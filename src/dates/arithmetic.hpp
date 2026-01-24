@@ -21,23 +21,22 @@ namespace dates
 
     inline days dayOfYear(const year_month_day& date)
 	{
-		auto d = sys_days(date) - sys_days{date.year()/1/0};
-		return d;
+		return sys_days(date) - sys_days{date.year()/1/0};
 	}
 
-    inline day lastDayOfMonth(year y, month m)
+    inline day lastDayOfMonth(const year& y, const month& m)
 	{
 		return year_month_day{y/m/last}.day();
 	}
 
-	inline days daysInMonth(year y, month m)
+	inline days daysInMonth(const year& y, const month& m)
 	{
         return days {static_cast<unsigned int>(lastDayOfMonth(y, m))};
 	}
 
-	inline days daysInYear(year y)
+	inline days daysInYear(const year& y)
 	{
-		return days(y.is_leap() ? 366 : 365);
+		return days { y.is_leap() ? 366 : 365 };
 	}
 
 	inline bool isEndOfMonth(const year_month_day& date)
@@ -47,10 +46,10 @@ namespace dates
 
 	inline year_month_day moveToEndOfMonth(const year_month_day& date)
 	{
-		return sys_days{year_month_day(date.year() / date.month() / last)};
+		return sys_days {year_month_day {date.year() / date.month() / last}};
 	}
 
-	inline year_month_day addMonths(const year_month_day& date, months m, bool eom)
+	inline year_month_day addMonths(const year_month_day& date, const months& m, bool eom)
 	{
 		auto date1 = date + m;
 		if (!date1.ok() || (eom && isEndOfMonth(date)))
@@ -61,14 +60,12 @@ namespace dates
 		return date1;
 	}
 
-	inline year_month_day addYears(const year_month_day& date, years y, bool eom)
+	inline year_month_day addYears(const year_month_day& date, const years& y, bool eom)
 	{
 		return addMonths(date, duration_cast<months>(y), eom);
 	}
 
-	inline
-	year_month_day
-	addWeeks(const year_month_day& date, weeks w)
+	inline year_month_day addWeeks(const year_month_day& date, const weeks& w)
 	{
 		return sys_days{date} + w;
 	}
