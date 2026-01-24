@@ -1,5 +1,5 @@
 #include "rates/accrued.hpp"
-#include "dates/frequency.hpp"
+#include "dates/schedules.hpp"
 
 #include <chrono>
 

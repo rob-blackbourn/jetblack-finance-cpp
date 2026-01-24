@@ -5,7 +5,7 @@
 #include <set>
 
 #include "dates/terms.hpp"
-#include "dates/frequency.hpp"
+#include "dates/schedules.hpp"
 
 namespace rates
 {

@@ -1,7 +1,7 @@
 #include "rates/value.hpp"
 #include "rates/yield_curve.hpp"
 
-#include "dates/frequency.hpp"
+#include "dates/schedules.hpp"
 
 #include <chrono>
 

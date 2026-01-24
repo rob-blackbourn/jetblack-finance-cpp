@@ -7,7 +7,6 @@
 
 #include "dates/schedules.hpp"
 #include "dates/terms.hpp"
-#include "dates/frequency.hpp"
 
 #include "rates/cashflow.hpp"
 

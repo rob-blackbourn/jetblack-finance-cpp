@@ -6,7 +6,6 @@
 #include <set>
 #include <vector>
 
-#include "dates/frequency.hpp"
 #include "dates/schedules.hpp"
 #include "dates/terms.hpp"
 

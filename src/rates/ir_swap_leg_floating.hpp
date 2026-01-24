@@ -8,7 +8,6 @@
 
 #include "dates/schedules.hpp"
 #include "dates/terms.hpp"
-#include "dates/frequency.hpp"
 
 #include "rates/ir_swap_leg.hpp"
 #include "rates/dated_rate.hpp"

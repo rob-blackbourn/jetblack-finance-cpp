@@ -7,7 +7,7 @@
 
 #include "dates/schedules.hpp"
 #include "dates/terms.hpp"
-#include "dates/frequency.hpp"
+#include "dates/schedules.hpp"
 
 namespace rates
 {

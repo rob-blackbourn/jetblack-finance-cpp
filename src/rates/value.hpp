@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "dates/terms.hpp"
-#include "dates/frequency.hpp"
+#include "dates/schedules.hpp"
 
 #include "rates/dated_rate.hpp"
 
