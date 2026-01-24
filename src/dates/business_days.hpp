@@ -16,7 +16,8 @@ namespace dates
 {
     using namespace std::chrono;
 
-	inline bool isWeekend(const year_month_day& date)
+	inline
+	bool isWeekend(const year_month_day& date)
 	{
 		auto dow = dayOfWeek(date);
 		return dow == Saturday || dow == Sunday;
@@ -31,11 +32,14 @@ namespace dates
 	inline
 	bool isBusinessDay(const year_month_day& date, const std::set<year_month_day>& holidays)
 	{
-		return (!(isWeekend(date) || isHoliday(date, holidays)));
+		return !(isWeekend(date) || isHoliday(date, holidays));
 	}
 
 	inline
-	year_month_day addBusinessDays(const year_month_day& date, days businessDays, const std::set<year_month_day>& holidays = std::set<year_month_day>{})
+	year_month_day addBusinessDays(
+		const year_month_day& date,
+		const days& businessDays,
+		const std::set<year_month_day>& holidays = {})
 	{
 		auto businessDate = sys_days{date};
 		auto sign = days{businessDays.count() > 0 ? 1 : -1};
@@ -58,28 +62,16 @@ namespace dates
 		return businessDate;
 	}
 
-	inline std::chrono::year_month_day nearestBusinessDay(
-		const std::chrono::year_month_day& date,
+	inline
+	year_month_day nearestBusinessDay(
+		const year_month_day& date,
 		bool prefer_forward,
-		const std::set<std::chrono::year_month_day> holidays)
+		const std::set<year_month_day> holidays = {})
 	{
-		// Find the nearest business day to a given date.
-		// 
-		// Args:
-		// 	date (datetime.date): The date.
-		// 	prefer_forward (bool, optional): If True prefer the nearest business day
-		// 		in the future. Defaults to True.
-		// 	cal (AbstractCalendar, optional): The holiday calendar. Defaults to
-		// 		WEEKEND_CALENDAR.
-		// 
-		// Returns:
-		// 	datetime.date: The nearest business day to a given date.
-		using namespace std::chrono;
-
 		if (isBusinessDay(date, holidays))
 			return date;
 
-		auto one_day = days(1);
+		auto one_day = days{1};
 		auto forward_date = sys_days{date} + one_day;
 		auto backward_date = sys_days{date} - one_day;
 
@@ -96,12 +88,14 @@ namespace dates
 		}
 	}
 
-	inline year_month_day immDate(year y, month m)
+	inline
+	year_month_day immDate(const year& y, const month& m)
 	{
     	return addNthDayOfWeek(y/m/1d, 3, Wednesday, true);
 	}
 
-	inline year_month_day immDate(year_month ym)
+	inline
+	year_month_day immDate(const year_month& ym)
 	{
     	return addNthDayOfWeek(ym/1d, 3, Wednesday, true);
 	}

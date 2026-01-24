@@ -81,7 +81,12 @@ namespace dates
 	}	
 
 	inline
-	year_month_day add(const year_month_day& date, const time_unit_t& offset, bool eom, EDateRule dateRule, const std::set<year_month_day>& holidays = {})
+	year_month_day add(
+		const year_month_day& date,
+		const time_unit_t& offset,
+		bool eom,
+		EDateRule dateRule,
+		const std::set<year_month_day>& holidays = {})
 	{
 		return std::visit( match {
 			[&date, &holidays](days i) { return addBusinessDays(date, i, holidays); },

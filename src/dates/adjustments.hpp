@@ -28,7 +28,10 @@ namespace dates
 
 	inline
 	year_month_day
-	adjust(const year_month_day& d, EDateRule dateRule, const std::set<year_month_day>& holidays)
+	adjust(
+		const year_month_day& d,
+		EDateRule dateRule,
+		const std::set<year_month_day>& holidays)
 	{
 		if(isBusinessDay(d, holidays) || dateRule == EDateRule::None)
 			return d;
@@ -64,21 +67,35 @@ namespace dates
 
 	inline
 	year_month_day
-	addMonths(const year_month_day& date, months m, bool eom, EDateRule dateRule, const std::set<year_month_day>& holidays = {})
+	addMonths(
+		const year_month_day& date,
+		const months& m,
+		bool eom,
+		EDateRule dateRule,
+		const std::set<year_month_day>& holidays = {})
 	{
 		return adjust(addMonths(date, m, eom), dateRule, holidays);
 	}
 
 	inline
 	year_month_day
-	addYears(const year_month_day& date, years y, bool eom, EDateRule dateRule, const std::set<year_month_day>& holidays = {})
+	addYears(
+		const year_month_day& date,
+		const years& y,
+		bool eom,
+		EDateRule dateRule,
+		const std::set<year_month_day>& holidays = {})
 	{
 		return adjust(addYears(date, y, eom), dateRule, holidays);
 	}
 
 	inline
 	year_month_day
-	addWeeks(const year_month_day& date, weeks w, EDateRule dateRule, const std::set<year_month_day>& holidays = {})
+	addWeeks(
+		const year_month_day& date,
+		const weeks& w,
+		EDateRule dateRule,
+		const std::set<year_month_day>& holidays = {})
 	{
 		return adjust(addWeeks(date, w), dateRule, holidays);
 	}
