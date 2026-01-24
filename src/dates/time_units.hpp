@@ -18,7 +18,6 @@ namespace dates
 	
 	using time_unit_t = std::variant<days, weeks, months, years>;
 
-
 	inline time_unit_t operator - (const time_unit_t& offset)
 	{
 		return std::visit( match {
