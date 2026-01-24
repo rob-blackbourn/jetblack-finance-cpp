@@ -1,0 +1,20 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "src",
+                "external"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/clang++",
+            "compilerArgs": [
+                "-DNULL=0"
+            ],
+            "cStandard": "c17",
+            "cppStandard": "c++23",
+            "intelliSenseMode": "linux-clang-x64"
+        }
+    ],
+    "version": 4
+}

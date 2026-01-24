@@ -1,0 +1,80 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "test/dates: schedules",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceRoot}/tests/dates/bin/test_schedules",
+            "args": [],
+            "cwd": "${workspaceRoot}"
+        },
+        {
+            "name": "test/rates: accrued",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceRoot}/tests/rates/bin/test_accrued",
+            "args": [],
+            "cwd": "${workspaceRoot}"
+        },
+        {
+            "name": "test/rates: deposit",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceRoot}/tests/rates/bin/test_deposit",
+            "args": [],
+            "cwd": "${workspaceRoot}"
+        },
+        {
+            "name": "test/rates: ir future",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceRoot}/tests/rates/bin/test_ir_future",
+            "args": [],
+            "cwd": "${workspaceRoot}"
+        },
+        {
+            "name": "test/rates: ir swap leg fixed",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceRoot}/tests/rates/bin/test_ir_swap_leg_fixed",
+            "args": [],
+            "cwd": "${workspaceRoot}"
+        },
+        {
+            "name": "test/rates: ir swap leg floating",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceRoot}/tests/rates/bin/test_ir_swap_leg_floating",
+            "args": [],
+            "cwd": "${workspaceRoot}"
+        },
+        {
+            "name": "test/rates: ir swap",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceRoot}/tests/rates/bin/test_ir_swap",
+            "args": [],
+            "cwd": "${workspaceRoot}"
+        },
+        {
+            "name": "test/rates: yield curve",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceRoot}/tests/rates/bin/test_yield_curve",
+            "args": [],
+            "cwd": "${workspaceRoot}"
+        },
+        {
+            "name": "test/stdext: match",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceRoot}/tests/stdext/bin/test_match",
+            "args": [],
+            "cwd": "${workspaceRoot}"
+        }
+    ]
+}
