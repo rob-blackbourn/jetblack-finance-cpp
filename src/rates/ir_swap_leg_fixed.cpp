@@ -84,7 +84,7 @@ namespace rates
 		if (divisor == 0.0)
 			throw std::runtime_error{"unable to calculate ir-swap zero rate - attempt to divide by zero"};
 
-		auto t = curve.calculateTime(endDate_);
+		auto t = curve.time(endDate_);
 		if (t == 0)
 			throw std::runtime_error{"unable to calculate ir-swap zero rate - swap has matured"};
 

@@ -153,22 +153,22 @@ namespace rates
 
 	double YieldCurve::rate(const year_month_day& date) const
 	{
-		return rate(calculateTime(date));
+		return rate(time(date));
 	}
 
 	double YieldCurve::forwardRate(const year_month_day& d1, const year_month_day& d2) const
 	{
-		return forwardRate(calculateTime(d1), calculateTime(d2));
+		return forwardRate(time(d1), time(d2));
 	}
 
 	double YieldCurve::discountFactor(const year_month_day& date) const
 	{
-		return discountFactor(calculateTime(date));
+		return discountFactor(time(date));
 	}
 
 	double YieldCurve::discountFactor(const year_month_day& d1, const year_month_day& d2) const
 	{
-		return discountFactor(calculateTime(d1), calculateTime(d2));
+		return discountFactor(time(d1), time(d2));
 	}
 
 	double YieldCurve::fix(const year_month_day& startDate, const year_month_day& endDate, EDayCount dayCount) const
@@ -176,7 +176,7 @@ namespace rates
 		if (startDate == endDate)
 			return 0.0;
 
-		double t = calculateTime(endDate) - calculateTime(startDate);
+		double t = time(endDate) - time(startDate);
 		double r = forwardRate(startDate, endDate);
 		double period_t = yearFrac(startDate, endDate, dayCount);
 
@@ -209,7 +209,7 @@ namespace rates
 		return YieldCurve(label_ + "_bumped", valueDate_, deposits, futures, swaps, dayCount_, interpolationMethod_);
 	}
 
-	double YieldCurve::calculateTime(const year_month_day& date) const
+	double YieldCurve::time(const year_month_day& date) const
 	{
 		return yearFrac(valueDate_, date, dayCount_);
 	}
@@ -225,7 +225,7 @@ namespace rates
 
 		for (const auto& deposit : deposits_)
 		{
-			auto t = calculateTime(deposit.endDate());
+			auto t = time(deposit.endDate());
 			points_.push_back({t, r});
 			r = deposit.solveZeroRate(*this, i);
 			rate(i++, r);
@@ -233,7 +233,7 @@ namespace rates
 
 		for (const auto& future : futures_)
 		{
-			auto t = calculateTime(future.endDate());
+			auto t = time(future.endDate());
 			points_.push_back({t, r});
 			r = future.solveZeroRate(*this, i);
 			rate(i++, r);
@@ -241,7 +241,7 @@ namespace rates
 
 		for (const auto& swap : swaps_)
 		{
-			auto t = calculateTime(swap.endDate());
+			auto t = time(swap.endDate());
 			points_.push_back({t, r});
 			r = swap.solveZeroRate(*this, i);
 			rate(i++, r);

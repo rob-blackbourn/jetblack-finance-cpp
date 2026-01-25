@@ -79,7 +79,7 @@ namespace rates
 
 		double fix(const year_month_day& valueDate, const year_month_day& fixingDate, EDayCount dayCount) const;
 
-		double calculateTime(const year_month_day& date) const;
+		double time(const year_month_day& date) const;
 
 	private:
 		void buildCurve();

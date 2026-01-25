@@ -80,7 +80,7 @@ namespace rates
 		if (divisor == 0.0)
 		throw std::runtime_error{"swap_fixed_leg_t::calculateZeroRate(YieldCurve*) attempt to divide by zero"};
 
-		t = curve.calculateTime(endDate());
+		t = curve.time(endDate());
 
 		if (t == 0)
 			throw std::runtime_error{"swap_fixed_leg_t::calculateZeroRate(YieldCurve*) attempt to divide by zero"};
