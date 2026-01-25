@@ -65,8 +65,6 @@ namespace rates
 		EDayCount dayCount_ {EDayCount::Actual_d365};
 		double rate_ {0};
 	};
-
-	bool compareDepositRates(const Deposit& d1, const Deposit& d2);
 }
 
 #endif // __jetblack__rates__deposit_hpp

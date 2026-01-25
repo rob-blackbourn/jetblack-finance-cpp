@@ -39,16 +39,16 @@ namespace rates
 	double Deposit::value(const YieldCurve& curve) const
 	{
 		// We assume we deposit $1 on the start date and receive back $1 plus interest on the end date.
-		double df0 = curve.discountFactor(startDate_);
-		double df1 = curve.discountFactor(endDate_);
+		double dfStart = curve.discountFactor(startDate_);
+		double dfEnd = curve.discountFactor(endDate_);
 		double t = yearFrac(startDate_, endDate_, dayCount_);
 
-		double startCashFlow = 1.0;
-		double interest = startCashFlow * rate_ * t;
-		double endCashFlow = startCashFlow + interest;
-		double NPV = endCashFlow * df1 - startCashFlow * df0;
+		double notional = 1.0;
+		double interest = notional * rate_ * t;
+		double endCashFlow = notional + interest;
+		double npv = endCashFlow * dfEnd - notional * dfStart;
 
-		return NPV;
+		return npv;
 	}
 
 	double Deposit::calculateZeroRate(const YieldCurve& curve) const
@@ -80,10 +80,5 @@ namespace rates
 			},
 			-0.1, 1.0, MAX_ITERATIONS, ERROR_TOLERANCE
 		);
-	}
-
-	bool compareDepositRates(const Deposit& d1, const Deposit& d2)
-	{
-		return d1.endDate() < d2.endDate();
 	}
 }
