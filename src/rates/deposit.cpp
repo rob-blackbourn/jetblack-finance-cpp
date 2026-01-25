@@ -65,7 +65,7 @@ namespace rates
 		return r;
 	}
 
-	double Deposit::solveZeroRate(const YieldCurve& curve, size_t index) const
+	double Deposit::solveZeroRate(YieldCurve& curve, size_t index) const
 	{
 		const double ERROR_TOLERANCE = 1e-15;
 		const unsigned int MAX_ITERATIONS = 30;

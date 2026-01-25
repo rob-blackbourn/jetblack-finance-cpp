@@ -63,7 +63,7 @@ namespace rates
 		const year_month_day& endDate() const { return fixedLeg_.endDate(); }
 
 		double calculateZeroRate(const YieldCurve& curve) const;
-		double solveZeroRate(const YieldCurve& curve, size_t pointIndex) const;
+		double solveZeroRate(YieldCurve& curve, size_t pointIndex) const;
 		double solveSwapRate(
 			const YieldCurve& curve,
 			const std::optional<double>& first_fixing,
