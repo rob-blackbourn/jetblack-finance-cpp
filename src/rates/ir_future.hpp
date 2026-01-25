@@ -59,8 +59,6 @@ namespace rates
 	private:
 		Deposit deposit_ {};
 	};
-
-	bool compareFutures(const IrFuture& f1, const IrFuture& f2);
 }
 
 #endif // __jetblack__rates__ir_future_hpp

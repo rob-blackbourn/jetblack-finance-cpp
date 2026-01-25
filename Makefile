@@ -10,7 +10,7 @@ install:
 uninstall:
 	cd src && make uninstall
 
-test:
+test: all
 	cd tests && make test
 
 clean:

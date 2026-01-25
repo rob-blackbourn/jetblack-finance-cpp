@@ -49,9 +49,4 @@ namespace rates
 			-0.1, 1.0, MAX_ITERATIONS, ERROR_TOLERANCE
 		);		
 	}
-
-	bool compareFutures(const IrFuture& f1, const IrFuture& f2)
-	{
-		return f1.endDate() < f2.endDate();
-	}
 }
