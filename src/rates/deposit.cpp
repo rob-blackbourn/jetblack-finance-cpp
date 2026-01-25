@@ -53,14 +53,16 @@ namespace rates
 
 	double Deposit::calculateZeroRate(const YieldCurve& curve) const
 	{
-		double t2 = curve.time(endDate_);
-		double df1 = curve.discountFactor(startDate_);
+		double df = curve.discountFactor(startDate_);
 		double payment = 1.0 + rate_ * yearFrac(startDate_, endDate_, dayCount_);
 
-		if (df1 / payment <= 0.0)
+		if (df / payment <= 0.0)
 			throw "unable to calculate zero rate for future - log of non-positive number";
 
-		return -1.0 / t2 * log(df1 / payment);
+		double t = curve.time(endDate_);
+		double r = -1.0 / t * log(df / payment);
+
+		return r;
 	}
 
 	double Deposit::solveZeroRate(const YieldCurve& curve, size_t index) const
