@@ -11,7 +11,7 @@
 #include <vector>
 
 #include "dates/arithmetic.hpp"
-#include "dates/frequency.hpp"
+#include "dates/schedules.hpp"
 #include "dates/tenor.hpp"
 
 namespace dates
