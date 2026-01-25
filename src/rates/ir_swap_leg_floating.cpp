@@ -18,6 +18,7 @@ namespace rates
 		const std::set<year_month_day>& holidays)
 	{
 		return schedule
+			| std::views::drop(1) // No fixing is required for the start date.
 			| std::views::transform(
 				[rate, &fixLag, &holidays](const year_month_day& d)
 				{
@@ -102,20 +103,20 @@ namespace rates
 			{
 				// Cashflow started in the past.
 				fix = (!prevFixing
-					? curve.fix(curve.valueDate(), endDate, dayCount_)
+					? curve.fix(curve.valueDate(), fixing.date(), dayCount_)
 					: *prevFixing);
 			}
 			else if (curve.valueDate() >= fixing.date())
 			{
 				// Cashflow started in the future, but the fix date is in the past.
 				fix = (!nextFixing
-					? curve.fix(curve.valueDate(), endDate, dayCount_)
+					? curve.fix(curve.valueDate(), fixing.date(), dayCount_)
 					: *nextFixing);
 			}
 			else
 			{
 				// fix occurs in the future.
-				fix = curve.fix(startDate, endDate, dayCount_);
+				fix = curve.fix(startDate, fixing.date(), dayCount_);
 			}
 
 			fixing.rate(fix + spread_);
