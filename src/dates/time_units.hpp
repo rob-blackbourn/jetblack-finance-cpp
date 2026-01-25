@@ -57,10 +57,22 @@ namespace dates
 		const std::set<year_month_day>& holidays = {})
 	{
 		return std::visit( match {
-			[&date, &holidays](days i) { return addBusinessDays(date, i, holidays); },
-			[&date, dateRule, &holidays](weeks i) { return addWeeks(date, i, dateRule, holidays); },
-			[&date, eom, dateRule, &holidays](months i) { return addMonths(date, i, eom, dateRule, holidays); },
-			[&date, eom, dateRule, &holidays](years i) { return addYears(date, i, eom, dateRule, holidays); },
+			[&date, &holidays](const days& i)
+			{
+				return addBusinessDays(date, i, holidays);
+			},
+			[&date, dateRule, &holidays](const weeks& i)
+			{
+				return addWeeks(date, i, dateRule, holidays);
+			},
+			[&date, eom, dateRule, &holidays](const months& i)
+			{
+				return addMonths(date, i, eom, dateRule, holidays);
+			},
+			[&date, eom, dateRule, &holidays](const years& i)
+			{
+				return addYears(date, i, eom, dateRule, holidays);
+			},
 		}, offset);
 	}
 }
