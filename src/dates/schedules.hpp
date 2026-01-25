@@ -20,6 +20,7 @@ namespace dates
 		ShortLast,
 		LongLast,
 	};
+	
 	enum class EFrequency
 	{
 		None = 0,
@@ -148,30 +149,30 @@ namespace dates
 
 		switch (stubType)
 		{
-			case EStubType::ShortFirst:
-			case EStubType::LongFirst:
-				
-				return generateScheduleBackwards(
-					startDate,
-					endDate,
-					frequency,
-					stubType == EStubType::ShortFirst,
-					dateRule,
-					holidays);
+		case EStubType::ShortFirst:
+		case EStubType::LongFirst:
+			
+			return generateScheduleBackwards(
+				startDate,
+				endDate,
+				frequency,
+				stubType == EStubType::ShortFirst,
+				dateRule,
+				holidays);
 
-			case EStubType::ShortLast:
-			case EStubType::LongLast:
+		case EStubType::ShortLast:
+		case EStubType::LongLast:
 
-				return generateScheduleForwards(
-					startDate,
-					endDate,
-					frequency,
-					stubType == EStubType::ShortLast,
-					dateRule, holidays);
+			return generateScheduleForwards(
+				startDate,
+				endDate,
+				frequency,
+				stubType == EStubType::ShortLast,
+				dateRule, holidays);
 
-			default:
+		default:
 
-				throw std::runtime_error("Unknown stub type");
+			throw std::runtime_error("Unknown stub type");
 		}
 	}
 }
