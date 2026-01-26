@@ -63,11 +63,11 @@ namespace rates
 		const year_month_day& endDate() const { return fixedLeg_.endDate(); }
 
 		double calculateZeroRate(const YieldCurve& curve) const;
-		double solveZeroRate(YieldCurve& curve, size_t pointIndex) const;
+		double solveZeroRate(YieldCurve& curve, size_t pointIndex);
 		double solveSwapRate(
 			const YieldCurve& curve,
 			const std::optional<double>& first_fixing,
-			const std::optional<double>& second_fixing) const;
+			const std::optional<double>& second_fixing);
 
 		bool operator == (const IrSwap& rhs) const { return endDate() == rhs.endDate(); }
 		bool operator <  (const IrSwap& rhs) const { return endDate() <  rhs.endDate(); }

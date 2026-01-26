@@ -109,7 +109,7 @@ namespace rates
 		return fixedLeg_.calculateZeroRate(curve);
 	}
 
-	double IrSwap::solveZeroRate(YieldCurve& curve, size_t index) const
+	double IrSwap::solveZeroRate(YieldCurve& curve, size_t index)
 	{
 		const double ERROR_TOLERANCE = 1e-11;
 		const unsigned int MAX_ITERATIONS = 100;
@@ -118,11 +118,11 @@ namespace rates
 		double lastRate = curve.points().empty() ? 0.33 : curve.points().back().rate();
 
 		return maths::brent::solve(
-			[&curve, &swap, index](double rate)
+			[&](double rate)
 			{
 				curve.rate(index, rate);
-				swap.floatingLeg().reset(curve, std::optional<double>(), std::optional<double>());
-				return swap.value(curve);
+				floatingLeg().reset(curve, std::optional<double>(), std::optional<double>());
+				return value(curve);
 			},
 			-0.1, std::max(0.10, 3.0 * lastRate), MAX_ITERATIONS, ERROR_TOLERANCE
 		);
@@ -133,20 +133,21 @@ namespace rates
 		return s1.endDate() < s2.endDate();
 	}
 
-	double IrSwap::solveSwapRate(const YieldCurve& curve, const std::optional<double>& first_fixing, const std::optional<double>& second_fixing) const
+	double IrSwap::solveSwapRate(
+		const YieldCurve& curve,
+		const std::optional<double>& first_fixing,
+		const std::optional<double>& second_fixing)
 	{
 		const double ERROR_TOLERANCE = 1e-11;
 		const unsigned int MAX_ITERATIONS = 100;
 
-		YieldCurve crv(curve);
-		IrSwap swap { *this };
-		swap.floatingLeg_.reset(crv, first_fixing, second_fixing);
+		floatingLeg_.reset(curve, first_fixing, second_fixing);
 
 		return maths::brent::solve(
-			[&crv, &swap](double rate)
+			[&](double rate)
 			{
-				swap.fixedLeg().rate(rate);
-				return swap.value(crv);
+				this->fixedLeg().rate(rate);
+				return this->value(curve);
 			},
 			-0.1, 1.0, MAX_ITERATIONS, ERROR_TOLERANCE
 		);

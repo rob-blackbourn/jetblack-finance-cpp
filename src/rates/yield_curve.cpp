@@ -239,7 +239,7 @@ namespace rates
 			rate(i++, r);
 		}
 
-		for (const auto& swap : swaps_)
+		for (auto& swap : swaps_)
 		{
 			auto t = time(swap.endDate());
 			points_.push_back({t, r});
