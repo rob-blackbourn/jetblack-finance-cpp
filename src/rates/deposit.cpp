@@ -70,13 +70,11 @@ namespace rates
 		const double ERROR_TOLERANCE = 1e-15;
 		const unsigned int MAX_ITERATIONS = 30;
 
-		YieldCurve crv(curve);
-
 		return maths::brent::solve(
-			[&crv, index, this](double rate)
+			[&](double rate)
 			{
-				crv.rate(index, rate);
-				return this->value(crv);
+				curve.rate(index, rate);
+				return this->value(curve);
 			},
 			-0.1, 1.0, MAX_ITERATIONS, ERROR_TOLERANCE
 		);
