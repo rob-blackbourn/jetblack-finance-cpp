@@ -60,12 +60,10 @@ namespace rates
 		const double ERROR_TOLERANCE = 1e-11;
 		const unsigned int MAX_ITERATIONS = 50;
 
-		Bond bond { *this };
-
 		return NR::bisector::solve(
-			[&bond, price, &valueDate](double yield)
+			[&](double yield)
 			{
-				return price - bond.value(valueDate, yield);
+				return price - this->value(valueDate, yield);
 			},
 			-0.1, 2.0, MAX_ITERATIONS, ERROR_TOLERANCE
 		);
