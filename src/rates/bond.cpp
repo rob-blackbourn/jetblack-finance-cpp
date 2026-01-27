@@ -18,7 +18,7 @@ namespace rates
 		EFrequency couponFrequency,
 		EDayCount dayCount,
 		EStubType stubType,
-		double faceValue,
+		double notional,
 		EDateRule dateRule,
 		const std::set<year_month_day>& holidays)
 		:	Bond(
@@ -29,7 +29,7 @@ namespace rates
 			couponFrequency,
 			dayCount,
 			stubType,
-			faceValue,
+			notional,
 			dateRule)
 	{
 		if (schedule_.size() < 2) throw "not enough dates in schedule";
@@ -37,12 +37,12 @@ namespace rates
 
 	double Bond::accruedInterest(const year_month_day& valueDate) const
 	{
-		return rates::accrued(valueDate, schedule_, dayCount_, couponRate_, faceValue_);
+		return rates::accrued(valueDate, schedule_, dayCount_, couponRate_, notional_);
 	}
 
 	double Bond::value(const year_month_day& valueDate, const YieldCurve& curve) const
 	{
-		return rates::value(valueDate, curve, schedule_, dayCount_, couponRate_, faceValue_);
+		return rates::value(valueDate, curve, schedule_, dayCount_, couponRate_, notional_);
 	}
 
 	double Bond::value(const YieldCurve& curve) const
@@ -52,7 +52,7 @@ namespace rates
 
 	double Bond::value(const year_month_day& valueDate, double yield) const
 	{
-		return rates::value(valueDate, yield, schedule_, dayCount_, couponRate_, faceValue_, couponFrequency_);
+		return rates::value(valueDate, yield, schedule_, dayCount_, couponRate_, notional_, couponFrequency_);
 	}
 
 	double Bond::yield(const year_month_day& valueDate, double price) const

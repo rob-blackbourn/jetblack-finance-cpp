@@ -29,7 +29,7 @@ namespace rates
 			EFrequency couponFrequency,
 			EDayCount dayCount,
 			EStubType stubType,
-			double faceValue,
+			double notional,
 			EDateRule dateRule)
 			:	schedule_(schedule),
 				firstAccrualDate_(firstAccrualDate),
@@ -38,7 +38,7 @@ namespace rates
 				couponFrequency_(couponFrequency),
 				dayCount_(dayCount),
 				stubType_(stubType),
-				faceValue_(faceValue),
+				notional_(notional),
 				dateRule_(dateRule)
 		{
 		}
@@ -50,7 +50,7 @@ namespace rates
 			EFrequency couponFrequency,
 			EDayCount dayCount,
 			EStubType stubType,
-			double faceValue,
+			double notional,
 			EDateRule dateRule,
 			const std::set<year_month_day>& holidays);
 
@@ -68,7 +68,7 @@ namespace rates
 		EFrequency couponFrequency() const { return couponFrequency_; }
 		EDayCount dayCount() const { return dayCount_; }
 		EStubType stubType() const { return stubType_; }
-		double faceValue() const { return faceValue_; }
+		double notional() const { return notional_; }
 		EDateRule dateRule() const { return dateRule_; }
 
 	private:
@@ -79,7 +79,7 @@ namespace rates
 		EFrequency couponFrequency_ {EFrequency::Annual};
 		EDayCount dayCount_ {EDayCount::Actual_d365};
 		EStubType stubType_ {EStubType::ShortFirst};
-		double faceValue_ {0.0};
+		double notional_ {1.0};
 		EDateRule dateRule_ {EDateRule::ModFollowing};
 	};
 }
