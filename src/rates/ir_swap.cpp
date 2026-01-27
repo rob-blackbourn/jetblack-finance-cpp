@@ -128,11 +128,6 @@ namespace rates
 		);
 	}
 
-	bool compareIrSwaps(const IrSwap& s1, const IrSwap& s2)
-	{
-		return s1.endDate() < s2.endDate();
-	}
-
 	double IrSwap::solveSwapRate(
 		const YieldCurve& curve,
 		const std::optional<double>& first_fixing,

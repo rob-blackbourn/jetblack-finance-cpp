@@ -76,8 +76,6 @@ namespace rates
 		IrSwapLegFixed fixedLeg_ {};
 		IrSwapLegFloating floatingLeg_ {};
 	};
-
-	bool compareIrSwaps(const IrSwap& s1, const IrSwap& s2);
 }
 
 #endif // __jetblack__rates__ir_swap_hpp
