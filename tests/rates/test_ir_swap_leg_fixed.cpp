@@ -34,10 +34,10 @@ TEST_CASE("ctor.tenor", "[ir_swap_leg_fixed]")
         frequency,
         stubType,
         dateRule,
-        holidays,
         dayCount,
         notional,
-        rate
+        rate,
+        holidays
     );
 
     REQUIRE ( leg.rate() == 0.05 );

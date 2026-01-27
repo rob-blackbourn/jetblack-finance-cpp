@@ -30,11 +30,11 @@ namespace rates
 			EFrequency frequency,
 			EStubType stubType,
 			EDateRule dateRule,
-			const std::set<year_month_day>& holidays,
 			EDayCount dayCount,
 			double notional,
 			const time_unit_t& fixLag,
-			double spread);
+			double spread,
+			const std::set<year_month_day>& holidays);
 
 		IrSwapLegFloating(
 			const year_month_day& startDate,
@@ -42,11 +42,11 @@ namespace rates
 			EFrequency frequency,
 			EStubType stubType,
 			EDateRule dateRule,
-			const std::set<year_month_day>& holidays,
 			EDayCount dayCount,
 			double notional,
 			const time_unit_t& fixLag,
-			double spread);
+			double spread,
+			const std::set<year_month_day>& holidays);
 
 		virtual double value(const year_month_day& valueDate, const YieldCurve& curve) const;
 		virtual double value(const YieldCurve& curve) const;

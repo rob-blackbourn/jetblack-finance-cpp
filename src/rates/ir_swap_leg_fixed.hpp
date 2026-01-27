@@ -27,10 +27,10 @@ namespace rates
 			EFrequency frequency,
 			EStubType stubType,
 			EDateRule dateRule,
-			const std::set<year_month_day>& holidays,
 			EDayCount dayCount,
 			double notional,
-			double rate);
+			double rate,
+			const std::set<year_month_day>& holidays);
 
 		IrSwapLegFixed(
 			const year_month_day& startDate,
@@ -38,10 +38,10 @@ namespace rates
 			EFrequency frequency,
 			EStubType stubType,
 			EDateRule dateRule,
-			const std::set<year_month_day>& holidays,
 			EDayCount dayCount,
 			double notional,
-			double rate);
+			double rate,
+			const std::set<year_month_day>& holidays);
 
 		virtual double value(const year_month_day& valueDate, const YieldCurve& curve) const;
 		virtual double value(const YieldCurve& curve) const;

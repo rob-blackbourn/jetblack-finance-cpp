@@ -34,11 +34,11 @@ TEST_CASE("ctor.tenor", "[ir_swap_leg_floating]")
         frequency,
         stubType,
         dateRule,
-        holidays,
         dayCount,
         notional,
         days{2},
-        spread
+        spread,
+        holidays
     );
 
     REQUIRE ( leg.spread() == 0.01 );

@@ -23,12 +23,12 @@ namespace rates
 		EFrequency frequency,
 		EStubType stubType,
 		EDateRule dateRule,
-		const std::set<year_month_day>& holidays,
 		EDayCount dayCount,
 		double notional,
 		double fixedRate,
 		const time_unit_t& fixLag,
-		double floatingSpread)
+		double floatingSpread,
+		const std::set<year_month_day>& holidays)
 		:	fixedLeg_(
 				IrSwapLegFixed(
 					startDate,
@@ -36,10 +36,10 @@ namespace rates
 					frequency,
 					stubType,
 					dateRule,
-					holidays,
 					dayCount,
 					notional,
-					fixedRate)),
+					fixedRate,
+					holidays)),
 			floatingLeg_(
 				IrSwapLegFloating(
 					startDate,
@@ -47,11 +47,11 @@ namespace rates
 					frequency,
 					stubType,
 					dateRule,
-					holidays,
 					dayCount,
 					notional,
 					fixLag,
-					floatingSpread))
+					floatingSpread,
+					holidays))
 	{		
 	}
 
@@ -61,12 +61,12 @@ namespace rates
 		EFrequency frequency,
 		EStubType stubType,
 		EDateRule dateRule,
-		const std::set<year_month_day>& holidays,
 		EDayCount dayCount,
 		double notional,
 		double fixedRate,
 		const time_unit_t& fixLag,
-		double floatingSpread)
+		double floatingSpread,
+		const std::set<year_month_day>& holidays)
 		:	fixedLeg_(
 				IrSwapLegFixed(
 					startDate,
@@ -74,10 +74,10 @@ namespace rates
 					frequency,
 					stubType,
 					dateRule,
-					holidays,
 					dayCount,
 					notional,
-					fixedRate)),
+					fixedRate,
+					holidays)),
 			floatingLeg_(
 				IrSwapLegFloating(
 					startDate,
@@ -85,11 +85,11 @@ namespace rates
 					frequency,
 					stubType,
 					dateRule,
-					holidays,
 					dayCount,
 					notional,
 					fixLag,
-					floatingSpread))
+					floatingSpread,
+					holidays))
 	{		
 	}
 

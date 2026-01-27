@@ -36,12 +36,12 @@ TEST_CASE("ctor.tenor", "[ir_swap]")
         frequency,
         stubType,
         dateRule,
-        holidays,
         dayCount,
         notional,
         rate,
         fixLag,
-        spread
+        spread,
+        holidays
     );
 
     REQUIRE ( swap.fixedLeg().rate() == 0.05 );

@@ -17,10 +17,10 @@ namespace rates
 		EFrequency frequency,
 		EStubType stubType,
 		EDateRule dateRule,
-		const std::set<year_month_day>& holidays,
 		EDayCount dayCount,
 		double notional,
-		double rate)
+		double rate,
+		const std::set<year_month_day>& holidays)
 		:	IrSwapLeg(startDate, tenor, notional, frequency, stubType, dayCount, dateRule, holidays),
 			rate_(rate)
 	{
@@ -32,10 +32,10 @@ namespace rates
 		EFrequency frequency,
 		EStubType stubType,
 		EDateRule dateRule,
-		const std::set<year_month_day>& holidays,
 		EDayCount dayCount,
 		double notional,
-		double rate)
+		double rate,
+		const std::set<year_month_day>& holidays)
 		:	IrSwapLeg(startDate, endDate, notional, frequency, stubType, dayCount, dateRule, holidays),
 			rate_(rate)
 	{

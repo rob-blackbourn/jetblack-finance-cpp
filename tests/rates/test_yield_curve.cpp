@@ -85,15 +85,15 @@ TEST_CASE("bootstrap", "[yield_curve]")
     auto futureDec98 = IrFuture(1998y/December, EDayCount::Actual_d365, 100 - 6.00, EDateRule::Following, daysToSpot, holidays);
     auto futures = std::vector<IrFuture> { futureDec97, futureMar98, futureJun98, futureSep98, futureDec98};
 
-    auto swap2Y = IrSwap(spotDate, years{2}, EFrequency::SemiAnnual, EStubType::ShortFirst, EDateRule::ModFollowing, holidays, EDayCount::Actual_d365, 1e6, 6.01253 / 100, days{2}, 0.0);
-    auto swap3Y = IrSwap(spotDate, years{3}, EFrequency::SemiAnnual, EStubType::ShortFirst, EDateRule::ModFollowing, holidays, EDayCount::Actual_d365, 1e6, 6.10823 / 100, days{2}, 0.0);
-    auto swap4Y = IrSwap(spotDate, years{4}, EFrequency::SemiAnnual, EStubType::ShortFirst, EDateRule::ModFollowing, holidays, EDayCount::Actual_d365, 1e6, 6.16 / 100, days{2}, 0.0);
-    auto swap5Y = IrSwap(spotDate, years{5}, EFrequency::SemiAnnual, EStubType::ShortFirst, EDateRule::ModFollowing, holidays, EDayCount::Actual_d365, 1e6, 6.22 / 100, days{2}, 0.0);
-    auto swap7Y = IrSwap(spotDate, years{7}, EFrequency::SemiAnnual, EStubType::ShortFirst, EDateRule::ModFollowing, holidays, EDayCount::Actual_d365, 1e6, 6.32 / 100, days{2}, 0.0);
-    auto swap10Y = IrSwap(spotDate, years{10}, EFrequency::SemiAnnual, EStubType::ShortFirst, EDateRule::ModFollowing, holidays, EDayCount::Actual_d365, 1e6, 6.42 / 100, days{2}, 0.0);
-    auto swap15Y = IrSwap(spotDate, years{15}, EFrequency::SemiAnnual, EStubType::ShortFirst, EDateRule::ModFollowing, holidays, EDayCount::Actual_d365, 1e6, 6.56 / 100, days{2}, 0.0);
-    auto swap20Y = IrSwap(spotDate, years{20}, EFrequency::SemiAnnual, EStubType::ShortFirst, EDateRule::ModFollowing, holidays, EDayCount::Actual_d365, 1e6, 6.56 / 100, days{2}, 0.0);
-    auto swap30Y = IrSwap(spotDate, years{30}, EFrequency::SemiAnnual, EStubType::ShortFirst, EDateRule::ModFollowing, holidays, EDayCount::Actual_d365, 1e6, 6.56 / 100, days{2}, 0.0);
+    auto swap2Y = IrSwap(spotDate, years{2}, EFrequency::SemiAnnual, EStubType::ShortFirst, EDateRule::ModFollowing, EDayCount::Actual_d365, 1e6, 6.01253 / 100, days{2}, 0.0, holidays);
+    auto swap3Y = IrSwap(spotDate, years{3}, EFrequency::SemiAnnual, EStubType::ShortFirst, EDateRule::ModFollowing, EDayCount::Actual_d365, 1e6, 6.10823 / 100, days{2}, 0.0, holidays);
+    auto swap4Y = IrSwap(spotDate, years{4}, EFrequency::SemiAnnual, EStubType::ShortFirst, EDateRule::ModFollowing, EDayCount::Actual_d365, 1e6, 6.16 / 100, days{2}, 0.0, holidays);
+    auto swap5Y = IrSwap(spotDate, years{5}, EFrequency::SemiAnnual, EStubType::ShortFirst, EDateRule::ModFollowing, EDayCount::Actual_d365, 1e6, 6.22 / 100, days{2}, 0.0, holidays);
+    auto swap7Y = IrSwap(spotDate, years{7}, EFrequency::SemiAnnual, EStubType::ShortFirst, EDateRule::ModFollowing, EDayCount::Actual_d365, 1e6, 6.32 / 100, days{2}, 0.0, holidays);
+    auto swap10Y = IrSwap(spotDate, years{10}, EFrequency::SemiAnnual, EStubType::ShortFirst, EDateRule::ModFollowing, EDayCount::Actual_d365, 1e6, 6.42 / 100, days{2}, 0.0, holidays);
+    auto swap15Y = IrSwap(spotDate, years{15}, EFrequency::SemiAnnual, EStubType::ShortFirst, EDateRule::ModFollowing, EDayCount::Actual_d365, 1e6, 6.56 / 100, days{2}, 0.0, holidays);
+    auto swap20Y = IrSwap(spotDate, years{20}, EFrequency::SemiAnnual, EStubType::ShortFirst, EDateRule::ModFollowing, EDayCount::Actual_d365, 1e6, 6.56 / 100, days{2}, 0.0, holidays);
+    auto swap30Y = IrSwap(spotDate, years{30}, EFrequency::SemiAnnual, EStubType::ShortFirst, EDateRule::ModFollowing, EDayCount::Actual_d365, 1e6, 6.56 / 100, days{2}, 0.0, holidays);
     auto swaps = std::vector<IrSwap> { swap2Y, swap3Y, swap4Y, swap5Y, swap7Y, swap10Y, swap15Y, swap20Y, swap30Y};
 
     auto yieldCurve1 = YieldCurve("solved", valueDate, deposits, futures, swaps, EDayCount::Actual_d365, EInterpolationMethod::CubicSpline);
