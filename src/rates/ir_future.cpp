@@ -12,17 +12,35 @@ namespace rates
 
 	IrFuture::IrFuture(
 		const year_month_day& expiryDate,
+		const months& m,
 		EDayCount dayCount,
 		double price,
-		double convexity,
 		EDateRule dateRule,
 		const std::set<year_month_day>& holidays,
 		const time_unit_t& spot)
 	{
 		// Interest rate future is a just a deposit starting spot days after expiry and lasting three months
 		year_month_day startDate = add(expiryDate, spot, false, dateRule, holidays);
-		double rate = (100 - (price + convexity)) / 100.0;
-		deposit_ = Deposit(startDate, months{3}, dayCount, rate, dateRule, holidays);
+		double rate = (100 - price) / 100.0;
+		deposit_ = Deposit(startDate, m, dayCount, rate, dateRule, holidays);
+	}
+
+	IrFuture::IrFuture(
+		const year_month& expiry,
+		EDayCount dayCount,
+		double price,
+		EDateRule dateRule,
+		const std::set<year_month_day>& holidays,
+		const time_unit_t& spot)
+		: IrFuture(
+			immDate(expiry),
+			months{3},
+			dayCount,
+			price,
+			dateRule,
+			holidays,
+			spot)
+	{
 	}
 
 	double IrFuture::value(const YieldCurve& curve) const

@@ -29,12 +29,21 @@ namespace rates
 		
 		IrFuture(
 			const year_month_day& expiryDate,
+			const months& m,
 			EDayCount dayCount,
 			double price,
-			double convexity,
 			EDateRule dateRule,
 			const std::set<year_month_day>& holidays,
 			const time_unit_t& spot);
+
+		IrFuture(
+			const year_month& expiry,
+			EDayCount dayCount,
+			double price,
+			EDateRule dateRule,
+			const std::set<year_month_day>& holidays,
+			const time_unit_t& spot);
+
 
 		const year_month_day& startDate() const { return deposit_.startDate(); }
 		const year_month_day& endDate() const { return deposit_.endDate(); }
