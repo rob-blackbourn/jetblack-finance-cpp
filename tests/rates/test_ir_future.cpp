@@ -23,8 +23,8 @@ TEST_CASE("ctor.dates", "[ir_future]")
         EDayCount::Actual_d365,
         95.0,
         EDateRule::Following,
-        {2026y/January/1d, 2026y/April/5d, 2026y/May/1d, 2026y/December/25},
-        days{2}
+        days{2},
+        {2026y/January/1d, 2026y/April/5d, 2026y/May/1d, 2026y/December/25}
     };
 
     REQUIRE( future.startDate() == 2026y/March/20d );
@@ -41,8 +41,8 @@ TEST_CASE("value", "[ir_future]")
         EDayCount::Actual_d365,
         95.0,
         EDateRule::Following,
-        {2026y/January/1d, 2026y/April/5d, 2026y/May/1d, 2026y/December/25},
-        days{2}
+        days{2},
+        {2026y/January/1d, 2026y/April/5d, 2026y/May/1d, 2026y/December/25}
     };
 
     auto yield_curve = YieldCurve{"flat", 0.05, 2026y/January/2d, EDayCount::Actual_d365};
@@ -58,8 +58,8 @@ TEST_CASE("calculateZeroRate", "[ir_future]")
         EDayCount::Actual_d365,
         95.0,
         EDateRule::Following,
-        {2026y/January/1d, 2026y/April/5d, 2026y/May/1d, 2026y/December/25},
-        days{2}
+        days{2},
+        {2026y/January/1d, 2026y/April/5d, 2026y/May/1d, 2026y/December/25}
     };
 
     auto yield_curve = YieldCurve{"flat", 0.05, 2026y/January/2d, EDayCount::Actual_d365};
@@ -76,8 +76,8 @@ TEST_CASE("solveZeroRate", "[ir_future]")
         EDayCount::Actual_d365,
         95.0,
         EDateRule::Following,
-        {2026y/January/1d, 2026y/April/5d, 2026y/May/1d, 2026y/December/25},
-        days{2}
+        days{2},
+        {2026y/January/1d, 2026y/April/5d, 2026y/May/1d, 2026y/December/25}
     };
     auto yield_curve = YieldCurve{"flat", 0.05, 2026y/January/2d, EDayCount::Actual_d365};
     auto actual = future.solveZeroRate(yield_curve, 0);

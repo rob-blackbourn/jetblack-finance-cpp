@@ -33,16 +33,16 @@ namespace rates
 			EDayCount dayCount,
 			double price,
 			EDateRule dateRule,
-			const std::set<year_month_day>& holidays,
-			const time_unit_t& spot);
+			const time_unit_t& spotLead,
+			const std::set<year_month_day>& holidays);
 
 		IrFuture(
 			const year_month& expiry,
 			EDayCount dayCount,
 			double price,
 			EDateRule dateRule,
-			const std::set<year_month_day>& holidays,
-			const time_unit_t& spot);
+			const time_unit_t& spotLead,
+			const std::set<year_month_day>& holidays);
 
 
 		const year_month_day& startDate() const { return deposit_.startDate(); }

@@ -16,10 +16,10 @@ namespace rates
 		EDayCount dayCount,
 		double price,
 		EDateRule dateRule,
-		const std::set<year_month_day>& holidays,
-		const time_unit_t& spot)
+		const time_unit_t& spotLead,
+		const std::set<year_month_day>& holidays)
 	{
-		year_month_day startDate = add(expiryDate, spot, false, dateRule, holidays);
+		year_month_day startDate = add(expiryDate, spotLead, false, dateRule, holidays);
 		// The price is quoted as a discount from par. e.g. 0.05 is 95.
 		double rate = (100 - price) / 100.0;
 		deposit_ = Deposit(startDate, nMonths, dayCount, rate, dateRule, holidays);
@@ -32,16 +32,16 @@ namespace rates
 		EDayCount dayCount,
 		double price,
 		EDateRule dateRule,
-		const std::set<year_month_day>& holidays,
-		const time_unit_t& spot)
+		const time_unit_t& spotLead,
+		const std::set<year_month_day>& holidays)
 		: IrFuture(
 			immDate(expiry),
 			months{3},
 			dayCount,
 			price,
 			dateRule,
-			holidays,
-			spot)
+			spotLead,
+			holidays)
 	{
 	}
 
