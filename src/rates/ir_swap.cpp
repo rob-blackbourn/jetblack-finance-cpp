@@ -3,6 +3,8 @@
 
 #include "maths/brent.hpp"
 
+#include <limits>
+
 namespace rates
 {
 	using namespace std::chrono;
@@ -111,7 +113,7 @@ namespace rates
 
 	double IrSwap::solveZeroRate(YieldCurve& curve, size_t index)
 	{
-		const double ERROR_TOLERANCE = 1e-11;
+		const double ERROR_TOLERANCE = std::numeric_limits<double>::epsilon();
 		const unsigned int MAX_ITERATIONS = 100;
 
 		IrSwap swap { *this };
@@ -133,7 +135,7 @@ namespace rates
 		const std::optional<double>& first_fixing,
 		const std::optional<double>& second_fixing)
 	{
-		const double ERROR_TOLERANCE = 1e-11;
+		const double ERROR_TOLERANCE = std::numeric_limits<double>::epsilon();
 		const unsigned int MAX_ITERATIONS = 100;
 
 		floatingLeg_.reset(curve, first_fixing, second_fixing);

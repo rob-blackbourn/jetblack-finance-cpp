@@ -4,6 +4,8 @@
 #include "NR/root_secant.hpp"
 #include "maths/brent.hpp"
 
+#include <limits>
+
 namespace rates
 {
 	using namespace std::chrono;
@@ -67,8 +69,8 @@ namespace rates
 
 	double Deposit::solveZeroRate(YieldCurve& curve, size_t index) const
 	{
-		const double ERROR_TOLERANCE = 1e-15;
-		const unsigned int MAX_ITERATIONS = 30;
+		const double ERROR_TOLERANCE = std::numeric_limits<double>::epsilon();
+		const unsigned int MAX_ITERATIONS = 100;
 
 		return maths::brent::solve(
 			[&](double rate)
