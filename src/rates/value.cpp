@@ -1,7 +1,9 @@
 #include "rates/value.hpp"
 #include "rates/yield_curve.hpp"
 
+#include <optional>
 #include <ranges>
+#include <stdexcept>
 
 namespace rates
 {
@@ -14,14 +16,28 @@ namespace rates
 		const year_month_day& startDate,
 		const year_month_day& endDate,
 		EDayCount dayCount,
-		double couponRate,
+		double rate,
 		double notional)
 	{
 		double t = yearFrac(startDate, endDate, dayCount);
 		double df = curve.discountFactor(valueDate, endDate);
-		double amount = notional * couponRate * t;
+		double amount = notional * rate * t;
 		double pv = amount * df;
 		return pv;
+	}
+
+	static double value(
+		const year_month_day& valueDate,
+		const YieldCurve& curve,
+		const year_month_day& startDate,
+		const year_month_day& endDate,
+		EDayCount dayCount,
+		const std::optional<double>& fixingRate,
+		double notional)
+	{
+		if (!fixingRate)
+			throw std::domain_error("rate not fixed");
+		return value(valueDate, curve, startDate, endDate, dayCount, *fixingRate, notional);
 	}
 
 	static double value(
@@ -85,19 +101,19 @@ namespace rates
 		const YieldCurve& curve,
 		const std::vector<year_month_day>& schedule,
 		EDayCount dayCount,
-		const std::vector<DatedRate>& fixings,
+		const std::vector<Fixing>& fixings,
 		double notional)
 	{
-		double pv, sum_pv = 0;
+		double sum_pv = 0;
 
 		for (const auto &[startDate, endDate, fixing] : std::views::zip(schedule, schedule | std::views::drop(1), fixings))
 		{
-			pv = value(valueDate, curve, startDate, endDate, dayCount, fixing.rate(), notional);
-			sum_pv += pv;
+			auto cashflow_pv = value(valueDate, curve, startDate, endDate, dayCount, fixing.rate(), notional);
+			sum_pv += cashflow_pv;
 		}
 
-		pv = value(valueDate, curve, schedule.back(), dayCount, notional);
-		sum_pv += pv;
+		auto notional_pv = value(valueDate, curve, schedule.back(), dayCount, notional);
+		sum_pv += notional_pv;
 
 		return sum_pv;
 	}

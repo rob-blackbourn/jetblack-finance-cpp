@@ -11,7 +11,7 @@ namespace rates
 	using namespace std::chrono;
 	using namespace dates;
 
-	static std::vector<DatedRate> createFixings(
+	static std::vector<Fixing> createFixings(
 		const std::vector<year_month_day>& schedule,
 		double rate,
 		const time_unit_t& fixLag,
@@ -22,9 +22,9 @@ namespace rates
 			| std::views::transform(
 				[rate, &fixLag, &holidays](const year_month_day& d)
 				{
-					return DatedRate { add(d, -fixLag, true, EDateRule::Preceding, holidays), rate };
+					return Fixing { add(d, -fixLag, true, EDateRule::Preceding, holidays), rate };
 				})
-			| std::ranges::to<std::vector<DatedRate>>();
+			| std::ranges::to<std::vector<Fixing>>();
 	}
 
 	IrSwapLegFloating::IrSwapLegFloating(

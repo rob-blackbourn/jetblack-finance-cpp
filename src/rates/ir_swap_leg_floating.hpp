@@ -10,7 +10,7 @@
 #include "dates/terms.hpp"
 
 #include "rates/ir_swap_leg.hpp"
-#include "rates/dated_rate.hpp"
+#include "rates/fixing.hpp"
 
 namespace rates
 {
@@ -55,14 +55,14 @@ namespace rates
 		void reset(const YieldCurve& curve, const std::optional<double>& first_fixing, const std::optional<double>& second_fixing);
 		std::pair<std::optional<double>,std::optional<double>> getCurrentFixings(const year_month_day& valueDate) const;
 
-		const std::vector<DatedRate>& fixings() const { return fixings_; }
+		const std::vector<Fixing>& fixings() const { return fixings_; }
 		double spread() const { return spread_; }
 		const time_unit_t& fixLag() const { return  fixLag_; }
 
 	private:
 		double spread_ {0};
 		time_unit_t fixLag_ {days{0}};
-		std::vector<DatedRate> fixings_ {};
+		std::vector<Fixing> fixings_ {};
 	};
 }
 

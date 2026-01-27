@@ -2,34 +2,35 @@
 #define __jetblack__rates__dated_rate_hpp
 
 #include <chrono>
+#include <optional>
 
 namespace rates
 {
 	using namespace std::chrono;
 
-	class DatedRate
+	class Fixing
 	{
 	public:
 
-		DatedRate() = default;
+		Fixing() = default;
 
-		DatedRate(year_month_day date, double rate)
+		Fixing(year_month_day date, double rate)
 			:	date_(date),
 				rate_(rate)
 		{
 		}
 
-		double rate() const { return rate_; }
-		void rate(double r) { rate_ = r; }
+		const std::optional<double>& rate() const { return rate_; }
+		void rate(const std::optional<double>& r) { rate_ = r; }
 
 		const year_month_day& date() const { return date_; }
 		void date(const year_month_day& d) { date_ = d; }
 
-		bool operator==(const DatedRate&) const = default;
+		bool operator==(const Fixing&) const = default;
 
 	private:
 		year_month_day date_ {};
-		double rate_ {};
+		std::optional<double> rate_ {};
 	};
 }
 

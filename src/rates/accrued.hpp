@@ -6,7 +6,7 @@
 
 #include "dates/terms.hpp"
 
-#include "rates/dated_rate.hpp"
+#include "rates/fixing.hpp"
 
 namespace rates
 {
@@ -33,7 +33,7 @@ namespace rates
 		const year_month_day& valueDate,
 		const std::vector<year_month_day>& schedule,
 		EDayCount dayCount,
-		const std::vector<DatedRate>& fixings,
+		const std::vector<Fixing>& fixings,
 		double notional);
 }
 
