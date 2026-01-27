@@ -1,6 +1,7 @@
 #include "rates/value.hpp"
 #include "rates/yield_curve.hpp"
 
+#include <cmath>
 #include <optional>
 #include <ranges>
 #include <stdexcept>
@@ -63,7 +64,7 @@ namespace rates
 		double sum_pv = 0.0;
 
 		for (
-			const auto &[startDate, endDate]
+			auto &&[startDate, endDate]
 			: std::views::zip(schedule, schedule | std::views::drop(1)))
 		{
 			auto coupon_pv = value(valueDate, curve, startDate, endDate, dayCount, rate, notional);
@@ -84,21 +85,21 @@ namespace rates
 		const std::vector<double>& fixingRates,
 		double notional)
 	{
-		double pv, sum_pv = 0;
+		double sum_pv = 0;
 
 		for (
-			const auto &[startDate, endDate, fixing]
+			auto &&[startDate, endDate, rate]
 			: std::views::zip(
 				schedule,
 				schedule | std::views::drop(1),
 				fixingRates))
 		{
-			pv = value(valueDate, curve, startDate, endDate, dayCount, fixing, notional);
-			sum_pv += pv;
+			auto cashflow_pv = value(valueDate, curve, startDate, endDate, dayCount, rate, notional);
+			sum_pv += cashflow_pv;
 		}
 
-		pv = value(valueDate, curve, schedule.back(), dayCount, notional);
-		sum_pv += pv;
+		auto notional_pv = value(valueDate, curve, schedule.back(), dayCount, notional);
+		sum_pv += notional_pv;
 
 		return sum_pv;
 	}
@@ -113,7 +114,7 @@ namespace rates
 	{
 		double sum_pv = 0;
 
-		for (const auto &[startDate, endDate, fixing] : std::views::zip(schedule, schedule | std::views::drop(1), fixings))
+		for (auto &&[startDate, endDate, fixing] : std::views::zip(schedule, schedule | std::views::drop(1), fixings))
 		{
 			auto cashflow_pv = value(valueDate, curve, startDate, endDate, dayCount, fixing.rate(), notional);
 			sum_pv += cashflow_pv;
@@ -136,13 +137,13 @@ namespace rates
 		EFrequency frequency)
 	{
 		double period_t = dates::getTerm(startDate, endDate, dayCount).second;
-		double amount = rate * notional * period_t;
+		double cashflow = rate * notional * period_t;
 		double t = dates::getTerm(valueDate, endDate, dayCount).second;
 		double periods = t * static_cast<int>(frequency);
-		double x = ::pow(1 + yield / static_cast<int>(frequency), periods);
+		double x = std::pow(1 + yield / std::to_underlying(frequency), periods);
 		if (x == 0)
 			throw std::runtime_error{"unable to calculate value - divide by zero"};
-		double pv = amount / x;
+		double pv = cashflow / x;
 		return pv;
 	}
 
@@ -156,7 +157,7 @@ namespace rates
 	{
 		double t = dates::getTerm(valueDate, endDate, dayCount).second;
 		double periods = t * static_cast<int>(frequency);
-		double x = ::pow(1 + yield / static_cast<int>(frequency), periods);
+		double x = std::pow(1 + yield / static_cast<int>(frequency), periods);
 		if (x == 0)
 			throw std::runtime_error{"unable to calculate value - divide by zero"};
 		double pv = notional / x;
@@ -174,7 +175,7 @@ namespace rates
 	{
 		double sum_pv = 0;
 
-		for (const auto &[startDate, endDate] : std::views::zip(schedule, schedule | std::views::drop(1)))
+		for (auto &&[startDate, endDate] : std::views::zip(schedule, schedule | std::views::drop(1)))
 		{
 			auto coupon_pv = value(valueDate, yield, startDate, endDate, dayCount, rate, notional, frequency);
 			sum_pv += coupon_pv;

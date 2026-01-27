@@ -21,7 +21,7 @@ namespace rates
 		const YieldCurve& curve,
 		const std::vector<year_month_day>& schedule,
 		EDayCount dayCount,
-		double couponRate,
+		double rate,
 		double notional);
 
 	double value(
@@ -29,7 +29,7 @@ namespace rates
 		const YieldCurve& curve,
 		const std::vector<year_month_day>& schedule,
 		EDayCount dayCount,
-		const std::vector<double>& fixings,
+		const std::vector<double>& fixingRates,
 		double notional);
 
 	double value(
@@ -45,7 +45,7 @@ namespace rates
 		double yield,
 		const std::vector<year_month_day>& schedule,
 		EDayCount dayCount,
-		double couponRate,
+		double rate,
 		double notional,
 		EFrequency frequency);
 }
