@@ -22,7 +22,8 @@ namespace rates
 			| std::views::transform(
 				[rate, &fixLag, &holidays](const year_month_day& d)
 				{
-					return Fixing { add(d, -fixLag, true, EDateRule::Preceding, holidays), rate };
+					auto date = add(d, -fixLag, true, EDateRule::Preceding, holidays);
+					return Fixing { date, rate };
 				})
 			| std::ranges::to<std::vector<Fixing>>();
 	}
@@ -38,7 +39,15 @@ namespace rates
 		double notional,
 		const time_unit_t& fixLag,
 		double spread)
-		:	IrSwapLeg(startDate, tenor, notional, frequency, stubType, dayCount, dateRule, holidays),
+		:	IrSwapLeg(
+				startDate,
+				tenor,
+				notional,
+				frequency,
+				stubType,
+				dayCount,
+				dateRule,
+				holidays),
 			spread_(spread),
 			fixLag_(fixLag),
 			fixings_(createFixings(schedule_, 0.0, fixLag_, holidays))
@@ -56,7 +65,15 @@ namespace rates
 		double notional,
 		const time_unit_t& fixLag,
 		double spread)
-		:	IrSwapLeg(startDate, endDate, notional, frequency, stubType, dayCount, dateRule, holidays),
+		:	IrSwapLeg(
+				startDate,
+				endDate,
+				notional,
+				frequency,
+				stubType,
+				dayCount,
+				dateRule,
+				holidays),
 			spread_(spread),
 			fixLag_(fixLag)
 	{
@@ -77,9 +94,15 @@ namespace rates
 		return value(curve.valueDate(), curve);
 	}
 
-	std::pair<std::optional<double>,std::optional<double>> IrSwapLegFloating::getCurrentFixings(const year_month_day& valueDate) const
+	std::pair<std::optional<double>,std::optional<double>>
+	IrSwapLegFloating::getCurrentFixings(const year_month_day& valueDate) const
 	{
-		for (const auto&[startDate, endDate, prevFixing, nextFixing] : std::views::zip(schedule_, schedule_ | std::views::drop(1), fixings_, fixings_ | std::views::drop(1)))
+		for (const auto&[startDate, endDate, prevFixing, nextFixing]
+			: std::views::zip(
+				schedule_,
+				schedule_ | std::views::drop(1),
+				fixings_,
+				fixings_ | std::views::drop(1)))
 		{
 			if (valueDate >= startDate && valueDate < endDate)
 			{
@@ -96,7 +119,11 @@ namespace rates
 		const std::optional<double>& prevFixing,
 		const std::optional<double>& nextFixing)
 	{
-		for (auto&& [startDate, endDate, fixing] : std::views::zip(schedule_, schedule_ | std::views::drop(1), fixings_))
+		for (auto&& [startDate, endDate, fixing]
+			: std::views::zip(
+				schedule_,
+				schedule_ | std::views::drop(1),
+				fixings_))
 		{
 			double fix = 0.0;
 			if (curve.valueDate() >= startDate)

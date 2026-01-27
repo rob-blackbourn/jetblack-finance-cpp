@@ -121,7 +121,7 @@ namespace rates
 			[&](double rate)
 			{
 				curve.rate(index, rate);
-				floatingLeg().reset(curve, std::optional<double>(), std::optional<double>());
+				floatingLeg().reset(curve);
 				return value(curve);
 			},
 			-0.1, std::max(0.10, 3.0 * lastRate), MAX_ITERATIONS, ERROR_TOLERANCE

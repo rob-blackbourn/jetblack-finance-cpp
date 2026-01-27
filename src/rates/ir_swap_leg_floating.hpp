@@ -52,7 +52,10 @@ namespace rates
 		virtual double value(const YieldCurve& curve) const;
 		virtual double accrued(const year_month_day& valueDate) const;
 
-		void reset(const YieldCurve& curve, const std::optional<double>& first_fixing, const std::optional<double>& second_fixing);
+		void reset(
+			const YieldCurve& curve,
+			const std::optional<double>& first_fixing = {},
+			const std::optional<double>& second_fixing = {});
 		std::pair<std::optional<double>,std::optional<double>> getCurrentFixings(const year_month_day& valueDate) const;
 
 		const std::vector<Fixing>& fixings() const { return fixings_; }
