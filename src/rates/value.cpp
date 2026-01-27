@@ -57,14 +57,16 @@ namespace rates
 		const YieldCurve& curve,
 		const std::vector<year_month_day>& schedule,
 		EDayCount dayCount,
-		double couponRate,
+		double rate,
 		double notional)
 	{
 		double sum_pv = 0.0;
 
-		for (const auto &[startDate, endDate] : std::views::zip(schedule, schedule | std::views::drop(1)))
+		for (
+			const auto &[startDate, endDate]
+			: std::views::zip(schedule, schedule | std::views::drop(1)))
 		{
-			auto coupon_pv = value(valueDate, curve, startDate, endDate, dayCount, couponRate, notional);
+			auto coupon_pv = value(valueDate, curve, startDate, endDate, dayCount, rate, notional);
 			sum_pv += coupon_pv;
 		}
 
@@ -79,12 +81,17 @@ namespace rates
 		const YieldCurve& curve,
 		const std::vector<year_month_day>& schedule,
 		EDayCount dayCount,
-		const std::vector<double>& fixings,
+		const std::vector<double>& fixingRates,
 		double notional)
 	{
 		double pv, sum_pv = 0;
 
-		for (const auto &[startDate, endDate, fixing] : std::views::zip(schedule, schedule | std::views::drop(1), fixings))
+		for (
+			const auto &[startDate, endDate, fixing]
+			: std::views::zip(
+				schedule,
+				schedule | std::views::drop(1),
+				fixingRates))
 		{
 			pv = value(valueDate, curve, startDate, endDate, dayCount, fixing, notional);
 			sum_pv += pv;
@@ -124,12 +131,12 @@ namespace rates
 		const year_month_day& startDate,
 		const year_month_day& endDate,
 		EDayCount dayCount,
-		double couponRate,
+		double rate,
 		double notional,
 		EFrequency frequency)
 	{
 		double period_t = dates::getTerm(startDate, endDate, dayCount).second;
-		double amount = couponRate * notional * period_t;
+		double amount = rate * notional * period_t;
 		double t = dates::getTerm(valueDate, endDate, dayCount).second;
 		double periods = t * static_cast<int>(frequency);
 		double x = ::pow(1 + yield / static_cast<int>(frequency), periods);
@@ -161,7 +168,7 @@ namespace rates
 		double yield,
 		const std::vector<year_month_day>& schedule,
 		EDayCount dayCount,
-		double couponRate,
+		double rate,
 		double notional,
 		EFrequency frequency)
 	{
@@ -169,7 +176,7 @@ namespace rates
 
 		for (const auto &[startDate, endDate] : std::views::zip(schedule, schedule | std::views::drop(1)))
 		{
-			auto coupon_pv = value(valueDate, yield, startDate, endDate, dayCount, couponRate, notional, frequency);
+			auto coupon_pv = value(valueDate, yield, startDate, endDate, dayCount, rate, notional, frequency);
 			sum_pv += coupon_pv;
 		}
 

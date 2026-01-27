@@ -4,6 +4,8 @@
 #include "dates/schedules.hpp"
 
 #include <chrono>
+#include <optional>
+#include <ranges>
 
 #define CATCH_CONFIG_MAIN
 #include "catch2/catch.hpp"
@@ -100,7 +102,7 @@ TEST_CASE("fixings/yieldCurve", "[value]")
         2026y/December/1d,
     };
     auto dayCount = EDayCount::Actual_d365;
-    auto fixings = std::vector<double> {
+    auto fixingRates = std::vector<double> {
         0.01,
         0.02,
         0.03,
@@ -113,6 +115,15 @@ TEST_CASE("fixings/yieldCurve", "[value]")
         0.10,
         0.11,
     };
+    auto fixings = std::views::zip(
+            schedule | std::views::drop(1),
+            fixingRates)
+        | std::views::transform([](auto&& t)
+            {
+                auto&& [date, rate] = t;
+                return Fixing { date, rate };
+            })
+        | std::ranges::to<std::vector<Fixing>>();
     auto notional = 1000000.0;
 
     auto actual = rates::value(
