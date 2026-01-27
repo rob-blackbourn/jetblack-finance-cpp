@@ -29,7 +29,7 @@ namespace rates
 		
 		IrFuture(
 			const year_month_day& expiryDate,
-			const months& m,
+			const months& nMonths,
 			EDayCount dayCount,
 			double price,
 			EDateRule dateRule,

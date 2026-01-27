@@ -12,19 +12,21 @@ namespace rates
 
 	IrFuture::IrFuture(
 		const year_month_day& expiryDate,
-		const months& m,
+		const months& nMonths,
 		EDayCount dayCount,
 		double price,
 		EDateRule dateRule,
 		const std::set<year_month_day>& holidays,
 		const time_unit_t& spot)
 	{
-		// Interest rate future is a just a deposit starting spot days after expiry and lasting three months
 		year_month_day startDate = add(expiryDate, spot, false, dateRule, holidays);
+		// The price is quoted as a discount from par. e.g. 0.05 is 95.
 		double rate = (100 - price) / 100.0;
-		deposit_ = Deposit(startDate, m, dayCount, rate, dateRule, holidays);
+		deposit_ = Deposit(startDate, nMonths, dayCount, rate, dateRule, holidays);
 	}
 
+	// A regular interest rate future is a just a deposit starting spot days
+	// after expiry and lasting three months.
 	IrFuture::IrFuture(
 		const year_month& expiry,
 		EDayCount dayCount,
