@@ -26,7 +26,7 @@ namespace rates
 		const year_month_day& valueDate,
 		const std::vector<year_month_day>& schedule,
 		EDayCount dayCount,
-		const std::vector<double>& fixings,
+		const std::vector<double>& fixingRates,
 		double notional);
 
 	double accrued(
