@@ -28,6 +28,7 @@ namespace rates
 		IrFuture() = default;
 		
 		IrFuture(
+			double notional,
 			const year_month_day& expiryDate,
 			const months& nMonths,
 			EDayCount dayCount,
@@ -37,6 +38,7 @@ namespace rates
 			const std::set<year_month_day>& holidays);
 
 		IrFuture(
+			double notional,
 			const year_month& expiry,
 			EDayCount dayCount,
 			double price,
@@ -44,7 +46,7 @@ namespace rates
 			const time_unit_t& spotLead,
 			const std::set<year_month_day>& holidays);
 
-
+		double notional() const { return deposit_.notional(); }
 		const year_month_day& startDate() const { return deposit_.startDate(); }
 		const year_month_day& endDate() const { return deposit_.endDate(); }
 		EDayCount dayCount() const { return deposit_.dayCount(); }

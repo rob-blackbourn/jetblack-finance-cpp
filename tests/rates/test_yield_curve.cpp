@@ -72,17 +72,17 @@ TEST_CASE("bootstrap", "[yield_curve]")
 
     auto spotDate = addBusinessDays(valueDate, days{2}, holidays);
 
-    auto depositON = Deposit(valueDate, days{1}, EDayCount::Actual_d360, 5.58675 / 100, EDateRule::Following, holidays);
-    auto depositTN = Deposit(depositON.endDate(), days{1}, EDayCount::Actual_d360, 5.59375 / 100, EDateRule::Following, holidays);
-    auto deposit1M = Deposit(spotDate, months{1}, EDayCount::Actual_d360, 5.625 / 100, EDateRule::Following, holidays);
-    auto deposit3M = Deposit(spotDate, months{3}, EDayCount::Actual_d360, 5.71875 / 100, EDateRule::Following, holidays);
+    auto depositON = Deposit(1e6, valueDate, days{1}, EDayCount::Actual_d360, 5.58675 / 100, EDateRule::Following, holidays);
+    auto depositTN = Deposit(1e6, depositON.endDate(), days{1}, EDayCount::Actual_d360, 5.59375 / 100, EDateRule::Following, holidays);
+    auto deposit1M = Deposit(1e6, spotDate, months{1}, EDayCount::Actual_d360, 5.625 / 100, EDateRule::Following, holidays);
+    auto deposit3M = Deposit(1e6, spotDate, months{3}, EDayCount::Actual_d360, 5.71875 / 100, EDateRule::Following, holidays);
     auto deposits = std::vector<Deposit> { depositON, depositTN, deposit1M, deposit3M};
 
-    auto futureDec97 = IrFuture(1997y/December, EDayCount::Actual_d365, 100 - 5.76, EDateRule::Following, daysToSpot, holidays);
-    auto futureMar98 = IrFuture(1998y/March, EDayCount::Actual_d365, 100 - 5.77, EDateRule::Following, daysToSpot, holidays);
-    auto futureJun98 = IrFuture(1998y/June, EDayCount::Actual_d365, 100 - 5.82, EDateRule::Following, daysToSpot, holidays);
-    auto futureSep98 = IrFuture(1998y/September, EDayCount::Actual_d365, 100 - 5.88, EDateRule::Following, daysToSpot, holidays);
-    auto futureDec98 = IrFuture(1998y/December, EDayCount::Actual_d365, 100 - 6.00, EDateRule::Following, daysToSpot, holidays);
+    auto futureDec97 = IrFuture(1e6, 1997y/December, EDayCount::Actual_d365, 100 - 5.76, EDateRule::Following, daysToSpot, holidays);
+    auto futureMar98 = IrFuture(1e6, 1998y/March, EDayCount::Actual_d365, 100 - 5.77, EDateRule::Following, daysToSpot, holidays);
+    auto futureJun98 = IrFuture(1e6, 1998y/June, EDayCount::Actual_d365, 100 - 5.82, EDateRule::Following, daysToSpot, holidays);
+    auto futureSep98 = IrFuture(1e6, 1998y/September, EDayCount::Actual_d365, 100 - 5.88, EDateRule::Following, daysToSpot, holidays);
+    auto futureDec98 = IrFuture(1e6, 1998y/December, EDayCount::Actual_d365, 100 - 6.00, EDateRule::Following, daysToSpot, holidays);
     auto futures = std::vector<IrFuture> { futureDec97, futureMar98, futureJun98, futureSep98, futureDec98};
 
     auto swap2Y = IrSwap(spotDate, years{2}, EFrequency::SemiAnnual, EStubType::ShortFirst, EDateRule::ModFollowing, EDayCount::Actual_d365, 1e6, 6.01253 / 100, days{2}, 0.0, holidays);

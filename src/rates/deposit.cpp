@@ -12,11 +12,13 @@ namespace rates
 	using namespace dates;
 
 	Deposit::Deposit(
+		double notional,
 		const year_month_day& startDate,
 		const year_month_day& endDate,
 		EDayCount dayCount,
 		double rate)
-		:	startDate_(startDate),
+		:	notional_(notional),
+			startDate_(startDate),
 			endDate_(endDate),
 			dayCount_(dayCount),
 			rate_(rate)
@@ -24,6 +26,7 @@ namespace rates
 	}
 
 	Deposit::Deposit(
+		double notional,
 		const year_month_day& startDate,
 		const time_unit_t& tenor,
 		EDayCount dayCount,
@@ -31,6 +34,7 @@ namespace rates
 		EDateRule dateRule,
 		const std::set<year_month_day>& holidays)
 		:	Deposit(
+				notional,
 				startDate,
 				add(startDate, tenor, isEndOfMonth(startDate), dateRule, holidays),
 				dayCount,
@@ -45,10 +49,9 @@ namespace rates
 		double dfEnd = curve.discountFactor(endDate_);
 		double t = yearFrac(startDate_, endDate_, dayCount_);
 
-		double notional = 1.0;
-		double interest = notional * rate_ * t;
-		double endCashFlow = notional + interest;
-		double npv = endCashFlow * dfEnd - notional * dfStart;
+		double interest = notional_ * rate_ * t;
+		double endCashFlow = notional_ + interest;
+		double npv = endCashFlow * dfEnd - notional_ * dfStart;
 
 		return npv;
 	}

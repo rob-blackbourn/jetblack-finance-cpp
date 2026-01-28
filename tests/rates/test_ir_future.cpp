@@ -19,6 +19,7 @@ TEST_CASE("ctor.default", "[ir_future]")
 TEST_CASE("ctor.dates", "[ir_future]")
 {
     auto future = IrFuture{
+        1.0,
         2026y/March,
         EDayCount::Actual_d365,
         95.0,
@@ -37,6 +38,7 @@ TEST_CASE("ctor.dates", "[ir_future]")
 TEST_CASE("value", "[ir_future]")
 {
     auto future = IrFuture{
+        1.0,
         2026y/March,
         EDayCount::Actual_d365,
         95.0,
@@ -54,6 +56,7 @@ TEST_CASE("value", "[ir_future]")
 TEST_CASE("calculateZeroRate", "[ir_future]")
 {
     auto future = IrFuture{
+        1.0,
         2026y/March,
         EDayCount::Actual_d365,
         95.0,
@@ -72,6 +75,7 @@ TEST_CASE("calculateZeroRate", "[ir_future]")
 TEST_CASE("solveZeroRate", "[ir_future]")
 {
     auto future = IrFuture{
+        1.0,
         2026y/March,
         EDayCount::Actual_d365,
         95.0,

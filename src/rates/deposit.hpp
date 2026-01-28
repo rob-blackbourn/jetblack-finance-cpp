@@ -24,12 +24,14 @@ namespace rates
 		Deposit() = default;
 
 		Deposit(
+			double notional,
 			const year_month_day& startDate,
 			const year_month_day& endDate,
 			EDayCount dayCount,
 			double rate);
 
 		Deposit(
+			double notional,
 			const year_month_day& startDate,
 			const time_unit_t& tenor,
 			EDayCount dayCount,
@@ -39,6 +41,7 @@ namespace rates
 
 		Deposit(const Deposit& deposit) = default;
 
+		double notional() const { return notional_; }
 		const year_month_day& startDate() const { return startDate_; }
 		const year_month_day& endDate() const { return endDate_; }
 		EDayCount dayCount() const { return dayCount_; }
@@ -50,6 +53,7 @@ namespace rates
 		double solveZeroRate(YieldCurve& curve, size_t pointIndex) const;
 
 	private:
+		double notional_ {1};
 		year_month_day startDate_ {};
 		year_month_day endDate_ {};
 		EDayCount dayCount_ {EDayCount::Actual_d365};
