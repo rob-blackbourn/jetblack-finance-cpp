@@ -13,7 +13,7 @@ TEST_CASE("ctor.default", "deposit")
 {
     auto deposit = Deposit{};
 
-    REQUIRE( fabs(deposit.rate() - 0.0) < 1e-12 );
+    REQUIRE( deposit.rate() == Approx(0.0).epsilon(1e-12) );
 }
 
 TEST_CASE("ctor.dates", "deposit")
@@ -22,7 +22,7 @@ TEST_CASE("ctor.dates", "deposit")
 
     REQUIRE( deposit.startDate() == 2026y/January/5d );
     REQUIRE( deposit.endDate() == 2026y/March/5d );
-    REQUIRE( fabs(deposit.rate() - 0.05) < 1e-12 );
+    REQUIRE( deposit.rate() == Approx(0.05).epsilon(1e-12) );
     REQUIRE( deposit.dayCount() == EDayCount::Actual_d365 );
 }
 
@@ -41,7 +41,7 @@ TEST_CASE("ctor.tenor", "deposit")
     REQUIRE( deposit.notional() == 1e6 );
     REQUIRE( deposit.startDate() == 2026y/January/5d );
     REQUIRE( deposit.endDate() == 2026y/April/6d );
-    REQUIRE( fabs(deposit.rate() - 0.05) < 1e-12 );
+    REQUIRE( deposit.rate() == Approx(0.05).epsilon(1e-12) );
     REQUIRE( deposit.dayCount() == EDayCount::Actual_d365 );
 }
 
@@ -51,7 +51,7 @@ TEST_CASE("value", "deposit")
     auto yield_curve = YieldCurve{"flat", 0.05, 2026y/January/2d, EDayCount::Actual_d365};
     auto actual = deposit.value(yield_curve);
     auto expected = -32.472115593855456;
-    REQUIRE( fabs(actual - expected) < 1e-10 );
+    REQUIRE( actual == Approx(expected).epsilon(1e-12) );
 }
 
 TEST_CASE("calculateZeroRate", "deposit")
@@ -60,7 +60,7 @@ TEST_CASE("calculateZeroRate", "deposit")
     auto yield_curve = YieldCurve{"flat", 0.05, 2026y/January/2d, EDayCount::Actual_d365};
     auto actual = deposit.calculateZeroRate(yield_curve);
     auto expected = 0.04980875182891082;
-    REQUIRE( fabs(actual - expected) < 1e-10 );
+    REQUIRE( actual == Approx(expected).epsilon(1e-10) );
 }
 
 TEST_CASE("solveZeroRate", "deposit")
@@ -69,8 +69,7 @@ TEST_CASE("solveZeroRate", "deposit")
     auto yield_curve = YieldCurve{"flat", 0.05, 2026y/January/2d, EDayCount::Actual_d365};
     auto actual = deposit.solveZeroRate(yield_curve, 0);
     auto expected = 0.049799027345635349;
-    // REQUIRE(actual == expected);
-    REQUIRE( fabs(actual - expected) < 1e-10 );
+    REQUIRE( actual == Approx(expected).epsilon(1e-10) );
 }
 
 TEST_CASE("solveZeroRate/ON", "deposit")
@@ -81,6 +80,5 @@ TEST_CASE("solveZeroRate/ON", "deposit")
     auto yield_curve = YieldCurve{"flat", {{t, 0.05}}, valueDate, EDayCount::Actual_d365, EInterpolationMethod::Exponential};
     auto actual = deposit.solveZeroRate(yield_curve, 0);
     auto expected = 0.056639042777946388;
-    // REQUIRE(actual == expected);
-    REQUIRE( fabs(actual - expected) < 1e-10 );
+    REQUIRE( actual == Approx(expected).epsilon(1e-10) );
 }

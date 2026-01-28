@@ -44,8 +44,7 @@ TEST_CASE("couponRate/yieldCurve", "[value]")
         couponRate,
         notional
     );
-    auto expected = 1027810.4346810074;
-    REQUIRE ( fabs(actual - expected) < 1e-10 );
+    REQUIRE ( actual == Approx(1027810.4346810074).epsilon(1e-10) );
 }
 
 TEST_CASE("couponRate/yieldRate", "[value]")
@@ -79,8 +78,7 @@ TEST_CASE("couponRate/yieldRate", "[value]")
         notional,
         EFrequency::Monthly
     );
-    auto expected = 1027902.6838747344;
-    REQUIRE ( fabs(actual - expected) < 1e-10 );
+    REQUIRE ( actual == Approx(1027902.6838747344).epsilon(1e-10) );
 }
 
 TEST_CASE("fixings/yieldCurve", "[value]")
@@ -134,6 +132,5 @@ TEST_CASE("fixings/yieldCurve", "[value]")
         fixings,
         notional
     );
-    auto expected = 1009728.5234190911;
-    REQUIRE ( fabs(actual - expected) < 1e-10 );
+    REQUIRE ( actual == Approx(1009728.5234190911).epsilon(1e-10) );
 }

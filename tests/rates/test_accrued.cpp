@@ -34,7 +34,7 @@ TEST_CASE("flatRate", "accrued")
         0.05,
         100.0);
 
-    REQUIRE (fabs(jan10 - 0.1232876712) < 1e-10);
+    REQUIRE( jan10 == Approx(0.12328767123287671).epsilon(1e-10) );
 
     auto feb10 = accrued(
         2026y/February/10d,
@@ -43,7 +43,7 @@ TEST_CASE("flatRate", "accrued")
         0.05,
         100.0);
 
-    REQUIRE (fabs(feb10 - 0.1232876712) < 1e-10);
+    REQUIRE( feb10 == Approx(0.12328767123287671).epsilon(1e-10) );
 
     auto jan1 = accrued(
         2026y/January/1d,
@@ -52,7 +52,7 @@ TEST_CASE("flatRate", "accrued")
         0.05,
         100.0);
 
-    REQUIRE (fabs(jan1 - 0.0) < 1e-10);
+    REQUIRE( jan1 == Approx(0.0).epsilon(1e-10) );
 
     auto jan31 = accrued(
         2026y/January/31d,
@@ -61,7 +61,7 @@ TEST_CASE("flatRate", "accrued")
         0.05,
         100.0);
 
-    REQUIRE (fabs(jan31 - 0.4109589041) < 1e-10);
+    REQUIRE( jan31 == Approx(0.41095890410958902).epsilon(1e-10) );
 
     auto nov10 = accrued(
         2026y/November/10d,
@@ -70,7 +70,7 @@ TEST_CASE("flatRate", "accrued")
         0.05,
         100.0);
 
-    REQUIRE (fabs(nov10 - 0.12328767123287671) < 1e-10);
+    REQUIRE( nov10 == Approx(0.12328767123287671).epsilon(1e-10) );
 
     auto dec31 = accrued(
         2026y/December/31d,
@@ -79,7 +79,7 @@ TEST_CASE("flatRate", "accrued")
         0.05,
         100.0);
 
-    REQUIRE (fabs(dec31 - 0.0) < 1e-10);
+    REQUIRE( dec31 == Approx(0.0).epsilon(1e-10) );
 }
 
 TEST_CASE("fixings", "accrued")
@@ -119,7 +119,7 @@ TEST_CASE("fixings", "accrued")
         fixings,
         100.0);
 
-    REQUIRE (fabs(jan10 - 0.024657534246575342) < 1e-10);
+    REQUIRE( jan10 == Approx(0.024657534246575342).epsilon(1e-10) );
 
     auto feb10 = accrued(
         2026y/February/10d,
@@ -128,7 +128,7 @@ TEST_CASE("fixings", "accrued")
         fixings,
         100.0);
 
-    REQUIRE (fabs(feb10 - 0.049315068493150684) < 1e-10);
+    REQUIRE( feb10 == Approx(0.049315068493150684).epsilon(1e-10) );
 
     auto jan1 = accrued(
         2026y/January/1d,
@@ -137,7 +137,7 @@ TEST_CASE("fixings", "accrued")
         fixings,
         100.0);
 
-    REQUIRE (fabs(jan1 - 0.0) < 1e-10);
+    REQUIRE( jan1 == Approx(0.0).epsilon(1e-10) );
 
     auto jan31 = accrued(
         2026y/January/31d,
@@ -146,7 +146,7 @@ TEST_CASE("fixings", "accrued")
         fixings,
         100.0);
 
-    REQUIRE (fabs(jan31 - 0.082191780821917804) < 1e-10);
+    REQUIRE( jan31 == Approx(0.082191780821917804).epsilon(1e-10) );
 
     auto nov10 = accrued(
         2026y/November/10d,
@@ -155,7 +155,7 @@ TEST_CASE("fixings", "accrued")
         fixings,
         100.0);
 
-    REQUIRE (fabs(nov10 - 0.27123287671232876) < 1e-10);
+    REQUIRE( nov10 == Approx(0.27123287671232876).epsilon(1e-10) );
 
     auto dec31 = accrued(
         2026y/December/31d,
@@ -164,6 +164,6 @@ TEST_CASE("fixings", "accrued")
         fixings,
         100.0);
 
-    REQUIRE (fabs(dec31 - 0.0) < 1e-10);
+    REQUIRE( dec31 == Approx(0.0).epsilon(1e-10) );
 
 }

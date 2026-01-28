@@ -99,5 +99,5 @@ TEST_CASE("bootstrap", "[yield_curve]")
     auto yieldCurve1 = YieldCurve("solved", valueDate, deposits, futures, swaps, EDayCount::Actual_d365, EInterpolationMethod::CubicSpline);
 
     auto df1 = yieldCurve1.discountFactor(2000y/January/1d);
-    REQUIRE ( fabs(df1 - 0.87484318856686527) < 1e-12 );
+    REQUIRE ( df1 == Approx(0.87484318856686527).epsilon(1e-12) );
 }

@@ -61,6 +61,14 @@
             "cwd": "${workspaceRoot}"
         },
         {
+            "name": "test/rates: value",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceRoot}/tests/rates/bin/test_value",
+            "args": [],
+            "cwd": "${workspaceRoot}"
+        },
+        {
             "name": "test/rates: yield curve",
             "type": "lldb",
             "request": "launch",
