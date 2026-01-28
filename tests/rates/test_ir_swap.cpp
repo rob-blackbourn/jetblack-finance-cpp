@@ -31,16 +31,16 @@ TEST_CASE("ctor.tenor", "[ir_swap]")
     double spread = 0.01;
 
     auto swap = IrSwap(
+        notional,
+        rate,
+        spread,
         startDate,
         tenor,
         frequency,
         stubType,
         dateRule,
         dayCount,
-        notional,
-        rate,
         fixLag,
-        spread,
         holidays
     );
 

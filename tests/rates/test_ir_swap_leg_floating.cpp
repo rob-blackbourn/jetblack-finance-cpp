@@ -29,15 +29,15 @@ TEST_CASE("ctor.tenor", "[ir_swap_leg_floating]")
     double spread = 0.01;
 
     auto leg = IrSwapLegFloating(
+        notional,
+        spread,
         startDate,
         tenor,
         frequency,
         stubType,
         dateRule,
         dayCount,
-        notional,
         days{2},
-        spread,
         holidays
     );
 

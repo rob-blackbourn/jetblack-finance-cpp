@@ -13,32 +13,32 @@ namespace rates
 
 	Deposit::Deposit(
 		double notional,
+		double rate,
 		const year_month_day& startDate,
 		const year_month_day& endDate,
-		EDayCount dayCount,
-		double rate)
+		EDayCount dayCount)
 		:	notional_(notional),
+			rate_(rate),
 			startDate_(startDate),
 			endDate_(endDate),
-			dayCount_(dayCount),
-			rate_(rate)
+			dayCount_(dayCount)
 	{
 	}
 
 	Deposit::Deposit(
 		double notional,
+		double rate,
 		const year_month_day& startDate,
 		const time_unit_t& tenor,
 		EDayCount dayCount,
-		double rate,
 		EDateRule dateRule,
 		const std::set<year_month_day>& holidays)
 		:	Deposit(
 				notional,
+				rate,
 				startDate,
 				add(startDate, tenor, isEndOfMonth(startDate), dateRule, holidays),
-				dayCount,
-				rate)
+				dayCount)
 	{
 	}
 

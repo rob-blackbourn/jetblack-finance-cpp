@@ -12,31 +12,31 @@ namespace rates
 	using namespace dates;
 
 	IrSwapLegFixed::IrSwapLegFixed(
+		double notional,
+		double rate,
 		const year_month_day& startDate,
 		const time_unit_t& tenor,
 		EFrequency frequency,
 		EStubType stubType,
 		EDateRule dateRule,
 		EDayCount dayCount,
-		double notional,
-		double rate,
 		const std::set<year_month_day>& holidays)
-		:	IrSwapLeg(startDate, tenor, notional, frequency, stubType, dayCount, dateRule, holidays),
+		:	IrSwapLeg(notional, startDate, tenor, frequency, stubType, dayCount, dateRule, holidays),
 			rate_(rate)
 	{
 	}
 
 	IrSwapLegFixed::IrSwapLegFixed(
+		double notional,
+		double rate,
 		const year_month_day& startDate,
 		const year_month_day& endDate,
 		EFrequency frequency,
 		EStubType stubType,
 		EDateRule dateRule,
 		EDayCount dayCount,
-		double notional,
-		double rate,
 		const std::set<year_month_day>& holidays)
-		:	IrSwapLeg(startDate, endDate, notional, frequency, stubType, dayCount, dateRule, holidays),
+		:	IrSwapLeg(notional, startDate, endDate, frequency, stubType, dayCount, dateRule, holidays),
 			rate_(rate)
 	{
 	}

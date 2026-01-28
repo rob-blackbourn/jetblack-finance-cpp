@@ -25,17 +25,17 @@ namespace rates
 
 		Deposit(
 			double notional,
+			double rate,
 			const year_month_day& startDate,
 			const year_month_day& endDate,
-			EDayCount dayCount,
-			double rate);
+			EDayCount dayCount);
 
 		Deposit(
 			double notional,
+			double rate,
 			const year_month_day& startDate,
 			const time_unit_t& tenor,
 			EDayCount dayCount,
-			double rate,
 			EDateRule dateRule,
 			const std::set<year_month_day>& holidays);
 
@@ -54,10 +54,10 @@ namespace rates
 
 	private:
 		double notional_ {1};
+		double rate_ {0};
 		year_month_day startDate_ {};
 		year_month_day endDate_ {};
 		EDayCount dayCount_ {EDayCount::Actual_d365};
-		double rate_ {0};
 	};
 }
 

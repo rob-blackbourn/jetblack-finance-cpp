@@ -25,27 +25,27 @@ namespace rates
 		IrSwapLegFloating() = default;
 
 		IrSwapLegFloating(
+			double notional,
+			double spread,
 			const year_month_day& startDate,
 			const time_unit_t& tenor,
 			EFrequency frequency,
 			EStubType stubType,
 			EDateRule dateRule,
 			EDayCount dayCount,
-			double notional,
 			const time_unit_t& fixLag,
-			double spread,
 			const std::set<year_month_day>& holidays);
 
 		IrSwapLegFloating(
+			double notional,
+			double spread,
 			const year_month_day& startDate,
 			const year_month_day& endDate,
 			EFrequency frequency,
 			EStubType stubType,
 			EDateRule dateRule,
 			EDayCount dayCount,
-			double notional,
 			const time_unit_t& fixLag,
-			double spread,
 			const std::set<year_month_day>& holidays);
 
 		virtual double value(const year_month_day& valueDate, const YieldCurve& curve) const;

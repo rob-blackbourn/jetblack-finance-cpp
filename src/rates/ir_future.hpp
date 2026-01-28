@@ -29,19 +29,19 @@ namespace rates
 		
 		IrFuture(
 			double notional,
+			double price,
 			const year_month_day& expiryDate,
 			const months& nMonths,
 			EDayCount dayCount,
-			double price,
 			EDateRule dateRule,
 			const time_unit_t& spotLead,
 			const std::set<year_month_day>& holidays);
 
 		IrFuture(
 			double notional,
+			double price,
 			const year_month& expiry,
 			EDayCount dayCount,
-			double price,
 			EDateRule dateRule,
 			const time_unit_t& spotLead,
 			const std::set<year_month_day>& holidays);

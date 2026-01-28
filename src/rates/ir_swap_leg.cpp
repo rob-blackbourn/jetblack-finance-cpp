@@ -9,17 +9,17 @@ namespace rates
 	using namespace dates;
 
 	IrSwapLeg::IrSwapLeg(
+		double notional,
 		const year_month_day& startDate,
 		const year_month_day& endDate,
-		double notional,
 		EFrequency frequency,
 		EStubType stubType,
 		EDayCount dayCount,
 		EDateRule dateRule,
 		const std::set<year_month_day>& holidays)
-		:	startDate_(startDate),
+		:	notional_(notional),
+			startDate_(startDate),
 			endDate_(endDate),
-			notional_(notional),
 			frequency_(frequency),
 			stubType_(stubType),
 			dayCount_(dayCount),
@@ -29,18 +29,18 @@ namespace rates
 	}
 
 	IrSwapLeg::IrSwapLeg(
+		double notional,
 		const year_month_day& startDate,
 		const time_unit_t& tenor,
-		double notional,
 		EFrequency frequency,
 		EStubType stubType,
 		EDayCount dayCount,
 		EDateRule dateRule,
 		const std::set<year_month_day>& holidays)
 		:	IrSwapLeg(
+				notional,
 				startDate,
 				add(startDate, tenor, isEndOfMonth(startDate), dateRule, holidays),
-				notional,
 				frequency,
 				stubType,
 				dayCount,

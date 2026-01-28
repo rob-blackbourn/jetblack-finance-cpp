@@ -18,77 +18,77 @@ namespace rates
 	}
 
 	IrSwap::IrSwap(
+		double notional,
+		double fixedRate,
+		double floatingSpread,
 		const year_month_day& startDate,
 		const time_unit_t& tenor,
 		EFrequency frequency,
 		EStubType stubType,
 		EDateRule dateRule,
 		EDayCount dayCount,
-		double notional,
-		double fixedRate,
 		const time_unit_t& fixLag,
-		double floatingSpread,
 		const std::set<year_month_day>& holidays)
 		:	fixedLeg_(
 				IrSwapLegFixed(
+					notional,
+					fixedRate,
 					startDate,
 					tenor,
 					frequency,
 					stubType,
 					dateRule,
 					dayCount,
-					notional,
-					fixedRate,
 					holidays)),
 			floatingLeg_(
 				IrSwapLegFloating(
+					notional,
+					floatingSpread,
 					startDate,
 					tenor,
 					frequency,
 					stubType,
 					dateRule,
 					dayCount,
-					notional,
 					fixLag,
-					floatingSpread,
 					holidays))
 	{		
 	}
 
 	IrSwap::IrSwap(
+		double notional,
+		double fixedRate,
+		double floatingSpread,
 		const year_month_day& startDate,
 		const year_month_day& endDate,
 		EFrequency frequency,
 		EStubType stubType,
 		EDateRule dateRule,
 		EDayCount dayCount,
-		double notional,
-		double fixedRate,
 		const time_unit_t& fixLag,
-		double floatingSpread,
 		const std::set<year_month_day>& holidays)
 		:	fixedLeg_(
 				IrSwapLegFixed(
+					notional,
+					fixedRate,
 					startDate,
 					endDate,
 					frequency,
 					stubType,
 					dateRule,
 					dayCount,
-					notional,
-					fixedRate,
 					holidays)),
 			floatingLeg_(
 				IrSwapLegFloating(
+					notional,
+					floatingSpread,
 					startDate,
 					endDate,
 					frequency,
 					stubType,
 					dateRule,
 					dayCount,
-					notional,
 					fixLag,
-					floatingSpread,
 					holidays))
 	{		
 	}

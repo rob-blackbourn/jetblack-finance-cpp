@@ -29,14 +29,14 @@ TEST_CASE("ctor.tenor", "[ir_swap_leg_fixed]")
     double rate = 0.05;
 
     auto leg = IrSwapLegFixed(
+        notional,
+        rate,
         startDate,
         tenor,
         frequency,
         stubType,
         dateRule,
         dayCount,
-        notional,
-        rate,
         holidays
     );
 
