@@ -69,9 +69,6 @@ namespace rates
 			const std::optional<double>& first_fixing,
 			const std::optional<double>& second_fixing);
 
-		bool operator == (const IrSwap& rhs) const { return endDate() == rhs.endDate(); }
-		bool operator <  (const IrSwap& rhs) const { return endDate() <  rhs.endDate(); }
-
 	private:
 		IrSwapLegFixed fixedLeg_ {};
 		IrSwapLegFloating floatingLeg_ {};

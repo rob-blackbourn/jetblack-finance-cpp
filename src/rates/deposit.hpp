@@ -49,16 +49,6 @@ namespace rates
 		double calculateZeroRate(const YieldCurve& curve) const;
 		double solveZeroRate(YieldCurve& curve, size_t pointIndex) const;
 
-		bool operator == (const Deposit& rhs) const
-		{
-			return endDate_ == rhs.endDate_;
-		}
-
-		bool operator < (const Deposit& rhs) const
-		{
-			return endDate_ < rhs.endDate_;
-		}
-
 	private:
 		year_month_day startDate_ {};
 		year_month_day endDate_ {};

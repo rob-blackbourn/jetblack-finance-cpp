@@ -55,16 +55,6 @@ namespace rates
 		double calculateZeroRate(const YieldCurve& curve) const;
 		double solveZeroRate(YieldCurve& curve, size_t pointIndex) const;
 
-		bool operator == (const IrFuture& rhs) const
-		{
-			return deposit_ == rhs.deposit_;
-		}
-
-		bool operator < (const IrFuture& rhs) const
-		{
-			return deposit_ < rhs.deposit_;
-		}
-
 	private:
 		Deposit deposit_ {};
 	};
