@@ -223,7 +223,7 @@ namespace rates
 		size_t i = 0;
 		double r = 0.05;
 
-		for (const auto& deposit : deposits_)
+		for (auto& deposit : deposits_)
 		{
 			auto t = time(deposit.endDate());
 			points_.push_back({t, r});
@@ -231,7 +231,7 @@ namespace rates
 			rate(i++, r);
 		}
 
-		for (const auto& future : futures_)
+		for (auto& future : futures_)
 		{
 			auto t = time(future.endDate());
 			points_.push_back({t, r});

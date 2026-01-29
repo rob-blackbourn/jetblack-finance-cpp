@@ -70,7 +70,7 @@ namespace rates
 		return r;
 	}
 
-	double Deposit::solveZeroRate(YieldCurve& curve, size_t index) const
+	double Deposit::solveZeroRate(YieldCurve& curve, size_t index)
 	{
 		const double ERROR_TOLERANCE = std::numeric_limits<double>::epsilon();
 		const unsigned int MAX_ITERATIONS = 100;

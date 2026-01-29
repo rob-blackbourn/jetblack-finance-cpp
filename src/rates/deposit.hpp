@@ -50,7 +50,7 @@ namespace rates
 
 		double value(const YieldCurve& curve) const;
 		double calculateZeroRate(const YieldCurve& curve) const;
-		double solveZeroRate(YieldCurve& curve, size_t pointIndex) const;
+		double solveZeroRate(YieldCurve& curve, size_t index);
 
 	private:
 		double notional_ {1};
