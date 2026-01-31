@@ -58,6 +58,7 @@ namespace rates
 		const year_month_day& startDate() const { return deposit_.startDate(); }
 		virtual const year_month_day& endDate() const override { return deposit_.endDate(); }
 		EDayCount dayCount() const { return deposit_.dayCount(); }
+		
 		virtual double rate() const override { return deposit_.rate(); }
 		virtual void rate(double rate) override { deposit_.rate(rate); }
 
