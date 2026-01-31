@@ -54,16 +54,12 @@ namespace rates
 	YieldCurve::YieldCurve(
 		const std::string& label,
 		const year_month_day& valueDate,
-		const std::vector<Deposit>& deposits,
-		const std::vector<IrFuture>& futures,
-		const std::vector<IrSwap>& swaps,
+		const std::vector<std::shared_ptr<Instrument>>& instruments,
 		EDayCount dayCount,
 		EInterpolationMethod interpolationMethod)
 		:	label_(label),
 			valueDate_(valueDate),
-			deposits_(deposits),
-			futures_(futures),
-			swaps_(swaps),
+			instruments_(instruments),
 			dayCount_(dayCount),
 			interpolationMethod_(interpolationMethod)
 	{
@@ -72,38 +68,16 @@ namespace rates
 
 	void YieldCurve::buildCurve()
 	{
-		if (deposits_.empty())
-			throw std::length_error("deposits required for yield curve building");
-		if (swaps_.empty())
-			throw std::length_error("swaps required for yield curve building");
+		if (instruments_.empty())
+			throw std::length_error("instruments required for yield curve building");
 
 		// Sort the instruments into chronological order
 		std::ranges::sort(
-			deposits_,
-			[](const Deposit& a, const Deposit& b)
+			instruments_,
+			[](const std::shared_ptr<Instrument>& a, const std::shared_ptr<Instrument>& b)
 			{
-				return a.endDate() < b.endDate();
+				return a->endDate() < b->endDate();
 			});
-
-		if (!futures_.empty())
-		{
-			std::ranges::sort(
-				futures_,
-				[](const IrFuture& a, IrFuture& b)
-				{
-					return a.endDate() < b.endDate();
-				});
-		}
-
-		std::ranges::sort(
-			swaps_,
-			[](const IrSwap& a, const IrSwap& b)
-			{
-				return a.endDate() < b.endDate();
-			});
-
-		// Get rid of any futures which will put in a point before the end of the deposits
-		deleteOverlappingFutures(deposits_, futures_);
 
 		solveZeroRates();
 	}
@@ -194,19 +168,20 @@ namespace rates
 
 	YieldCurve YieldCurve::bumpInstruments(double x) const
 	{
-		std::vector<Deposit> deposits(deposits_);
-		for (auto& deposit : deposits)
-			deposit.rate(deposit.rate() + x);
+        auto instruments = instruments_
+			| std::views::transform(
+				[](auto&& instrument)
+				{
+					return instrument->clone_shared();
+				})
+			| std::ranges::to<std::vector<std::shared_ptr<Instrument>>>();
 
-		std::vector<IrFuture> futures(futures_);
-		for (auto& future : futures)
-			future.rate(future.rate() + x);
+		for (auto&& instrument : instruments)
+		{
+			instrument->rate(instrument->rate() + x);
+		}
 
-		std::vector<IrSwap> swaps(swaps_);
-		for (auto& swap : swaps)
-			swap.fixedLeg().rate(swap.fixedLeg().rate() + x);
-
-		return YieldCurve(label_ + "_bumped", valueDate_, deposits, futures, swaps, dayCount_, interpolationMethod_);
+		return YieldCurve(label_ + "_bumped", valueDate_, instruments, dayCount_, interpolationMethod_);
 	}
 
 	double YieldCurve::time(const year_month_day& date) const
@@ -223,27 +198,11 @@ namespace rates
 		size_t i = 0;
 		double r = 0.05;
 
-		for (auto& deposit : deposits_)
+		for (auto&& instrument : instruments_)
 		{
-			auto t = time(deposit.endDate());
+			auto t = time(instrument->endDate());
 			points_.push_back({t, r});
-			r = deposit.solveZeroRate(*this, i);
-			rate(i++, r);
-		}
-
-		for (auto& future : futures_)
-		{
-			auto t = time(future.endDate());
-			points_.push_back({t, r});
-			r = future.solveZeroRate(*this, i);
-			rate(i++, r);
-		}
-
-		for (auto& swap : swaps_)
-		{
-			auto t = time(swap.endDate());
-			points_.push_back({t, r});
-			r = swap.solveZeroRate(*this, i);
+			r = instrument->solveZeroRate(*this, i);
 			rate(i++, r);
 		}
 	}
@@ -285,26 +244,6 @@ namespace rates
 		default:
 			throw std::runtime_error("Invalid interpolation method");
 		}
-	}
-
-	void YieldCurve::deleteOverlappingFutures(const std::vector<Deposit>& deposits, std::vector<IrFuture>& futures)
-	{	
-		year_month_day depositsEndDate = deposits_.back().endDate();
-		bool deletedFuture;
-		do
-		{
-			deletedFuture = false;
-			for (std::vector<IrFuture>::iterator i_future(futures.begin()); i_future != futures.end(); ++i_future)
-			{
-				if (i_future->endDate() <= depositsEndDate)
-				{
-					futures.erase(i_future);
-					deletedFuture = true;
-					break;
-				}
-			}
-		}
-		while (deletedFuture == true);
 	}
 }
 

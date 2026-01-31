@@ -9,9 +9,7 @@
 #include "dates/terms.hpp"
 #include "maths/interp.hpp"
 
-#include "rates/deposit.hpp"
-#include "rates/ir_future.hpp"
-#include "rates/ir_swap.hpp"
+#include "rates/instrument.hpp"
 #include "rates/yield_curve_point.hpp"
 
 namespace rates
@@ -49,9 +47,7 @@ namespace rates
 		YieldCurve(
 			const std::string& label,
 			const year_month_day& valueDate,
-			const std::vector<Deposit>& deposits,
-			const std::vector<IrFuture>& futures,
-			const std::vector<IrSwap>& swaps,
+			const std::vector<std::shared_ptr<Instrument>>& instruments,
 			EDayCount dayCount,
 			EInterpolationMethod interpolationMethod);
 
@@ -84,16 +80,13 @@ namespace rates
 	private:
 		void buildCurve();
 		void solveZeroRates();
-		void deleteOverlappingFutures(const std::vector<Deposit>& deposits, std::vector<IrFuture>& futures);
 
 		static std::shared_ptr<maths::Interp> createInterpolator(const std::vector<YieldCurvePoint>& points, EInterpolationMethod interpolationMethod);
 
 	private:
 		std::string						label_;
 		year_month_day					valueDate_;
-		std::vector<Deposit>			deposits_;
-		std::vector<IrFuture>			futures_;
-		std::vector<IrSwap>				swaps_;
+		std::vector<std::shared_ptr<Instrument>>	instruments_;
 		std::vector<YieldCurvePoint>	points_;
 		EDayCount						dayCount_;
 		EInterpolationMethod			interpolationMethod_;

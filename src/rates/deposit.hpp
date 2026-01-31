@@ -7,6 +7,8 @@
 #include "dates/terms.hpp"
 #include "dates/schedules.hpp"
 
+#include "rates/instrument.hpp"
+
 namespace rates
 {
 	using namespace std::chrono;
@@ -18,7 +20,7 @@ namespace rates
 	 * Deposit rate is a payment of $1 on the start date and receipt of $1 plus interest on the end date.
 	 */
 
-	class Deposit
+	class Deposit : public Instrument
 	{
 	public:
 		Deposit() = default;
@@ -41,16 +43,29 @@ namespace rates
 
 		Deposit(const Deposit& deposit) = default;
 
+		virtual ~Deposit() override
+		{
+		}
+
 		double notional() const { return notional_; }
 		const year_month_day& startDate() const { return startDate_; }
-		const year_month_day& endDate() const { return endDate_; }
+		virtual const year_month_day& endDate() const override { return endDate_; }
 		EDayCount dayCount() const { return dayCount_; }
-		double rate() const { return rate_; }
-		void rate(double rate) { rate_ = rate; }
+		virtual double rate() const override { return rate_; }
+		virtual void rate(double rate) override { rate_ = rate; }
 
 		double value(const YieldCurve& curve) const;
 		double calculateZeroRate(const YieldCurve& curve) const;
-		double solveZeroRate(YieldCurve& curve, size_t index);
+		virtual double solveZeroRate(YieldCurve& curve, size_t index) override;
+
+		virtual std::shared_ptr<Instrument> clone_shared() const override
+		{
+			return std::make_shared<Deposit>(*this);
+		}
+		virtual std::unique_ptr<Instrument> clone_unique() const override
+		{
+			return std::make_unique<Deposit>(*this);
+		}
 
 	private:
 		double notional_ {1};

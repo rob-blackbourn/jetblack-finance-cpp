@@ -1,4 +1,7 @@
 #include "rates/yield_curve.hpp"
+#include "rates/deposit.hpp"
+#include "rates/ir_future.hpp"
+#include "rates/ir_swap.hpp"
 
 #include "dates/calendars/target.hpp"
 
@@ -72,31 +75,34 @@ TEST_CASE("bootstrap", "[yield_curve]")
 
     auto spotDate = addBusinessDays(valueDate, days{2}, holidays);
 
-    auto depositON = Deposit(1e6, 5.58675 / 100, valueDate, days{1}, EDayCount::Actual_d360, EDateRule::Following, holidays);
-    auto depositTN = Deposit(1e6, 5.59375 / 100, depositON.endDate(), days{1}, EDayCount::Actual_d360, EDateRule::Following, holidays);
-    auto deposit1M = Deposit(1e6, 5.625 / 100, spotDate, months{1}, EDayCount::Actual_d360, EDateRule::Following, holidays);
-    auto deposit3M = Deposit(1e6, 5.71875 / 100, spotDate, months{3}, EDayCount::Actual_d360, EDateRule::Following, holidays);
-    auto deposits = std::vector<Deposit> { depositON, depositTN, deposit1M, deposit3M};
+    auto depositON = std::make_shared<Deposit>(1e6, 5.58675 / 100, valueDate, days{1}, EDayCount::Actual_d360, EDateRule::Following, holidays);
+    auto depositTN = std::make_shared<Deposit>(1e6, 5.59375 / 100, depositON->endDate(), days{1}, EDayCount::Actual_d360, EDateRule::Following, holidays);
+    auto deposit1M = std::make_shared<Deposit>(1e6, 5.625 / 100, spotDate, months{1}, EDayCount::Actual_d360, EDateRule::Following, holidays);
+    auto deposit3M = std::make_shared<Deposit>(1e6, 5.71875 / 100, spotDate, months{3}, EDayCount::Actual_d360, EDateRule::Following, holidays);
 
-    auto futureDec97 = IrFuture(1e6, 100 - 5.76, 1997y/December, EDayCount::Actual_d365, EDateRule::Following, daysToSpot, holidays);
-    auto futureMar98 = IrFuture(1e6, 100 - 5.77, 1998y/March, EDayCount::Actual_d365, EDateRule::Following, daysToSpot, holidays);
-    auto futureJun98 = IrFuture(1e6, 100 - 5.82, 1998y/June, EDayCount::Actual_d365, EDateRule::Following, daysToSpot, holidays);
-    auto futureSep98 = IrFuture(1e6, 100 - 5.88, 1998y/September, EDayCount::Actual_d365, EDateRule::Following, daysToSpot, holidays);
-    auto futureDec98 = IrFuture(1e6, 100 - 6.00, 1998y/December, EDayCount::Actual_d365, EDateRule::Following, daysToSpot, holidays);
-    auto futures = std::vector<IrFuture> { futureDec97, futureMar98, futureJun98, futureSep98, futureDec98};
+    auto futureDec97 = std::make_shared<IrFuture>(1e6, 100 - 5.76, 1997y/December, EDayCount::Actual_d365, EDateRule::Following, daysToSpot, holidays);
+    auto futureMar98 = std::make_shared<IrFuture>(1e6, 100 - 5.77, 1998y/March, EDayCount::Actual_d365, EDateRule::Following, daysToSpot, holidays);
+    auto futureJun98 = std::make_shared<IrFuture>(1e6, 100 - 5.82, 1998y/June, EDayCount::Actual_d365, EDateRule::Following, daysToSpot, holidays);
+    auto futureSep98 = std::make_shared<IrFuture>(1e6, 100 - 5.88, 1998y/September, EDayCount::Actual_d365, EDateRule::Following, daysToSpot, holidays);
+    auto futureDec98 = std::make_shared<IrFuture>(1e6, 100 - 6.00, 1998y/December, EDayCount::Actual_d365, EDateRule::Following, daysToSpot, holidays);
 
-    auto swap2Y = IrSwap(1e6, 6.01253 / 100, 0.0, spotDate, years{2}, EFrequency::SemiAnnual, EStubType::ShortFirst, EDateRule::ModFollowing, EDayCount::Actual_d365, days{2}, holidays);
-    auto swap3Y = IrSwap(1e6, 6.10823 / 100, 0.0, spotDate, years{3}, EFrequency::SemiAnnual, EStubType::ShortFirst, EDateRule::ModFollowing, EDayCount::Actual_d365, days{2}, holidays);
-    auto swap4Y = IrSwap(1e6, 6.16 / 100, 0.0, spotDate, years{4}, EFrequency::SemiAnnual, EStubType::ShortFirst, EDateRule::ModFollowing, EDayCount::Actual_d365, days{2}, holidays);
-    auto swap5Y = IrSwap(1e6, 6.22 / 100, 0.0, spotDate, years{5}, EFrequency::SemiAnnual, EStubType::ShortFirst, EDateRule::ModFollowing, EDayCount::Actual_d365, days{2}, holidays);
-    auto swap7Y = IrSwap(1e6, 6.32 / 100, 0.0, spotDate, years{7}, EFrequency::SemiAnnual, EStubType::ShortFirst, EDateRule::ModFollowing, EDayCount::Actual_d365, days{2}, holidays);
-    auto swap10Y = IrSwap(1e6, 6.42 / 100, 0.0, spotDate, years{10}, EFrequency::SemiAnnual, EStubType::ShortFirst, EDateRule::ModFollowing, EDayCount::Actual_d365, days{2}, holidays);
-    auto swap15Y = IrSwap(1e6, 6.56 / 100, 0.0, spotDate, years{15}, EFrequency::SemiAnnual, EStubType::ShortFirst, EDateRule::ModFollowing, EDayCount::Actual_d365, days{2}, holidays);
-    auto swap20Y = IrSwap(1e6, 6.56 / 100, 0.0, spotDate, years{20}, EFrequency::SemiAnnual, EStubType::ShortFirst, EDateRule::ModFollowing, EDayCount::Actual_d365, days{2}, holidays);
-    auto swap30Y = IrSwap(1e6, 6.56 / 100, 0.0, spotDate, years{30}, EFrequency::SemiAnnual, EStubType::ShortFirst, EDateRule::ModFollowing, EDayCount::Actual_d365, days{2}, holidays);
-    auto swaps = std::vector<IrSwap> { swap2Y, swap3Y, swap4Y, swap5Y, swap7Y, swap10Y, swap15Y, swap20Y, swap30Y};
+    auto swap2Y = std::make_shared<IrSwap>(1e6, 6.01253 / 100, 0.0, spotDate, years{2}, EFrequency::SemiAnnual, EStubType::ShortFirst, EDateRule::ModFollowing, EDayCount::Actual_d365, days{2}, holidays);
+    auto swap3Y = std::make_shared<IrSwap>(1e6, 6.10823 / 100, 0.0, spotDate, years{3}, EFrequency::SemiAnnual, EStubType::ShortFirst, EDateRule::ModFollowing, EDayCount::Actual_d365, days{2}, holidays);
+    auto swap4Y = std::make_shared<IrSwap>(1e6, 6.16 / 100, 0.0, spotDate, years{4}, EFrequency::SemiAnnual, EStubType::ShortFirst, EDateRule::ModFollowing, EDayCount::Actual_d365, days{2}, holidays);
+    auto swap5Y = std::make_shared<IrSwap>(1e6, 6.22 / 100, 0.0, spotDate, years{5}, EFrequency::SemiAnnual, EStubType::ShortFirst, EDateRule::ModFollowing, EDayCount::Actual_d365, days{2}, holidays);
+    auto swap7Y = std::make_shared<IrSwap>(1e6, 6.32 / 100, 0.0, spotDate, years{7}, EFrequency::SemiAnnual, EStubType::ShortFirst, EDateRule::ModFollowing, EDayCount::Actual_d365, days{2}, holidays);
+    auto swap10Y = std::make_shared<IrSwap>(1e6, 6.42 / 100, 0.0, spotDate, years{10}, EFrequency::SemiAnnual, EStubType::ShortFirst, EDateRule::ModFollowing, EDayCount::Actual_d365, days{2}, holidays);
+    auto swap15Y = std::make_shared<IrSwap>(1e6, 6.56 / 100, 0.0, spotDate, years{15}, EFrequency::SemiAnnual, EStubType::ShortFirst, EDateRule::ModFollowing, EDayCount::Actual_d365, days{2}, holidays);
+    auto swap20Y = std::make_shared<IrSwap>(1e6, 6.56 / 100, 0.0, spotDate, years{20}, EFrequency::SemiAnnual, EStubType::ShortFirst, EDateRule::ModFollowing, EDayCount::Actual_d365, days{2}, holidays);
+    auto swap30Y = std::make_shared<IrSwap>(1e6, 6.56 / 100, 0.0, spotDate, years{30}, EFrequency::SemiAnnual, EStubType::ShortFirst, EDateRule::ModFollowing, EDayCount::Actual_d365, days{2}, holidays);
 
-    auto yieldCurve1 = YieldCurve("solved", valueDate, deposits, futures, swaps, EDayCount::Actual_d365, EInterpolationMethod::CubicSpline);
+    auto instruments = std::vector<std::shared_ptr<Instrument>> {
+        depositON, depositTN, deposit1M, deposit3M,
+        futureDec97, futureMar98, futureJun98, futureSep98, futureDec98,
+        swap2Y, swap3Y, swap4Y, swap5Y, swap7Y, swap10Y, swap15Y, swap20Y, swap30Y
+    };
+
+    auto yieldCurve1 = YieldCurve("solved", valueDate, instruments, EDayCount::Actual_d365, EInterpolationMethod::CubicSpline);
 
     auto df1 = yieldCurve1.discountFactor(2000y/January/1d);
     REQUIRE ( df1 == Approx(0.87484318856686527).epsilon(1e-12) );
