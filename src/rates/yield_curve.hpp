@@ -29,43 +29,36 @@ namespace rates
 	class YieldCurve
 	{
 	private:
-		std::string						label_;
 		year_month_day					valueDate_;
 		std::vector<std::shared_ptr<Instrument>>	instruments_;
 		std::vector<YieldCurvePoint>	points_;
 		EDayCount						dayCount_;
 		EInterpolationMethod			interpolationMethod_;
 		std::shared_ptr<maths::Interp>	interpolator_;
-		
+
 	public:
 		YieldCurve();
 
 		YieldCurve(
-			const std::string& label,
 			const std::vector<YieldCurvePoint>& points,
 			const year_month_day& valueDate,
 			EDayCount dayCount,
 			EInterpolationMethod interpolationMethod = EInterpolationMethod::Linear);
 		
 		YieldCurve(
-			const std::string& label,
 			double flatRate,
 			const year_month_day& valueDate,
 			EDayCount dayCount);
 		
 		YieldCurve(
-			const std::string& label,
 			const year_month_day& valueDate,
 			const std::vector<std::shared_ptr<Instrument>>& instruments,
 			EDayCount dayCount,
 			EInterpolationMethod interpolationMethod);
 
-		const std::string& label() const { return label_; }
 		const year_month_day& valueDate() const { return valueDate_; }
 		const std::vector<YieldCurvePoint>& points() const { return points_; }
 		EDayCount dayCount() const { return dayCount_; }
-
-		bool operator == (const YieldCurve& rhs) const { return label_ == rhs.label_; }
 
 		YieldCurve shift(double) const;
 		YieldCurve bumpInstruments(double) const;

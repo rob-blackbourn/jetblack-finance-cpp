@@ -23,7 +23,6 @@ TEST_CASE("ctor.default", "[yield_curve]")
 TEST_CASE("ctor.points", "[yield_curve]")
 {
     auto yc = YieldCurve{
-        "yc",
         { {0.1, 0.05}, {0.5, 0.06}, {1.0, 0.062} },
         2026y / January / 9d,
         EDayCount::Actual_d365,
@@ -36,7 +35,6 @@ TEST_CASE("ctor.points", "[yield_curve]")
 TEST_CASE("ctor.flatRate", "[yield_curve]")
 {
     auto yc = YieldCurve{
-        "yc",
         0.05,
         2026y / January / 9d,
         EDayCount::Actual_d365
@@ -102,7 +100,7 @@ TEST_CASE("bootstrap", "[yield_curve]")
         swap2Y, swap3Y, swap4Y, swap5Y, swap7Y, swap10Y, swap15Y, swap20Y, swap30Y
     };
 
-    auto yieldCurve1 = YieldCurve("solved", valueDate, instruments, EDayCount::Actual_d365, EInterpolationMethod::CubicSpline);
+    auto yieldCurve1 = YieldCurve(valueDate, instruments, EDayCount::Actual_d365, EInterpolationMethod::CubicSpline);
 
     auto df1 = yieldCurve1.discountFactor(2000y/January/1d);
     REQUIRE ( df1 == Approx(0.87484318856686527).epsilon(1e-12) );

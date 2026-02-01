@@ -23,13 +23,11 @@ namespace rates
 	}
 	
 	YieldCurve::YieldCurve(
-		const std::string& label,
 		const std::vector<YieldCurvePoint>& points,
 		const year_month_day& valueDate,
 		EDayCount dayCount,
 		EInterpolationMethod interpolationMethod)
-		:	label_(label),
-			valueDate_(valueDate),
+		:	valueDate_(valueDate),
 			points_(points),
 			dayCount_(dayCount),
 			interpolationMethod_(interpolationMethod),
@@ -38,12 +36,10 @@ namespace rates
 	}
 
 	YieldCurve::YieldCurve(
-		const std::string& label,
 		double flatRate,
 		const year_month_day& valueDate,
 		EDayCount dayCount)
 		:	YieldCurve(
-				label,
 				{{1.0, flatRate}},
 				valueDate,
 				dayCount,
@@ -52,13 +48,11 @@ namespace rates
 	}
 
 	YieldCurve::YieldCurve(
-		const std::string& label,
 		const year_month_day& valueDate,
 		const std::vector<std::shared_ptr<Instrument>>& instruments,
 		EDayCount dayCount,
 		EInterpolationMethod interpolationMethod)
-		:	label_(label),
-			valueDate_(valueDate),
+		:	valueDate_(valueDate),
 			instruments_(instruments),
 			dayCount_(dayCount),
 			interpolationMethod_(interpolationMethod)
@@ -163,7 +157,7 @@ namespace rates
 		for (auto& point : points)
 			point.rate(point.rate() + x);
 
-		return YieldCurve(label_ + "_shifted", points, valueDate_, dayCount_);
+		return YieldCurve(points, valueDate_, dayCount_);
 	}
 
 	YieldCurve YieldCurve::bumpInstruments(double x) const
@@ -181,7 +175,7 @@ namespace rates
 			instrument->rate(instrument->rate() + x);
 		}
 
-		return YieldCurve(label_ + "_bumped", valueDate_, instruments, dayCount_, interpolationMethod_);
+		return YieldCurve(valueDate_, instruments, dayCount_, interpolationMethod_);
 	}
 
 	double YieldCurve::time(const year_month_day& date) const

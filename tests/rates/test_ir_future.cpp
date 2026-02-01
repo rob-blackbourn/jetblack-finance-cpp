@@ -47,7 +47,7 @@ TEST_CASE("value", "[ir_future]")
         {2026y/January/1d, 2026y/April/5d, 2026y/May/1d, 2026y/December/25}
     };
 
-    auto yield_curve = YieldCurve{"flat", 0.05, 2026y/January/2d, EDayCount::Actual_d365};
+    auto yield_curve = YieldCurve{0.05, 2026y/January/2d, EDayCount::Actual_d365};
     auto actual = future.value(yield_curve);
     auto expected = -0.000081334141743003596;
     REQUIRE( actual == Approx(expected).epsilon(1e-10) );
@@ -65,7 +65,7 @@ TEST_CASE("calculateZeroRate", "[ir_future]")
         {2026y/January/1d, 2026y/April/5d, 2026y/May/1d, 2026y/December/25}
     };
 
-    auto yield_curve = YieldCurve{"flat", 0.05, 2026y/January/2d, EDayCount::Actual_d365};
+    auto yield_curve = YieldCurve{0.05, 2026y/January/2d, EDayCount::Actual_d365};
     auto actual = future.calculateZeroRate(yield_curve);
     auto expected = 0.049824543926518167;
     REQUIRE( actual == Approx(expected).epsilon(1e-10) );
@@ -82,7 +82,7 @@ TEST_CASE("solveZeroRate", "[ir_future]")
         days{2},
         {2026y/January/1d, 2026y/April/5d, 2026y/May/1d, 2026y/December/25}
     };
-    auto yield_curve = YieldCurve{"flat", 0.05, 2026y/January/2d, EDayCount::Actual_d365};
+    auto yield_curve = YieldCurve{0.05, 2026y/January/2d, EDayCount::Actual_d365};
     auto actual = future.solveZeroRate(yield_curve, 0);
     auto expected = 0.049680819270580927;
     REQUIRE( actual == Approx(expected).epsilon(1e-10) );

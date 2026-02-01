@@ -17,7 +17,7 @@ using namespace std::chrono;
 TEST_CASE("couponRate/yieldCurve", "[value]")
 {
     auto valueDate = 2026y/January/9d;
-    auto curve = YieldCurve{"flat", 0.05, valueDate, EDayCount::Actual_d365};
+    auto curve = YieldCurve{0.05, valueDate, EDayCount::Actual_d365};
     auto schedule = std::vector<year_month_day> {
         2026y/January/1d,
         2026y/February/1d,
@@ -84,7 +84,7 @@ TEST_CASE("couponRate/yieldRate", "[value]")
 TEST_CASE("fixings/yieldCurve", "[value]")
 {
     auto valueDate = 2026y/January/9d;
-    auto curve = YieldCurve{"flat", 0.05, valueDate, EDayCount::Actual_d365};
+    auto curve = YieldCurve{0.05, valueDate, EDayCount::Actual_d365};
     auto schedule = std::vector<year_month_day> {
         2026y/January/1d,
         2026y/February/1d,
