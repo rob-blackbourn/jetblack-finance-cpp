@@ -2,8 +2,8 @@
 #define __jetblack__rates__instrument_hpp
 
 #include <chrono>
-#include <memory>
 #include <limits>
+#include <memory>
 
 namespace rates
 {

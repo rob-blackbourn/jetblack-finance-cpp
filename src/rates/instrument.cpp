@@ -1,10 +1,7 @@
 #include "rates/instrument.hpp"
 #include "rates/yield_curve.hpp"
 
-
 #include "maths/brent.hpp"
-
-#include <limits>
 
 namespace rates
 {
