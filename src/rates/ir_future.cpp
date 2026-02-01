@@ -57,19 +57,4 @@ namespace rates
 	{
 		return deposit_.calculateZeroRate(curve);
 	}
-
-	double IrFuture::solveZeroRate(YieldCurve& curve, size_t index)
-	{
-		const double ERROR_TOLERANCE = std::numeric_limits<double>::epsilon();
-		const unsigned int MAX_ITERATIONS = 30;
-
-		return maths::brent::solve(
-			[&](double rate)
-			{
-				curve.rate(index, rate);
-				return value(curve);
-			},
-			-0.1, 1.0, MAX_ITERATIONS, ERROR_TOLERANCE
-		);		
-	}
 }

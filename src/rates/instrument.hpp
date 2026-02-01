@@ -22,7 +22,8 @@ namespace rates
 		virtual double rate() const = 0;
 		virtual void rate(double rate) = 0;
 
-		virtual double solveZeroRate(YieldCurve& curve, size_t index) = 0;
+		virtual double value(const YieldCurve& curve) const = 0;
+		double solveZeroRate(YieldCurve& curve, size_t index);
 
         virtual std::shared_ptr<Instrument> clone_shared() const = 0;
         virtual std::unique_ptr<Instrument> clone_unique() const = 0;

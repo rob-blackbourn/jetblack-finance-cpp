@@ -58,7 +58,7 @@ namespace rates
 		{
 		}
 
-		double value(const YieldCurve& curve) const;
+		virtual double value(const YieldCurve& curve) const override;
 		double value(const year_month_day& valueDate, const YieldCurve& curve) const;
 
 		IrSwapLegFixed& fixedLeg() { return fixedLeg_; }
@@ -73,7 +73,6 @@ namespace rates
 		virtual void rate(double rate) override { fixedLeg_.rate(rate); }
 
 		double calculateZeroRate(const YieldCurve& curve) const;
-		virtual double solveZeroRate(YieldCurve& curve, size_t index) override;
 		double solveSwapRate(
 			const YieldCurve& curve,
 			const std::optional<double>& first_fixing,

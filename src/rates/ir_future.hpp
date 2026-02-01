@@ -65,9 +65,8 @@ namespace rates
 		virtual double rate() const override { return deposit_.rate(); }
 		virtual void rate(double rate) override { deposit_.rate(rate); }
 
-		double value(const YieldCurve& curve) const;
+		virtual double value(const YieldCurve& curve) const override;
 		double calculateZeroRate(const YieldCurve& curve) const;
-		virtual double solveZeroRate(YieldCurve& curve, size_t index) override;
 
 		virtual std::shared_ptr<Instrument> clone_shared() const override
 		{
