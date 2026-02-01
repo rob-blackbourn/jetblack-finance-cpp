@@ -35,7 +35,7 @@ namespace rates
 		if (schedule_.size() < 2) throw "not enough dates in schedule";
 	}
 
-	double Bond::accruedInterest(const year_month_day& valueDate) const
+	double Bond::accrued(const year_month_day& valueDate) const
 	{
 		return rates::accrued(valueDate, schedule_, dayCount_, couponRate_, notional_);
 	}

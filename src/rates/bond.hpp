@@ -2,12 +2,14 @@
 #define __jetblack__rates__bond_hpp
 
 #include <chrono>
-#include <set>
+#include <memory>
 #include <set>
 #include <vector>
 
 #include "dates/schedules.hpp"
 #include "dates/terms.hpp"
+
+#include "rates/instrument.hpp"
 
 namespace rates
 {
@@ -16,7 +18,7 @@ namespace rates
 
 	class YieldCurve;
 
-	class Bond
+	class Bond : public Instrument
 	{
 	private:
 		std::vector<year_month_day> schedule_ {};
@@ -65,12 +67,16 @@ namespace rates
 			EDateRule dateRule,
 			const std::set<year_month_day>& holidays);
 
+		virtual ~Bond() override
+		{
+		}
+
 		double value(const year_month_day& valueDate, const YieldCurve& curve) const;
-		double value(const YieldCurve& curve) const;
+		virtual double value(const YieldCurve& curve) const override;
 		double value(const year_month_day& valueDate, double yield) const;
 		double yield(const year_month_day& valueDate, double price) const;
 
-		double accruedInterest(const year_month_day& valueDate) const;
+		double accrued(const year_month_day& valueDate) const;
 
 		const std::vector<year_month_day>& schedule() const { return schedule_; }
 		const year_month_day& firstAccrualDate() const {return firstAccrualDate_; }
@@ -81,6 +87,19 @@ namespace rates
 		EStubType stubType() const { return stubType_; }
 		double notional() const { return notional_; }
 		EDateRule dateRule() const { return dateRule_; }
+
+		virtual double rate() const override { return couponRate_; };
+		virtual void rate(double rate) override { couponRate_ = rate; };
+		virtual const year_month_day& endDate() const override { return maturityDate_; }
+
+		virtual std::shared_ptr<Instrument> clone_shared() const override
+		{
+			return std::make_shared<Bond>(*this);
+		}
+		virtual std::unique_ptr<Instrument> clone_unique() const override
+		{
+			return std::make_unique<Bond>(*this);
+		}
 	};
 }
 
