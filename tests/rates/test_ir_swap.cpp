@@ -46,9 +46,9 @@ TEST_CASE("ctor.tenor", "[ir_swap]")
 
     REQUIRE ( swap.fixedLeg().rate() == 0.05 );
     REQUIRE ( swap.fixedLeg().startDate() == 2000y/January/1d );
-    REQUIRE ( swap.fixedLeg().endDate() == 2002y/January/1d );
+    REQUIRE ( swap.fixedLeg().maturity() == 2002y/January/1d );
 
     REQUIRE ( swap.floatingLeg().spread() == 0.01 );
     REQUIRE ( swap.floatingLeg().startDate() == 2000y/January/1d );
-    REQUIRE ( swap.floatingLeg().endDate() == 2002y/January/1d );
+    REQUIRE ( swap.floatingLeg().maturity() == 2002y/January/1d );
 }

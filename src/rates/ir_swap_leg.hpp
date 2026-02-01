@@ -21,7 +21,7 @@ namespace rates
 	protected:
 		double notional_ {0};
 		year_month_day startDate_ {};
-		year_month_day endDate_ {};
+		year_month_day maturity_ {};
 		EFrequency frequency_ {EFrequency::Annual};
 		EStubType stubType_ {EStubType::ShortFirst};
 		EDayCount dayCount_ {EDayCount::Actual_d365};
@@ -34,7 +34,7 @@ namespace rates
 		IrSwapLeg(
 			double notional,
 			const year_month_day& startDate,
-			const year_month_day& endDate,
+			const year_month_day& maturity,
 			EFrequency frequency,
 			EStubType stubType,
 			EDayCount dayCount,
@@ -57,7 +57,7 @@ namespace rates
 
 		double notional() const { return notional_; }
 		const year_month_day& startDate() const { return startDate_; }
-		const year_month_day& endDate() const { return endDate_; }
+		const year_month_day& maturity() const { return maturity_; }
 		EFrequency frequency() const { return frequency_; }
 		EStubType stubType() const { return stubType_; }
 		EDayCount dayCount() const { return dayCount_; }

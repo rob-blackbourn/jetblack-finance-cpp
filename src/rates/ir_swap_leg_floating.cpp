@@ -56,7 +56,7 @@ namespace rates
 		double notional,
 		double spread,
 		const year_month_day& startDate,
-		const year_month_day& endDate,
+		const year_month_day& maturity,
 		EFrequency frequency,
 		EStubType stubType,
 		EDateRule dateRule,
@@ -66,7 +66,7 @@ namespace rates
 		:	IrSwapLeg(
 				notional,
 				startDate,
-				endDate,
+				maturity,
 				frequency,
 				stubType,
 				dayCount,
@@ -110,14 +110,14 @@ namespace rates
 	IrSwapLegFloating::getCurrentFixings(const YieldCurve& curve, const year_month_day& valueDate) const
 	{
 		auto fixingRates = getFixingRates(curve);
-		for (const auto&[startDate, endDate, prevFixing, nextFixing]
+		for (const auto&[startDate, maturity, prevFixing, nextFixing]
 			: std::views::zip(
 				schedule_,
 				schedule_ | std::views::drop(1),
 				fixingRates,
 				fixingRates | std::views::drop(1)))
 		{
-			if (valueDate >= startDate && valueDate < endDate)
+			if (valueDate >= startDate && valueDate < maturity)
 			{
 				return {prevFixing, nextFixing};
 			}

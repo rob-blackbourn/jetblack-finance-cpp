@@ -26,7 +26,7 @@ namespace rates
 		double notional_ {1};
 		double rate_ {0};
 		year_month_day startDate_ {};
-		year_month_day endDate_ {};
+		year_month_day maturity_ {};
 		EDayCount dayCount_ {EDayCount::Actual_d365};
 		
 	public:
@@ -56,7 +56,7 @@ namespace rates
 
 		double notional() const { return notional_; }
 		const year_month_day& startDate() const { return startDate_; }
-		virtual const year_month_day& endDate() const override { return endDate_; }
+		virtual const year_month_day& maturity() const override { return maturity_; }
 		EDayCount dayCount() const { return dayCount_; }
 		virtual double rate() const override { return rate_; }
 		virtual void rate(double rate) override { rate_ = rate; }

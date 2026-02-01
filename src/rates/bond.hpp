@@ -23,7 +23,7 @@ namespace rates
 	private:
 		std::vector<year_month_day> schedule_ {};
 		year_month_day firstAccrualDate_ {};
-		year_month_day maturityDate_ {};
+		year_month_day maturity_ {};
 		double couponRate_ {0.0};
 		EFrequency couponFrequency_ {EFrequency::Annual};
 		EDayCount dayCount_ {EDayCount::Actual_d365};
@@ -46,7 +46,7 @@ namespace rates
 			EDateRule dateRule)
 			:	schedule_(schedule),
 				firstAccrualDate_(firstAccrualDate),
-				maturityDate_(maturityDate),
+				maturity_(maturityDate),
 				couponRate_(couponRate),
 				couponFrequency_(couponFrequency),
 				dayCount_(dayCount),
@@ -80,7 +80,7 @@ namespace rates
 
 		const std::vector<year_month_day>& schedule() const { return schedule_; }
 		const year_month_day& firstAccrualDate() const {return firstAccrualDate_; }
-		const year_month_day& maturityDate() const { return maturityDate_; }
+		virtual const year_month_day& maturity() const override { return maturity_; }
 		double couponRate() const { return couponRate_; }
 		EFrequency couponFrequency() const { return couponFrequency_; }
 		EDayCount dayCount() const { return dayCount_; }
@@ -90,7 +90,6 @@ namespace rates
 
 		virtual double rate() const override { return couponRate_; };
 		virtual void rate(double rate) override { couponRate_ = rate; };
-		virtual const year_month_day& endDate() const override { return maturityDate_; }
 
 		virtual std::shared_ptr<Instrument> clone_shared() const override
 		{

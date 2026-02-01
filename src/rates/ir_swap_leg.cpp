@@ -11,7 +11,7 @@ namespace rates
 	IrSwapLeg::IrSwapLeg(
 		double notional,
 		const year_month_day& startDate,
-		const year_month_day& endDate,
+		const year_month_day& maturity,
 		EFrequency frequency,
 		EStubType stubType,
 		EDayCount dayCount,
@@ -19,12 +19,12 @@ namespace rates
 		const std::set<year_month_day>& holidays)
 		:	notional_(notional),
 			startDate_(startDate),
-			endDate_(endDate),
+			maturity_(maturity),
 			frequency_(frequency),
 			stubType_(stubType),
 			dayCount_(dayCount),
 			dateRule_(dateRule),
-			schedule_(dates::generateSchedule(startDate, endDate, frequency, stubType, dateRule, holidays))
+			schedule_(dates::generateSchedule(startDate, maturity, frequency, stubType, dateRule, holidays))
 	{
 	}
 

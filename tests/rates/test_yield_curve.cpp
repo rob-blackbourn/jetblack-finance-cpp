@@ -74,7 +74,7 @@ TEST_CASE("bootstrap", "[yield_curve]")
     auto spotDate = addBusinessDays(valueDate, days{2}, holidays);
 
     auto depositON = std::make_shared<Deposit>(1e6, 5.58675 / 100, valueDate, days{1}, EDayCount::Actual_d360, EDateRule::Following, holidays);
-    auto depositTN = std::make_shared<Deposit>(1e6, 5.59375 / 100, depositON->endDate(), days{1}, EDayCount::Actual_d360, EDateRule::Following, holidays);
+    auto depositTN = std::make_shared<Deposit>(1e6, 5.59375 / 100, depositON->maturity(), days{1}, EDayCount::Actual_d360, EDateRule::Following, holidays);
     auto deposit1M = std::make_shared<Deposit>(1e6, 5.625 / 100, spotDate, months{1}, EDayCount::Actual_d360, EDateRule::Following, holidays);
     auto deposit3M = std::make_shared<Deposit>(1e6, 5.71875 / 100, spotDate, months{3}, EDayCount::Actual_d360, EDateRule::Following, holidays);
 

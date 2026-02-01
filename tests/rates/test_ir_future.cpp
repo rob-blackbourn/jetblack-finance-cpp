@@ -29,7 +29,7 @@ TEST_CASE("ctor.dates", "[ir_future]")
     };
 
     REQUIRE( future.startDate() == 2026y/March/20d );
-    REQUIRE( future.endDate() == 2026y/June/22d );
+    REQUIRE( future.maturity() == 2026y/June/22d );
     REQUIRE( future.rate() == Approx(0.05).epsilon(1e-12) );
     REQUIRE( future.dayCount() == EDayCount::Actual_d365 );
 }

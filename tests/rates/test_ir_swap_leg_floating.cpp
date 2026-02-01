@@ -43,5 +43,5 @@ TEST_CASE("ctor.tenor", "[ir_swap_leg_floating]")
 
     REQUIRE ( leg.spread() == 0.01 );
     REQUIRE ( leg.startDate() == 2000y/January/1d );
-    REQUIRE ( leg.endDate() == 2002y/January/1d );
+    REQUIRE ( leg.maturity() == 2002y/January/1d );
 }

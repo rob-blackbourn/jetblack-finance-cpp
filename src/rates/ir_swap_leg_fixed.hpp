@@ -39,7 +39,7 @@ namespace rates
 			double notional,
 			double rate,
 			const year_month_day& startDate,
-			const year_month_day& endDate,
+			const year_month_day& maturity,
 			EFrequency frequency,
 			EStubType stubType,
 			EDateRule dateRule,

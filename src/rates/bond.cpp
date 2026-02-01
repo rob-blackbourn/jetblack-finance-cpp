@@ -13,7 +13,7 @@ namespace rates
 
 	Bond::Bond(
 		const year_month_day& firstAccrualDate,
-		const year_month_day& maturityDate,
+		const year_month_day& maturity,
 		double couponRate,
 		EFrequency couponFrequency,
 		EDayCount dayCount,
@@ -22,9 +22,9 @@ namespace rates
 		EDateRule dateRule,
 		const std::set<year_month_day>& holidays)
 		:	Bond(
-			generateSchedule(firstAccrualDate, maturityDate, couponFrequency, stubType, dateRule, holidays),
+			generateSchedule(firstAccrualDate, maturity, couponFrequency, stubType, dateRule, holidays),
 			firstAccrualDate,
-			maturityDate,
+			maturity,
 			couponRate,
 			couponFrequency,
 			dayCount,

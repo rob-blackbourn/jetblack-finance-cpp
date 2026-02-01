@@ -18,7 +18,7 @@ namespace rates
         {            
         }
 
-		virtual const year_month_day& endDate() const = 0;
+		virtual const year_month_day& maturity() const = 0;
 
 		virtual double rate() const = 0;
 		virtual void rate(double rate) = 0;

@@ -15,12 +15,12 @@ namespace rates
 		double notional,
 		double rate,
 		const year_month_day& startDate,
-		const year_month_day& endDate,
+		const year_month_day& maturity,
 		EDayCount dayCount)
 		:	notional_(notional),
 			rate_(rate),
 			startDate_(startDate),
-			endDate_(endDate),
+			maturity_(maturity),
 			dayCount_(dayCount)
 	{
 	}
@@ -46,8 +46,8 @@ namespace rates
 	{
 		// We assume we deposit $1 on the start date and receive back $1 plus interest on the end date.
 		double dfStart = curve.discountFactor(startDate_);
-		double dfEnd = curve.discountFactor(endDate_);
-		double t = yearFrac(startDate_, endDate_, dayCount_);
+		double dfEnd = curve.discountFactor(maturity_);
+		double t = yearFrac(startDate_, maturity_, dayCount_);
 
 		double interest = notional_ * rate_ * t;
 		double endCashFlow = notional_ + interest;
@@ -59,12 +59,12 @@ namespace rates
 	double Deposit::calculateZeroRate(const YieldCurve& curve) const
 	{
 		double df = curve.discountFactor(startDate_);
-		double payment = 1.0 + rate_ * yearFrac(startDate_, endDate_, dayCount_);
+		double payment = 1.0 + rate_ * yearFrac(startDate_, maturity_, dayCount_);
 
 		if (df / payment <= 0.0)
 			throw "unable to calculate zero rate for future - log of non-positive number";
 
-		double t = curve.time(endDate_);
+		double t = curve.time(maturity_);
 		double r = -1.0 / t * log(df / payment);
 
 		return r;

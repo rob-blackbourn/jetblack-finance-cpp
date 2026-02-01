@@ -46,7 +46,7 @@ namespace rates
 			double fixedRate,
 			double spread,
 			const year_month_day& startDate,
-			const year_month_day& endDate,
+			const year_month_day& maturity,
 			EFrequency frequency,
 			EStubType stubType,
 			EDateRule dateRule,
@@ -67,7 +67,7 @@ namespace rates
 		IrSwapLegFloating& floatingLeg() { return floatingLeg_; }
 		const IrSwapLegFloating& floatingLeg() const { return floatingLeg_; }
 
-		virtual const year_month_day& endDate() const override { return fixedLeg_.endDate(); }
+		virtual const year_month_day& maturity() const override { return fixedLeg_.maturity(); }
 
 		virtual double rate() const override { return fixedLeg_.rate(); }
 		virtual void rate(double rate) override { fixedLeg_.rate(rate); }
