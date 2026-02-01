@@ -57,7 +57,7 @@ namespace rates
 			EInterpolationMethod interpolationMethod);
 
 		const year_month_day& valueDate() const { return valueDate_; }
-		std::vector<YieldCurvePoint>& points() { return points_; }
+		// std::vector<YieldCurvePoint>& points() { return points_; }
 		const std::vector<YieldCurvePoint>& points() const { return points_; }
 		EDayCount dayCount() const { return dayCount_; }
 
@@ -83,8 +83,10 @@ namespace rates
 	private:
 		void buildCurve();
 		void solveZeroRates();
-
-		static std::shared_ptr<maths::Interp> createInterpolator(const std::vector<YieldCurvePoint>& points, EInterpolationMethod interpolationMethod);
+		
+		static std::shared_ptr<maths::Interp> createInterpolator(
+			const std::vector<YieldCurvePoint>& points,
+			EInterpolationMethod interpolationMethod);
 	};
 }
 

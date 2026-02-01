@@ -65,11 +65,12 @@ TEST_CASE("calculateZeroRate", "deposit")
 
 TEST_CASE("solveZeroRate", "deposit")
 {
+    auto valueDate = 2026y/January/2d;
     auto deposit = Deposit{1.0, 0.05, 2026y/January/5d, 2026y/March/5d, EDayCount::Actual_d365};
-    auto curve = YieldCurve{{}, 2026y/January/2d, EDayCount::Actual_d365};
-    curve.points().push_back({curve.time(deposit.endDate()), 0.05});
+    auto t = yearFrac(valueDate, deposit.endDate(), EDayCount::Actual_d365);
+    auto curve = YieldCurve{{{t, 0.05}}, valueDate, EDayCount::Actual_d365};
     auto actual = deposit.solveZeroRate(curve);
-    auto expected = 0.63333333333333364;
+    auto expected = 0.049799027345635349;
     REQUIRE( actual == Approx(expected).epsilon(1e-10) );
 }
 
@@ -77,8 +78,8 @@ TEST_CASE("solveZeroRate/ON", "deposit")
 {
     auto valueDate = 1997y/October/6d;
     auto deposit = Deposit(1e6, 5.58675 / 100, valueDate, days{1}, EDayCount::Actual_d360, EDateRule::Following, {});
-    auto curve = YieldCurve{{}, valueDate, EDayCount::Actual_d365, EInterpolationMethod::Exponential};
-    curve.points().push_back({curve.time(deposit.endDate()), 0.05});
+    auto t = yearFrac(valueDate, deposit.endDate(), EDayCount::Actual_d365);
+    auto curve = YieldCurve{{{1, 0.05}}, valueDate, EDayCount::Actual_d365, EInterpolationMethod::Exponential};
     auto actual = deposit.solveZeroRate(curve);
     auto expected = 0.056639042777946388;
     REQUIRE( actual == Approx(expected).epsilon(1e-10) );
