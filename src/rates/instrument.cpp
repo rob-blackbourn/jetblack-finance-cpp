@@ -13,7 +13,7 @@ namespace rates
 		return maths::brent::solve(
 			[&](double rate)
 			{
-				curve.lastRate(rate);
+				curve.setLastRate(rate);
 				return value(curve);
 			},
 			-0.1, 1.0, maxIterations, errorTolerance

@@ -66,8 +66,7 @@ namespace rates
 
 		double rate(double t) const;
 		double rate(const year_month_day& date) const;
-		void rate(size_t i, double z);
-		void lastRate(double z);
+		void setLastRate(double z);
 
 		double forwardRate(double t1, double t2) const;
 		double forwardRate(const year_month_day& startDate, const year_month_day& endDate) const;
