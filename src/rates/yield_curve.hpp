@@ -28,6 +28,15 @@ namespace rates
 
 	class YieldCurve
 	{
+	private:
+		std::string						label_;
+		year_month_day					valueDate_;
+		std::vector<std::shared_ptr<Instrument>>	instruments_;
+		std::vector<YieldCurvePoint>	points_;
+		EDayCount						dayCount_;
+		EInterpolationMethod			interpolationMethod_;
+		std::shared_ptr<maths::Interp>	interpolator_;
+		
 	public:
 		YieldCurve();
 
@@ -82,15 +91,6 @@ namespace rates
 		void solveZeroRates();
 
 		static std::shared_ptr<maths::Interp> createInterpolator(const std::vector<YieldCurvePoint>& points, EInterpolationMethod interpolationMethod);
-
-	private:
-		std::string						label_;
-		year_month_day					valueDate_;
-		std::vector<std::shared_ptr<Instrument>>	instruments_;
-		std::vector<YieldCurvePoint>	points_;
-		EDayCount						dayCount_;
-		EInterpolationMethod			interpolationMethod_;
-		std::shared_ptr<maths::Interp>	interpolator_;
 	};
 }
 

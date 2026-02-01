@@ -18,6 +18,9 @@ namespace rates
 
 	class IrSwapLegFixed : public IrSwapLeg
 	{
+	private:
+		double rate_ {0};
+		
 	public:
 		IrSwapLegFixed() = default;
 
@@ -51,9 +54,6 @@ namespace rates
 
 		double rate() const { return rate_; }
 		void rate(double rate) { rate_ = rate; }
-
-	private:
-		double rate_ {0};
 	};
 }
 

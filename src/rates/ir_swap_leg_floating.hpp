@@ -20,6 +20,11 @@ namespace rates
 
 	class IrSwapLegFloating : public IrSwapLeg
 	{
+	private:
+		double spread_ {0};
+		time_unit_t fixLag_ {days{0}};
+		std::vector<year_month_day> fixingSchedule_ {};
+		
 	public:
 		IrSwapLegFloating() = default;
 
@@ -59,11 +64,6 @@ namespace rates
 
 	private:
 		std::vector<double> getFixingRates(const YieldCurve& curve) const;
-
-	private:
-		double spread_ {0};
-		time_unit_t fixLag_ {days{0}};
-		std::vector<year_month_day> fixingSchedule_ {};
 	};
 }
 

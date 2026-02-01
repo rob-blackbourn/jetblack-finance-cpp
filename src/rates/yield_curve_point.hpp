@@ -5,6 +5,10 @@ namespace rates
 {
 	class YieldCurvePoint
 	{
+	private:
+		double time_ {}; // time in years as a double.
+		double rate_ {};
+
 	public:
 
 		YieldCurvePoint() = default;
@@ -22,11 +26,6 @@ namespace rates
 		void time(double t) { time_ = t; }
 
 		bool operator==(const YieldCurvePoint&) const = default;
-
-
-	private:
-		double time_ {}; // time in years as a double.
-		double rate_ {};
 	};
 }
 

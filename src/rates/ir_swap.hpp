@@ -17,6 +17,10 @@ namespace rates
 
 	class IrSwap : public Instrument
 	{
+	private:
+		IrSwapLegFixed fixedLeg_ {};
+		IrSwapLegFloating floatingLeg_ {};
+		
 	public:
 		IrSwap() = default;
 
@@ -83,10 +87,6 @@ namespace rates
 		{
 			return std::make_unique<IrSwap>(*this);
 		}
-
-	private:
-		IrSwapLegFixed fixedLeg_ {};
-		IrSwapLegFloating floatingLeg_ {};
 	};
 }
 

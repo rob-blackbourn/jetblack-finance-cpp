@@ -18,6 +18,17 @@ namespace rates
 
 	class Bond
 	{
+	private:
+		std::vector<year_month_day> schedule_ {};
+		year_month_day firstAccrualDate_ {};
+		year_month_day maturityDate_ {};
+		double couponRate_ {0.0};
+		EFrequency couponFrequency_ {EFrequency::Annual};
+		EDayCount dayCount_ {EDayCount::Actual_d365};
+		EStubType stubType_ {EStubType::ShortFirst};
+		double notional_ {1.0};
+		EDateRule dateRule_ {EDateRule::ModFollowing};
+
 	public:
 		Bond() = default;
 		
@@ -70,17 +81,6 @@ namespace rates
 		EStubType stubType() const { return stubType_; }
 		double notional() const { return notional_; }
 		EDateRule dateRule() const { return dateRule_; }
-
-	private:
-		std::vector<year_month_day> schedule_ {};
-		year_month_day firstAccrualDate_ {};
-		year_month_day maturityDate_ {};
-		double couponRate_ {0.0};
-		EFrequency couponFrequency_ {EFrequency::Annual};
-		EDayCount dayCount_ {EDayCount::Actual_d365};
-		EStubType stubType_ {EStubType::ShortFirst};
-		double notional_ {1.0};
-		EDateRule dateRule_ {EDateRule::ModFollowing};
 	};
 }
 

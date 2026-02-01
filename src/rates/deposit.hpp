@@ -22,6 +22,13 @@ namespace rates
 
 	class Deposit : public Instrument
 	{
+	private:
+		double notional_ {1};
+		double rate_ {0};
+		year_month_day startDate_ {};
+		year_month_day endDate_ {};
+		EDayCount dayCount_ {EDayCount::Actual_d365};
+		
 	public:
 		Deposit() = default;
 
@@ -66,13 +73,6 @@ namespace rates
 		{
 			return std::make_unique<Deposit>(*this);
 		}
-
-	private:
-		double notional_ {1};
-		double rate_ {0};
-		year_month_day startDate_ {};
-		year_month_day endDate_ {};
-		EDayCount dayCount_ {EDayCount::Actual_d365};
 	};
 }
 

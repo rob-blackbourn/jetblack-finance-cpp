@@ -25,6 +25,9 @@ namespace rates
 
 	class IrFuture : public Instrument
 	{
+	private:
+		Deposit deposit_ {};
+		
 	public:
 
 		IrFuture() = default;
@@ -74,9 +77,6 @@ namespace rates
 		{
 			return std::make_unique<IrFuture>(*this);
 		}
-
-	private:
-		Deposit deposit_ {};
 	};
 }
 

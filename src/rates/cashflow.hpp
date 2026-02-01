@@ -23,6 +23,14 @@ namespace rates
 
 	class CashFlow
 	{
+	private:
+		year_month_day startDate_ {};
+		year_month_day endDate_ {};
+		double notional_ {0};
+		EDayCount dayCount_ {EDayCount::Actual_d365};
+		double rate_ {0};
+		double flow_ {0};
+
 	public:
 		CashFlow() = default;
 
@@ -122,14 +130,6 @@ namespace rates
 		{
 			return rate * notional * yearFrac(startDate, endDate, dayCount);
 		}
-
-	private:
-		year_month_day startDate_ {};
-		year_month_day endDate_ {};
-		double notional_ {0};
-		EDayCount dayCount_ {EDayCount::Actual_d365};
-		double rate_ {0};
-		double flow_ {0};
 	};
 
 	double valueCashflows(const std::vector<CashFlow>& cashflows, const YieldCurve& curve);

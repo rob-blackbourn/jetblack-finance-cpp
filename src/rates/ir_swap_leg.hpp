@@ -18,6 +18,16 @@ namespace rates
 
 	class IrSwapLeg
 	{
+	protected:
+		double notional_ {0};
+		year_month_day startDate_ {};
+		year_month_day endDate_ {};
+		EFrequency frequency_ {EFrequency::Annual};
+		EStubType stubType_ {EStubType::ShortFirst};
+		EDayCount dayCount_ {EDayCount::Actual_d365};
+		EDateRule dateRule_ {EDateRule::ModFollowing};
+		std::vector<year_month_day> schedule_ {};
+		
 	public:
 		IrSwapLeg() = default;
 
@@ -53,16 +63,6 @@ namespace rates
 		EDayCount dayCount() const { return dayCount_; }
 		EDateRule dateRule() const { return dateRule_; }
 		const std::vector<year_month_day>& schedule() const { return schedule_; }
-
-	protected:
-		double notional_ {0};
-		year_month_day startDate_ {};
-		year_month_day endDate_ {};
-		EFrequency frequency_ {EFrequency::Annual};
-		EStubType stubType_ {EStubType::ShortFirst};
-		EDayCount dayCount_ {EDayCount::Actual_d365};
-		EDateRule dateRule_ {EDateRule::ModFollowing};
-		std::vector<year_month_day> schedule_ {};
 	};
 }
 
