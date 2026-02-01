@@ -24,7 +24,7 @@ namespace rates
 	class CashFlow
 	{
 	private:
-		year_month_day firstAccrualDate_ {};
+		year_month_day startDate_ {};
 		year_month_day endDate_ {};
 		double notional_ {0};
 		EDayCount dayCount_ {EDayCount::Actual_d365};
@@ -35,13 +35,13 @@ namespace rates
 		CashFlow() = default;
 
 		CashFlow(
-			const year_month_day& firstAccrualDate,
+			const year_month_day& startDate,
 			const year_month_day& endDate,
 			double notional,
 			EDayCount dayCount,
 			double rate,
 			double flow)
-			:	firstAccrualDate_(firstAccrualDate),
+			:	startDate_(startDate),
 				endDate_(endDate),
 				notional_(notional),
 				dayCount_(dayCount),
@@ -51,28 +51,28 @@ namespace rates
 		}
 
 		CashFlow(
-			const year_month_day& firstAccrualDate,
+			const year_month_day& startDate,
 			const year_month_day& endDate,
 			double notional,
 			EDayCount dayCount,
 			double rate)
 			:	CashFlow(
-					firstAccrualDate,
+					startDate,
 					endDate,
 					notional,
 					dayCount,
 					rate,
-					calculateFlow(rate, notional, firstAccrualDate, endDate, dayCount)
+					calculateFlow(rate, notional, startDate, endDate, dayCount)
 				) 
 		{
 		}
 
 		CashFlow(
-			const year_month_day& firstAccrualDate,
+			const year_month_day& startDate,
 			const year_month_day& endDate,
 			double notional,
 			EDayCount dayCount) 
-			:	firstAccrualDate_(firstAccrualDate),
+			:	startDate_(startDate),
 				endDate_(endDate),
 				notional_(notional),
 				dayCount_(dayCount)
@@ -80,11 +80,11 @@ namespace rates
 		}
 
 		CashFlow(
-			const year_month_day& firstAccrualDate,
+			const year_month_day& startDate,
 			const year_month_day& endDate,
 			EDayCount dayCount,
 			double flow)
-			:	firstAccrualDate_(firstAccrualDate),
+			:	startDate_(startDate),
 				endDate_(endDate),
 				dayCount_(dayCount),
 				flow_(flow)
@@ -92,10 +92,10 @@ namespace rates
 		}
 
 		CashFlow(
-			const year_month_day& firstAccrualDate,
+			const year_month_day& startDate,
 			const year_month_day& endDate,
 			double flow)
-			:	firstAccrualDate_(firstAccrualDate),
+			:	startDate_(startDate),
 				endDate_(endDate),
 				flow_(flow)
 		{
@@ -109,7 +109,7 @@ namespace rates
 		EDayCount dayCount() const { return dayCount_; }
 		void dayCount(EDayCount dayCount) { dayCount_ = dayCount; }
 
-		const year_month_day& firstAccrualDate() const { return firstAccrualDate_; }
+		const year_month_day& startDate() const { return startDate_; }
 
 		const year_month_day& endDate() const { return endDate_; }
 
@@ -123,12 +123,12 @@ namespace rates
 	private:
 		double calculateFlow()
 		{
-			return calculateFlow(rate_, notional_,firstAccrualDate_, endDate_, dayCount_);
+			return calculateFlow(rate_, notional_,startDate_, endDate_, dayCount_);
 		}
 
-		static double calculateFlow(double rate, double notional, const year_month_day& firstAccrualDate, const year_month_day& endDate, EDayCount dayCount)
+		static double calculateFlow(double rate, double notional, const year_month_day& startDate, const year_month_day& endDate, EDayCount dayCount)
 		{
-			return rate * notional * yearFrac(firstAccrualDate, endDate, dayCount);
+			return rate * notional * yearFrac(startDate, endDate, dayCount);
 		}
 	};
 

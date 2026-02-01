@@ -52,12 +52,12 @@ namespace rates
 
 	double calculateAccrued(const std::chrono::year_month_day& valueDate,  std::vector<CashFlow>& cashflows)
 	{
-		if (valueDate <= cashflows.front().firstAccrualDate() || valueDate >= cashflows.back().endDate())
+		if (valueDate <= cashflows.front().startDate() || valueDate >= cashflows.back().endDate())
 			return 0.0;
 
 		for (const auto& cashflow : std::ranges::drop_view(cashflows, 1))
-			if (valueDate >= cashflow.firstAccrualDate() && valueDate < cashflow.endDate())
-				return cashflow.rate() * cashflow.notional() * yearFrac(cashflow.firstAccrualDate(), valueDate, cashflow.dayCount());
+			if (valueDate >= cashflow.startDate() && valueDate < cashflow.endDate())
+				return cashflow.rate() * cashflow.notional() * yearFrac(cashflow.startDate(), valueDate, cashflow.dayCount());
 
 		return 0.0;
 	}
