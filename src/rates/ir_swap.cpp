@@ -123,7 +123,6 @@ namespace rates
 			[&](double rate)
 			{
 				curve.rate(index, rate);
-				floatingLeg().reset(curve);
 				return value(curve);
 			},
 			-0.1, std::max(0.10, 3.0 * lastRate), MAX_ITERATIONS, ERROR_TOLERANCE
@@ -137,8 +136,6 @@ namespace rates
 	{
 		const double ERROR_TOLERANCE = std::numeric_limits<double>::epsilon();
 		const unsigned int MAX_ITERATIONS = 100;
-
-		floatingLeg_.reset(curve, first_fixing, second_fixing);
 
 		return maths::brent::solve(
 			[&](double rate)

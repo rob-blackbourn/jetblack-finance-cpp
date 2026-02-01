@@ -45,7 +45,7 @@ namespace rates
 
 		virtual double value(const year_month_day& valueDate, const YieldCurve& curve) const;
 		virtual double value(const YieldCurve& curve) const;
-		virtual double accrued(const year_month_day& valueDate) const;
+		virtual double accrued(const YieldCurve& curve, const year_month_day& valueDate) const;
 
 		double calculateZeroRate(const YieldCurve& curve) const;
 

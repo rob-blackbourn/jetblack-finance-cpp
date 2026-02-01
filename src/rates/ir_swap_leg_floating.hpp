@@ -10,7 +10,6 @@
 #include "dates/terms.hpp"
 
 #include "rates/ir_swap_leg.hpp"
-#include "rates/fixing.hpp"
 
 namespace rates
 {
@@ -50,22 +49,21 @@ namespace rates
 
 		virtual double value(const year_month_day& valueDate, const YieldCurve& curve) const;
 		virtual double value(const YieldCurve& curve) const;
-		virtual double accrued(const year_month_day& valueDate) const;
+		virtual double accrued(const YieldCurve& curve, const year_month_day& valueDate) const;
 
-		void reset(
-			const YieldCurve& curve,
-			const std::optional<double>& first_fixing = {},
-			const std::optional<double>& second_fixing = {});
-		std::pair<std::optional<double>,std::optional<double>> getCurrentFixings(const year_month_day& valueDate) const;
+		std::pair<std::optional<double>,std::optional<double>> getCurrentFixings(const YieldCurve& curve, const year_month_day& valueDate) const;
 
-		const std::vector<Fixing>& fixings() const { return fixings_; }
+		const std::vector<year_month_day>& fixingSchedule() const { return fixingSchedule_; }
 		double spread() const { return spread_; }
 		const time_unit_t& fixLag() const { return  fixLag_; }
 
 	private:
+		std::vector<double> getFixingRates(const YieldCurve& curve) const;
+
+	private:
 		double spread_ {0};
 		time_unit_t fixLag_ {days{0}};
-		std::vector<Fixing> fixings_ {};
+		std::vector<year_month_day> fixingSchedule_ {};
 	};
 }
 

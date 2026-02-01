@@ -43,7 +43,7 @@ namespace rates
 
 		virtual double value(const year_month_day& valueDate, const YieldCurve& curve) const = 0;
 		virtual double value(const YieldCurve& curve) const = 0;
-		virtual double accrued(const year_month_day& valueDate) const = 0;
+		virtual double accrued(const YieldCurve& curve, const year_month_day& valueDate) const = 0;
 
 		double notional() const { return notional_; }
 		const year_month_day& startDate() const { return startDate_; }

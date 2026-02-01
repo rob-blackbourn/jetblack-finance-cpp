@@ -11,21 +11,19 @@ namespace rates
 	using namespace std::chrono;
 	using namespace dates;
 
-	static std::vector<Fixing> createFixings(
+	static std::vector<year_month_day> createFixings(
 		const std::vector<year_month_day>& schedule,
-		double rate,
 		const time_unit_t& fixLag,
 		const std::set<year_month_day>& holidays)
 	{
 		return schedule
 			| std::views::drop(1) // No fixing is required for the start date.
 			| std::views::transform(
-				[rate, &fixLag, &holidays](const year_month_day& d)
+				[&fixLag, &holidays](const year_month_day& d)
 				{
-					auto date = add(d, -fixLag, true, EDateRule::Preceding, holidays);
-					return Fixing { date, rate };
+					return add(d, -fixLag, true, EDateRule::Preceding, holidays);
 				})
-			| std::ranges::to<std::vector<Fixing>>();
+			| std::ranges::to<std::vector<year_month_day>>();
 	}
 
 	IrSwapLegFloating::IrSwapLegFloating(
@@ -50,7 +48,7 @@ namespace rates
 				holidays),
 			spread_(spread),
 			fixLag_(fixLag),
-			fixings_(createFixings(schedule_, 0.0, fixLag_, holidays))
+			fixingSchedule_(createFixings(schedule_, fixLag_, holidays))
 	{
 	}
 
@@ -79,14 +77,28 @@ namespace rates
 	{
 	}
 
-	double IrSwapLegFloating::accrued(const year_month_day& valueDate) const
+	std::vector<double> IrSwapLegFloating::getFixingRates(const YieldCurve& curve) const
 	{
-		return rates::accrued(valueDate, schedule_, dayCount_, fixings_, notional_);
+		return std::ranges::zip_view(schedule_, fixingSchedule_)
+			| std::views::transform(
+				[&](auto&& x)
+				{
+					auto& [startDate, fixingDate] = x;
+					return curve.fix(startDate, fixingDate, dayCount_);
+				})
+			| std::ranges::to<std::vector<double>>();
+	}
+
+	double IrSwapLegFloating::accrued(const YieldCurve& curve, const year_month_day& valueDate) const
+	{
+		auto fixingRates = getFixingRates(curve);
+		return rates::accrued(valueDate, schedule_, dayCount_, fixingRates, notional_);
 	}
 
 	double IrSwapLegFloating::value(const year_month_day& valueDate, const YieldCurve& curve) const
 	{
-		return rates::value(valueDate, curve, schedule_, dayCount_, fixings_, notional_);
+		auto fixingRates = getFixingRates(curve);
+		return rates::value(valueDate, curve, schedule_, dayCount_, fixingRates, notional_);
 	}
 
 	double IrSwapLegFloating::value(const YieldCurve& curve) const
@@ -95,58 +107,22 @@ namespace rates
 	}
 
 	std::pair<std::optional<double>,std::optional<double>>
-	IrSwapLegFloating::getCurrentFixings(const year_month_day& valueDate) const
+	IrSwapLegFloating::getCurrentFixings(const YieldCurve& curve, const year_month_day& valueDate) const
 	{
+		auto fixingRates = getFixingRates(curve);
 		for (const auto&[startDate, endDate, prevFixing, nextFixing]
 			: std::views::zip(
 				schedule_,
 				schedule_ | std::views::drop(1),
-				fixings_,
-				fixings_ | std::views::drop(1)))
+				fixingRates,
+				fixingRates | std::views::drop(1)))
 		{
 			if (valueDate >= startDate && valueDate < endDate)
 			{
-				return {prevFixing.rate(), nextFixing.rate()};
+				return {prevFixing, nextFixing};
 			}
 		}
 
 		return {};
-	}
-
-	// Create the fixings from the supplied fixes and from the yield curve.
-	void IrSwapLegFloating::reset(
-		const YieldCurve& curve,
-		const std::optional<double>& prevFixing,
-		const std::optional<double>& nextFixing)
-	{
-		for (auto&& [startDate, endDate, fixing]
-			: std::views::zip(
-				schedule_,
-				schedule_ | std::views::drop(1),
-				fixings_))
-		{
-			double fix = 0.0;
-			if (curve.valueDate() >= startDate)
-			{
-				// Cashflow started in the past.
-				fix = (!prevFixing
-					? curve.fix(curve.valueDate(), fixing.date(), dayCount_)
-					: *prevFixing);
-			}
-			else if (curve.valueDate() >= fixing.date())
-			{
-				// Cashflow started in the future, but the fix date is in the past.
-				fix = (!nextFixing
-					? curve.fix(curve.valueDate(), fixing.date(), dayCount_)
-					: *nextFixing);
-			}
-			else
-			{
-				// fix occurs in the future.
-				fix = curve.fix(startDate, fixing.date(), dayCount_);
-			}
-
-			fixing.rate(fix + spread_);
-		}
 	}
 }

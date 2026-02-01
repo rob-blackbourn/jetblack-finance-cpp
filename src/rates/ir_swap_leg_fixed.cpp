@@ -41,7 +41,7 @@ namespace rates
 	{
 	}
 
-	double IrSwapLegFixed::accrued(const year_month_day& valueDate) const
+	double IrSwapLegFixed::accrued(const YieldCurve& curve, const year_month_day& valueDate) const
 	{
 		return rates::accrued(valueDate, schedule_, dayCount_, rate_, notional_);
 	}
