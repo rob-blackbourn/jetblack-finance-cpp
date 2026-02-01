@@ -79,7 +79,7 @@ namespace rates
 			[&](double rate)
 			{
 				curve.rate(index, rate);
-				return this->value(curve);
+				return value(curve);
 			},
 			-0.1, 1.0, MAX_ITERATIONS, ERROR_TOLERANCE
 		);

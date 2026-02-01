@@ -64,10 +64,10 @@ namespace rates
 		const unsigned int MAX_ITERATIONS = 30;
 
 		return maths::brent::solve(
-			[&curve, index, this](double rate)
+			[&](double rate)
 			{
 				curve.rate(index, rate);
-				return this->value(curve);
+				return value(curve);
 			},
 			-0.1, 1.0, MAX_ITERATIONS, ERROR_TOLERANCE
 		);		
