@@ -3,6 +3,7 @@
 
 #include <chrono>
 #include <memory>
+#include <limits>
 
 namespace rates
 {
@@ -23,7 +24,12 @@ namespace rates
 		virtual void rate(double rate) = 0;
 
 		virtual double value(const YieldCurve& curve) const = 0;
-		double solveZeroRate(YieldCurve& curve, size_t index);
+		double solveZeroRate(
+            YieldCurve& curve,
+            size_t index,
+            unsigned int maxIterations = 100,
+            double errorTolerance = std::numeric_limits<double>::epsilon()
+        ) const;
 
         virtual std::shared_ptr<Instrument> clone_shared() const = 0;
         virtual std::unique_ptr<Instrument> clone_unique() const = 0;
