@@ -116,16 +116,13 @@ namespace rates
 		const double ERROR_TOLERANCE = std::numeric_limits<double>::epsilon();
 		const unsigned int MAX_ITERATIONS = 100;
 
-		IrSwap swap { *this };
-		double lastRate = curve.points().empty() ? 0.33 : curve.points().back().rate();
-
 		return maths::brent::solve(
 			[&](double rate)
 			{
 				curve.rate(index, rate);
 				return value(curve);
 			},
-			-0.1, std::max(0.10, 3.0 * lastRate), MAX_ITERATIONS, ERROR_TOLERANCE
+			-0.1, 1.0, MAX_ITERATIONS, ERROR_TOLERANCE
 		);
 	}
 
