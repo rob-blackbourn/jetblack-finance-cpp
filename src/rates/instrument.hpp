@@ -26,7 +26,6 @@ namespace rates
 		virtual double value(const YieldCurve& curve) const = 0;
 		double solveZeroRate(
             YieldCurve& curve,
-            size_t index,
             unsigned int maxIterations = 100,
             double errorTolerance = std::numeric_limits<double>::epsilon()
         ) const;

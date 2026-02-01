@@ -7,14 +7,13 @@ namespace rates
 {
 	double Instrument::solveZeroRate(
 		YieldCurve& curve,
-		size_t index,
 		unsigned int maxIterations,
 		double errorTolerance) const
 	{
 		return maths::brent::solve(
 			[&](double rate)
 			{
-				curve.rate(index, rate);
+				curve.lastRate(rate);
 				return value(curve);
 			},
 			-0.1, 1.0, maxIterations, errorTolerance

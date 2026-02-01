@@ -85,6 +85,15 @@ namespace rates
 		);
 	}
 
+	void YieldCurve::lastRate(double z)
+	{
+		points_.back().rate(z);
+		interpolator_ = createInterpolator(
+			points_,
+			points_.size() == 1 ? EInterpolationMethod::Linear : interpolationMethod_
+		);
+	}
+
 	double YieldCurve::rate(double t) const
 	{
 		if (t < 0.0)
@@ -196,7 +205,7 @@ namespace rates
 		{
 			auto t = time(instrument->endDate());
 			points_.push_back({t, r});
-			r = instrument->solveZeroRate(*this, i);
+			r = instrument->solveZeroRate(*this);
 			rate(i++, r);
 		}
 	}

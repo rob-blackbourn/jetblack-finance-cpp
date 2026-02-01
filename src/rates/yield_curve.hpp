@@ -57,6 +57,7 @@ namespace rates
 			EInterpolationMethod interpolationMethod);
 
 		const year_month_day& valueDate() const { return valueDate_; }
+		std::vector<YieldCurvePoint>& points() { return points_; }
 		const std::vector<YieldCurvePoint>& points() const { return points_; }
 		EDayCount dayCount() const { return dayCount_; }
 
@@ -66,6 +67,7 @@ namespace rates
 		double rate(double t) const;
 		double rate(const year_month_day& date) const;
 		void rate(size_t i, double z);
+		void lastRate(double z);
 
 		double forwardRate(double t1, double t2) const;
 		double forwardRate(const year_month_day& startDate, const year_month_day& endDate) const;
