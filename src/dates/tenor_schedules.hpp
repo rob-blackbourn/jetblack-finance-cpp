@@ -23,23 +23,23 @@ namespace dates
 	// <summary>
 	// Returns the number of days between two dates after removing the number of complete months.
 	// </summary>
-	// <param name="startDate">The start date</param>
+	// <param name="firstAccrualDate">The start date</param>
 	// <param name="endDate">The end date</param>
 	// <returns>
 	// The number of days between two dates after removing the number of complete months.
 	// </returns>
 	inline
 	days
-	monthMod(const year_month_day& startDate, const year_month_day& endDate)
+	monthMod(const year_month_day& firstAccrualDate, const year_month_day& endDate)
 	{
-		if (startDate.day() == endDate.day())
+		if (firstAccrualDate.day() == endDate.day())
 			return days {0};
-		else if (startDate.day() < endDate.day())
-			return endDate.day() - startDate.day();
+		else if (firstAccrualDate.day() < endDate.day())
+			return endDate.day() - firstAccrualDate.day();
 		else
 		{
-			auto last_day = lastDayOfMonth(startDate.year(), startDate.month());
-			auto offset = last_day - startDate.day();
+			auto last_day = lastDayOfMonth(firstAccrualDate.year(), firstAccrualDate.month());
+			auto offset = last_day - firstAccrualDate.day();
 			auto daysFromOffset = offset + endDate.day();
 			return days {static_cast<unsigned int>(daysFromOffset)};
 		}
@@ -48,7 +48,7 @@ namespace dates
 	// <summary>
 	// Returns the number of whole months between two dates.
 	// </summary>
-	// <param name="startDate">The start date</param>
+	// <param name="firstAccrualDate">The start date</param>
 	// <param name="endDate">The end date</param>
 	// <param name="EOMFlag">A boolean flag indicating whether intermediate dates are assumed to lie at the end of the month</param>
 	// <returns>
@@ -56,18 +56,18 @@ namespace dates
 	// </returns>
 	inline
 	months
-	monthDiff(const year_month_day& startDate, const year_month_day& endDate, bool EOMFlag)
+	monthDiff(const year_month_day& firstAccrualDate, const year_month_day& endDate, bool EOMFlag)
 	{
 		year_month_day start, end;
 
 		if (EOMFlag)
 		{
-			start = year_month_day {startDate.year(), startDate.month(), 1d };
+			start = year_month_day {firstAccrualDate.year(), firstAccrualDate.month(), 1d };
 			end = year_month_day {endDate.year(), endDate.month(), 1d};
 		}
 		else
 		{
-			start = sys_days(startDate) + monthMod(startDate, endDate);
+			start = sys_days(firstAccrualDate) + monthMod(firstAccrualDate, endDate);
 			end = endDate;
 		}
 
@@ -79,12 +79,12 @@ namespace dates
 
 	inline
 	std::vector<year_month_day>
-	generateScheduleNoCheck(const year_month_day& startDate, const year_month_day& firstRegularDate, const year_month_day& lastRegularDate, const year_month_day& endDate, const day& dayOfMonth, const months& periodMonths)
+	generateScheduleNoCheck(const year_month_day& firstAccrualDate, const year_month_day& firstRegularDate, const year_month_day& lastRegularDate, const year_month_day& endDate, const day& dayOfMonth, const months& periodMonths)
 	{
 		std::vector<year_month_day> dates;
 
-		if (startDate < firstRegularDate)
-			dates.push_back(startDate);
+		if (firstAccrualDate < firstRegularDate)
+			dates.push_back(firstAccrualDate);
 
 		year_month_day date = firstRegularDate;
 		while (date <= lastRegularDate)
@@ -114,7 +114,7 @@ namespace dates
 	// flag. The end of month flag can be used to specify that the given dates are intended to
 	// always lie at the end of the month.
 	// </summary>
-	// <param name="startDate">The start date</param>
+	// <param name="firstAccrualDate">The start date</param>
 	// <param name="endDate">The end date</param>
 	// <param name="eom">A boolean flag indicating whether intermediate dates are assumed to lie at the end of the month</param>
 	// <param name="frequency">The frequency of the schedule</param>
@@ -123,7 +123,7 @@ namespace dates
 	inline
 	std::vector<year_month_day>
 	generateSchedule(
-		const year_month_day& startDate,
+		const year_month_day& firstAccrualDate,
 		const year_month_day& endDate,
 		bool eom,
 		EFrequency frequency,
@@ -136,17 +136,17 @@ namespace dates
 		if (eom)
 		{
 			// move all dates to the end of the month
-			start = moveToEndOfMonth(startDate);
+			start = moveToEndOfMonth(firstAccrualDate);
 			end = moveToEndOfMonth(endDate);
 		}
 		else
 		{
-			start = startDate;
+			start = firstAccrualDate;
 			end = endDate;
 		}
 
 		// Checck the date order is valid
-		if (startDate > endDate)
+		if (firstAccrualDate > endDate)
 			throw std::invalid_argument("The start date must be on or before the end date");
 
 		// Discover the first regular date
@@ -204,7 +204,7 @@ namespace dates
 	// first regular date, and regular schedule between the first and last regular
 	// date, and one period bewteen the last regular date and the end date.
 	// </summary>
-	// <param name="startDate">The start date</param>
+	// <param name="firstAccrualDate">The start date</param>
 	// <param name="firstRegularDate">The fist regular date</param>
 	// <param name="lastRegularDate">The last regular date</param>
 	// <param name="endDate">The end date</param>
@@ -214,7 +214,7 @@ namespace dates
 	inline
 	std::vector<year_month_day>
 	generateSchedule(
-		const year_month_day& startDate,
+		const year_month_day& firstAccrualDate,
 		const year_month_day& firstRegularDate,
 		const year_month_day& lastRegularDate,
 		const year_month_day& endDate,
@@ -229,7 +229,7 @@ namespace dates
 		if (eom)
 		{
 			// move all dates to the end of the month
-			start = moveToEndOfMonth(startDate);
+			start = moveToEndOfMonth(firstAccrualDate);
 			firstRegular = moveToEndOfMonth(firstRegularDate);
 			lastRegular = moveToEndOfMonth(lastRegularDate);
 			end = moveToEndOfMonth(endDate);
@@ -248,7 +248,7 @@ namespace dates
 					|| (firstRegularDayOfMonth == firstRegularDaysInMonth && firstRegularDayOfMonth < lastRegularDayOfMonth)
 					|| (lastRegularDayOfMonth == lastRegularDaysInMonth && lastRegularDayOfMonth < firstRegularDayOfMonth) ) )
 				throw std::invalid_argument("first regular date and last regular date must correspond");
-			start = startDate;
+			start = firstAccrualDate;
 			firstRegular = firstRegularDate;
 			lastRegular = lastRegularDate;
 			end = endDate;
@@ -256,7 +256,7 @@ namespace dates
 		}
 
 		// Checck the date order is valid
-		if (startDate > firstRegularDate)
+		if (firstAccrualDate > firstRegularDate)
 			throw std::invalid_argument("The start date must be on or before the first regular date");
 		else if (firstRegularDate > lastRegularDate)
 			throw std::invalid_argument("The first regular date must be on or before the last regular date");

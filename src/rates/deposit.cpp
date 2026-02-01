@@ -14,13 +14,13 @@ namespace rates
 	Deposit::Deposit(
 		double notional,
 		double rate,
-		const year_month_day& startDate,
-		const year_month_day& maturity,
+		const year_month_day& firstAccrualDate,
+		const year_month_day& maturityDate,
 		EDayCount dayCount)
 		:	notional_(notional),
 			rate_(rate),
-			startDate_(startDate),
-			maturity_(maturity),
+			firstAccrualDate_(firstAccrualDate),
+			maturityDate_(maturityDate),
 			dayCount_(dayCount)
 	{
 	}
@@ -28,7 +28,7 @@ namespace rates
 	Deposit::Deposit(
 		double notional,
 		double rate,
-		const year_month_day& startDate,
+		const year_month_day& firstAccrualDate,
 		const time_unit_t& tenor,
 		EDayCount dayCount,
 		EDateRule dateRule,
@@ -36,8 +36,8 @@ namespace rates
 		:	Deposit(
 				notional,
 				rate,
-				startDate,
-				add(startDate, tenor, isEndOfMonth(startDate), dateRule, holidays),
+				firstAccrualDate,
+				add(firstAccrualDate, tenor, isEndOfMonth(firstAccrualDate), dateRule, holidays),
 				dayCount)
 	{
 	}
@@ -45,9 +45,9 @@ namespace rates
 	double Deposit::value(const YieldCurve& curve) const
 	{
 		// We assume we deposit $1 on the start date and receive back $1 plus interest on the end date.
-		double dfStart = curve.discountFactor(startDate_);
-		double dfEnd = curve.discountFactor(maturity_);
-		double t = yearFrac(startDate_, maturity_, dayCount_);
+		double dfStart = curve.discountFactor(firstAccrualDate_);
+		double dfEnd = curve.discountFactor(maturityDate_);
+		double t = yearFrac(firstAccrualDate_, maturityDate_, dayCount_);
 
 		double interest = notional_ * rate_ * t;
 		double endCashFlow = notional_ + interest;
@@ -58,13 +58,13 @@ namespace rates
 
 	double Deposit::calculateZeroRate(const YieldCurve& curve) const
 	{
-		double df = curve.discountFactor(startDate_);
-		double payment = 1.0 + rate_ * yearFrac(startDate_, maturity_, dayCount_);
+		double df = curve.discountFactor(firstAccrualDate_);
+		double payment = 1.0 + rate_ * yearFrac(firstAccrualDate_, maturityDate_, dayCount_);
 
 		if (df / payment <= 0.0)
 			throw "unable to calculate zero rate for future - log of non-positive number";
 
-		double t = curve.time(maturity_);
+		double t = curve.time(maturityDate_);
 		double r = -1.0 / t * log(df / payment);
 
 		return r;

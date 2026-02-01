@@ -14,13 +14,13 @@ namespace rates
 	static double value(
 		const year_month_day& valueDate,
 		const YieldCurve& curve,
-		const year_month_day& startDate,
+		const year_month_day& firstAccrualDate,
 		const year_month_day& endDate,
 		EDayCount dayCount,
 		double rate,
 		double notional)
 	{
-		double t = yearFrac(startDate, endDate, dayCount);
+		double t = yearFrac(firstAccrualDate, endDate, dayCount);
 		double df = curve.discountFactor(valueDate, endDate);
 		double amount = notional * rate * t;
 		double pv = amount * df;
@@ -50,10 +50,10 @@ namespace rates
 		double sum_pv = 0.0;
 
 		for (
-			auto &&[startDate, endDate]
+			auto &&[firstAccrualDate, endDate]
 			: std::views::zip(schedule, schedule | std::views::drop(1)))
 		{
-			auto coupon_pv = value(valueDate, curve, startDate, endDate, dayCount, rate, notional);
+			auto coupon_pv = value(valueDate, curve, firstAccrualDate, endDate, dayCount, rate, notional);
 			sum_pv += coupon_pv;
 		}
 
@@ -74,13 +74,13 @@ namespace rates
 		double sum_pv = 0;
 
 		for (
-			auto &&[startDate, endDate, rate]
+			auto &&[firstAccrualDate, endDate, rate]
 			: std::views::zip(
 				schedule,
 				schedule | std::views::drop(1),
 				fixingRates))
 		{
-			auto cashflow_pv = value(valueDate, curve, startDate, endDate, dayCount, rate, notional);
+			auto cashflow_pv = value(valueDate, curve, firstAccrualDate, endDate, dayCount, rate, notional);
 			sum_pv += cashflow_pv;
 		}
 
@@ -93,14 +93,14 @@ namespace rates
 	static double value(
 		const year_month_day& valueDate,
 		double yield,
-		const year_month_day& startDate,
+		const year_month_day& firstAccrualDate,
 		const year_month_day& endDate,
 		EDayCount dayCount,
 		double rate,
 		double notional,
 		EFrequency frequency)
 	{
-		double period_t = dates::getTerm(startDate, endDate, dayCount).second;
+		double period_t = dates::getTerm(firstAccrualDate, endDate, dayCount).second;
 		double cashflow = rate * notional * period_t;
 		double t = dates::getTerm(valueDate, endDate, dayCount).second;
 		double periods = t * static_cast<int>(frequency);
@@ -139,9 +139,9 @@ namespace rates
 	{
 		double sum_pv = 0;
 
-		for (auto &&[startDate, endDate] : std::views::zip(schedule, schedule | std::views::drop(1)))
+		for (auto &&[firstAccrualDate, endDate] : std::views::zip(schedule, schedule | std::views::drop(1)))
 		{
-			auto coupon_pv = value(valueDate, yield, startDate, endDate, dayCount, rate, notional, frequency);
+			auto coupon_pv = value(valueDate, yield, firstAccrualDate, endDate, dayCount, rate, notional, frequency);
 			sum_pv += coupon_pv;
 		}
 

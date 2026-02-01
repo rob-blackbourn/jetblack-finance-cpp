@@ -10,7 +10,7 @@ namespace rates
 	using namespace dates;
 
 	static double accrued(
-		const year_month_day& startDate,
+		const year_month_day& firstAccrualDate,
 		const year_month_day& valueDate,
 		EDayCount dayCount,
 		double rate,
@@ -18,7 +18,7 @@ namespace rates
 	{
 		// The accrued is the amount of the notional between the start of the
 		// period and the cashflow date multiplied by the rate.
-		auto t = yearFrac(startDate, valueDate, dayCount);
+		auto t = yearFrac(firstAccrualDate, valueDate, dayCount);
 		return notional * rate * t;		
 	}
 
@@ -36,12 +36,12 @@ namespace rates
 			return 0.0;
 		}
 
-		for (const auto &[startDate, endDate] : std::views::zip(schedule, schedule | std::views::drop(1)))
+		for (const auto &[firstAccrualDate, endDate] : std::views::zip(schedule, schedule | std::views::drop(1)))
 		{
-			if (valueDate >= startDate && valueDate < endDate)
+			if (valueDate >= firstAccrualDate && valueDate < endDate)
 			{
 				// The value date is within this cashflow period.
-				return accrued(startDate, valueDate, dayCount, rate, notional);
+				return accrued(firstAccrualDate, valueDate, dayCount, rate, notional);
 			}
 		}
 
@@ -63,16 +63,16 @@ namespace rates
 		}
 
 		for (
-			const auto &[startDate, endDate, rate]
+			const auto &[firstAccrualDate, endDate, rate]
 			: std::views::zip(
 				schedule,
 				schedule | std::views::drop(1),
 				fixingRates))
 		{
-			if (valueDate >= startDate && valueDate < endDate)
+			if (valueDate >= firstAccrualDate && valueDate < endDate)
 			{
 				// The value date is within this cashflow period.
-				return accrued(startDate, valueDate, dayCount, rate, notional);
+				return accrued(firstAccrualDate, valueDate, dayCount, rate, notional);
 			}
 		}
 

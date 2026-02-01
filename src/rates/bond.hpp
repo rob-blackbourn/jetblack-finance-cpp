@@ -23,7 +23,7 @@ namespace rates
 	private:
 		std::vector<year_month_day> schedule_ {};
 		year_month_day firstAccrualDate_ {};
-		year_month_day maturity_ {};
+		year_month_day maturityDate_ {};
 		double couponRate_ {0.0};
 		EFrequency couponFrequency_ {EFrequency::Annual};
 		EDayCount dayCount_ {EDayCount::Actual_d365};
@@ -46,7 +46,7 @@ namespace rates
 			EDateRule dateRule)
 			:	schedule_(schedule),
 				firstAccrualDate_(firstAccrualDate),
-				maturity_(maturityDate),
+				maturityDate_(maturityDate),
 				couponRate_(couponRate),
 				couponFrequency_(couponFrequency),
 				dayCount_(dayCount),
@@ -79,8 +79,8 @@ namespace rates
 		double accrued(const year_month_day& valueDate) const;
 
 		const std::vector<year_month_day>& schedule() const { return schedule_; }
-		const year_month_day& firstAccrualDate() const {return firstAccrualDate_; }
-		virtual const year_month_day& maturity() const override { return maturity_; }
+		virtual const year_month_day& firstAccrualDate() const override {return firstAccrualDate_; }
+		virtual const year_month_day& maturityDate() const override { return maturityDate_; }
 		double couponRate() const { return couponRate_; }
 		EFrequency couponFrequency() const { return couponFrequency_; }
 		EDayCount dayCount() const { return dayCount_; }

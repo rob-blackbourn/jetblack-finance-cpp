@@ -70,7 +70,7 @@ namespace rates
 			instruments_,
 			[](const std::shared_ptr<Instrument>& a, const std::shared_ptr<Instrument>& b)
 			{
-				return a->maturity() < b->maturity();
+				return a->maturityDate() < b->maturityDate();
 			});
 
 		solveZeroRates();
@@ -139,14 +139,14 @@ namespace rates
 		return discountFactor(time(d1), time(d2));
 	}
 
-	double YieldCurve::fix(const year_month_day& startDate, const year_month_day& maturity, EDayCount dayCount) const
+	double YieldCurve::fix(const year_month_day& firstAccrualDate, const year_month_day& maturityDate, EDayCount dayCount) const
 	{
-		if (startDate == maturity)
+		if (firstAccrualDate == maturityDate)
 			return 0.0;
 
-		double t = time(maturity) - time(startDate);
-		double r = forwardRate(startDate, maturity);
-		double period_t = yearFrac(startDate, maturity, dayCount);
+		double t = time(maturityDate) - time(firstAccrualDate);
+		double r = forwardRate(firstAccrualDate, maturityDate);
+		double period_t = yearFrac(firstAccrualDate, maturityDate, dayCount);
 
 		return (exp(r * t) - 1.0) / period_t;
 	}
@@ -193,7 +193,7 @@ namespace rates
 
 		for (auto&& instrument : instruments_)
 		{
-			auto t = time(instrument->maturity());
+			auto t = time(instrument->maturityDate());
 			points_.push_back({t, r});
 			r = instrument->solveZeroRate(*this);
 		}

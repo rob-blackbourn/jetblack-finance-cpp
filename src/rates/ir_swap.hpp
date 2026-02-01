@@ -32,7 +32,7 @@ namespace rates
 			double notional,
 			double fixedRate,
 			double spread,
-			const year_month_day& startDate,
+			const year_month_day& firstAccrualDate,
 			const time_unit_t& tenor,
 			EFrequency frequency,
 			EStubType stubType,
@@ -45,8 +45,8 @@ namespace rates
 			double notional,
 			double fixedRate,
 			double spread,
-			const year_month_day& startDate,
-			const year_month_day& maturity,
+			const year_month_day& firstAccrualDate,
+			const year_month_day& maturityDate,
 			EFrequency frequency,
 			EStubType stubType,
 			EDateRule dateRule,
@@ -67,7 +67,8 @@ namespace rates
 		IrSwapLegFloating& floatingLeg() { return floatingLeg_; }
 		const IrSwapLegFloating& floatingLeg() const { return floatingLeg_; }
 
-		virtual const year_month_day& maturity() const override { return fixedLeg_.maturity(); }
+		virtual const year_month_day& firstAccrualDate() const override { return fixedLeg_.firstAccrualDate(); }
+		virtual const year_month_day& maturityDate() const override { return fixedLeg_.maturityDate(); }
 
 		virtual double rate() const override { return fixedLeg_.rate(); }
 		virtual void rate(double rate) override { fixedLeg_.rate(rate); }

@@ -18,7 +18,7 @@ TEST_CASE("ctor.default", "[ir_swap_leg_fixed]")
 
 TEST_CASE("ctor.tenor", "[ir_swap_leg_fixed]")
 {
-    auto startDate = 2000y/January/1d;
+    auto firstAccrualDate = 2000y/January/1d;
     auto tenor = years(2);
     auto frequency = EFrequency::SemiAnnual;
     auto stubType = EStubType::ShortFirst;
@@ -31,7 +31,7 @@ TEST_CASE("ctor.tenor", "[ir_swap_leg_fixed]")
     auto leg = IrSwapLegFixed(
         notional,
         rate,
-        startDate,
+        firstAccrualDate,
         tenor,
         frequency,
         stubType,
@@ -41,6 +41,6 @@ TEST_CASE("ctor.tenor", "[ir_swap_leg_fixed]")
     );
 
     REQUIRE ( leg.rate() == 0.05 );
-    REQUIRE ( leg.startDate() == 2000y/January/1d );
-    REQUIRE ( leg.maturity() == 2002y/January/1d );
+    REQUIRE ( leg.firstAccrualDate() == 2000y/January/1d );
+    REQUIRE ( leg.maturityDate() == 2002y/January/1d );
 }

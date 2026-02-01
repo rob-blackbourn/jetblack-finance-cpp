@@ -20,8 +20,8 @@ namespace rates
 	{
 	protected:
 		double notional_ {0};
-		year_month_day startDate_ {};
-		year_month_day maturity_ {};
+		year_month_day firstAccrualDate_ {};
+		year_month_day maturityDate_ {};
 		EFrequency frequency_ {EFrequency::Annual};
 		EStubType stubType_ {EStubType::ShortFirst};
 		EDayCount dayCount_ {EDayCount::Actual_d365};
@@ -33,8 +33,8 @@ namespace rates
 
 		IrSwapLeg(
 			double notional,
-			const year_month_day& startDate,
-			const year_month_day& maturity,
+			const year_month_day& firstAccrualDate,
+			const year_month_day& maturityDate,
 			EFrequency frequency,
 			EStubType stubType,
 			EDayCount dayCount,
@@ -43,7 +43,7 @@ namespace rates
 		
 		IrSwapLeg(
 			double notional,
-			const year_month_day& startDate,
+			const year_month_day& firstAccrualDate,
 			const time_unit_t& tenor,
 			EFrequency frequency,
 			EStubType stubType,
@@ -56,8 +56,8 @@ namespace rates
 		virtual double accrued(const YieldCurve& curve, const year_month_day& valueDate) const = 0;
 
 		double notional() const { return notional_; }
-		const year_month_day& startDate() const { return startDate_; }
-		const year_month_day& maturity() const { return maturity_; }
+		const year_month_day& firstAccrualDate() const { return firstAccrualDate_; }
+		const year_month_day& maturityDate() const { return maturityDate_; }
 		EFrequency frequency() const { return frequency_; }
 		EStubType stubType() const { return stubType_; }
 		EDayCount dayCount() const { return dayCount_; }

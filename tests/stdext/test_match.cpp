@@ -30,7 +30,7 @@ year_month_day add(const year_month_day& date, const time_unit_t& offset, bool e
 TEST_CASE("match", "[stdext]")
 {
 
-    auto startDate = 2000y/January/31d;
+    auto firstAccrualDate = 2000y/January/31d;
     auto offsets = std::vector<time_unit_t> {
         days(1),
         weeks{2},
@@ -39,16 +39,16 @@ TEST_CASE("match", "[stdext]")
     };
 
     auto expecteds = std::vector<year_month_day> {
-        addBusinessDays(startDate, days(1), {}),
-        addWeeks(startDate, weeks{2}, EDateRule::None, {}),
-        addMonths(startDate, months{3}, true, EDateRule::None, {}),
-        addYears(startDate, years{4}, true, EDateRule::None, {})
+        addBusinessDays(firstAccrualDate, days(1), {}),
+        addWeeks(firstAccrualDate, weeks{2}, EDateRule::None, {}),
+        addMonths(firstAccrualDate, months{3}, true, EDateRule::None, {}),
+        addYears(firstAccrualDate, years{4}, true, EDateRule::None, {})
     };
 
     auto actual = std::vector<year_month_day>();
     for (const auto& [offset, expected] : std::views::zip(offsets, expecteds))
     {
-        auto actual = add(startDate, offset, true, EDateRule::None, {});
+        auto actual = add(firstAccrualDate, offset, true, EDateRule::None, {});
         REQUIRE ( expected == actual );
     }
 

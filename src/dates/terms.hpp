@@ -159,24 +159,24 @@ namespace dates
             case EDayCount::Actual_Actual:
 			case EDayCount::Actual_Actual_ISDA:
 				{
-					auto startDate = year_month_day{start.year() / start.month() / start.day()};
+					auto firstAccrualDate = year_month_day{start.year() / start.month() / start.day()};
                     auto daysInPeriod = days{0};
                     auto term = 0.0;
 
 					// Get the period from now to the end of the year
-					if (startDate.year() < end.year())
+					if (firstAccrualDate.year() < end.year())
 					{
-						daysInPeriod = days{1} + (daysInYear(startDate.year()) - dayOfYear(startDate));
-						term = daysInPeriod.count() / (double)daysInYear(startDate.year()).count();
+						daysInPeriod = days{1} + (daysInYear(firstAccrualDate.year()) - dayOfYear(firstAccrualDate));
+						term = daysInPeriod.count() / (double)daysInYear(firstAccrualDate.year()).count();
 
-						startDate = year_month_day((startDate.year() + years{1}) / January / 1d);
+						firstAccrualDate = year_month_day((firstAccrualDate.year() + years{1}) / January / 1d);
 
 						// Get the whole years from the moved start to the end
-						while (startDate.year() < end.year())
+						while (firstAccrualDate.year() < end.year())
 						{
 							term += 1;
-							daysInPeriod += daysInYear(startDate.year());
-							startDate = {(startDate.year() + years{1}) / January / 1d};
+							daysInPeriod += daysInYear(firstAccrualDate.year());
+							firstAccrualDate = {(firstAccrualDate.year() + years{1}) / January / 1d};
 						}
 						// Years should now be the same.
 					}
@@ -187,8 +187,8 @@ namespace dates
 					}
 
 					// Handle the end stub.
-					auto end_days = (dayOfYear(end) - dayOfYear(startDate));
-					term += end_days.count() / (double)daysInYear(startDate.year()).count();
+					auto end_days = (dayOfYear(end) - dayOfYear(firstAccrualDate));
+					term += end_days.count() / (double)daysInYear(firstAccrualDate.year()).count();
 					daysInPeriod += end_days;
                     return { daysInPeriod, term };
 				}
@@ -321,7 +321,7 @@ namespace dates
 	// Calculates the year fraction between a start date and an schedule of N dates, returning
 	// an array fo year fractions of size N-1.
 	// </summary>
-	// <param name="startDate">The start date</param>
+	// <param name="firstAccrualDate">The start date</param>
 	// <param name="schedule">The end date</param>
 	// <param name="daycount">The daycount convention</param>
 	// <returns>
@@ -329,11 +329,11 @@ namespace dates
 	// </returns>
 	inline
 	std::vector<double>
-	yearsBetween(const year_month_day& startDate, const std::vector<year_month_day> schedule, EDayCount dayCount)
+	yearsBetween(const year_month_day& firstAccrualDate, const std::vector<year_month_day> schedule, EDayCount dayCount)
 	{
 		std::vector<double> terms;
 		for (const auto& date  : schedule)
-			terms.push_back(yearsBetween(startDate, date, dayCount));
+			terms.push_back(yearsBetween(firstAccrualDate, date, dayCount));
 		return terms;
 	}
 
@@ -341,7 +341,7 @@ namespace dates
 	// Calculates the year fraction between a the first date and subsequent dates in a schedule
 	// of N dates, returning N-2 year fractions.
 	// </summary>
-	// <param name="startDate">The start date</param>
+	// <param name="firstAccrualDate">The start date</param>
 	// <param name="schedule">The end date</param>
 	// <param name="daycount">The daycount convention</param>
 	// <returns>

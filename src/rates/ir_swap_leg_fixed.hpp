@@ -27,7 +27,7 @@ namespace rates
 		IrSwapLegFixed(
 			double notional,
 			double rate,
-			const year_month_day& startDate,
+			const year_month_day& firstAccrualDate,
 			const time_unit_t& tenor,
 			EFrequency frequency,
 			EStubType stubType,
@@ -38,8 +38,8 @@ namespace rates
 		IrSwapLegFixed(
 			double notional,
 			double rate,
-			const year_month_day& startDate,
-			const year_month_day& maturity,
+			const year_month_day& firstAccrualDate,
+			const year_month_day& maturityDate,
 			EFrequency frequency,
 			EStubType stubType,
 			EDateRule dateRule,

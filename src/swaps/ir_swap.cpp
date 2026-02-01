@@ -90,11 +90,11 @@ namespace swaps
 		double spot_t = dates::yearsBetween(effective_date, spot_date, df_daycount);
 		double spot_df = df_curve.interp_df(spot_t);
 
-		// Calculate the maturity date
+		// Calculate the maturityDate date
 		COleDateTime maturity_date = dates::addMonths(spot_date, static_cast<int>(months_duration));
 
 		// -- Fixed side --
-		// Generate the schedule from spot date to maturity date
+		// Generate the schedule from spot date to maturityDate date
 		std::vector<COleDateTime> fixed_sched = dates::generateSchedule(spot_date, maturity_date, false, fixed_frequency, true);
 		fixed_sched = std::vector<COleDateTime>(fixed_sched.begin() + 1, fixed_sched.end());
 		// Adjust the schedule with the given holidays and date rule
@@ -118,7 +118,7 @@ namespace swaps
 		fixed_pv /= spot_df;
 
 		// -- Floating side --
-		// Generate the schedule from spot date to maturity date
+		// Generate the schedule from spot date to maturityDate date
 		std::vector<COleDateTime> floating_sched = dates::generateSchedule(spot_date, maturity_date, false, floating_frequency, true);
 		floating_sched = std::vector<COleDateTime>(floating_sched.begin() + 1, floating_sched.end());
 		// Adjust the schedule with the given holidays and date rule

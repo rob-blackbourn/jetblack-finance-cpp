@@ -28,8 +28,8 @@ TEST_CASE("ctor.dates", "[ir_future]")
         {2026y/January/1d, 2026y/April/5d, 2026y/May/1d, 2026y/December/25}
     };
 
-    REQUIRE( future.startDate() == 2026y/March/20d );
-    REQUIRE( future.maturity() == 2026y/June/22d );
+    REQUIRE( future.firstAccrualDate() == 2026y/March/20d );
+    REQUIRE( future.maturityDate() == 2026y/June/22d );
     REQUIRE( future.rate() == Approx(0.05).epsilon(1e-12) );
     REQUIRE( future.dayCount() == EDayCount::Actual_d365 );
 }

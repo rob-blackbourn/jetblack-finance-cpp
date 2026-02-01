@@ -58,8 +58,8 @@ namespace rates
 		}
 
 		double notional() const { return deposit_.notional(); }
-		const year_month_day& startDate() const { return deposit_.startDate(); }
-		virtual const year_month_day& maturity() const override { return deposit_.maturity(); }
+		virtual const year_month_day& firstAccrualDate() const override { return deposit_.firstAccrualDate(); }
+		virtual const year_month_day& maturityDate() const override { return deposit_.maturityDate(); }
 		EDayCount dayCount() const { return deposit_.dayCount(); }
 		
 		virtual double rate() const override { return deposit_.rate(); }

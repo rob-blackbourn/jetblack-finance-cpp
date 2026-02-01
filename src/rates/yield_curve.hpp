@@ -69,12 +69,12 @@ namespace rates
 		void setLastRate(double z);
 
 		double forwardRate(double t1, double t2) const;
-		double forwardRate(const year_month_day& startDate, const year_month_day& endDate) const;
+		double forwardRate(const year_month_day& firstAccrualDate, const year_month_day& endDate) const;
 
 		double discountFactor(double t) const;
 		double discountFactor(const year_month_day& date) const;
 		double discountFactor(double t1, double t2) const;
-		double discountFactor(const year_month_day& startDate, const year_month_day& endDate) const;
+		double discountFactor(const year_month_day& firstAccrualDate, const year_month_day& endDate) const;
 
 		double fix(const year_month_day& valueDate, const year_month_day& fixingDate, EDayCount dayCount) const;
 

@@ -85,7 +85,7 @@ TEST_CASE("dayOfYear", "[dates]")
 
 TEST_CASE("addNthDayOfWeek", "[dates]")
 {
-    auto startDate = 2026y/January/1d;
-    auto resultDate = addNthDayOfWeek(startDate, 3, Wednesday, true);
+    auto firstAccrualDate = 2026y/January/1d;
+    auto resultDate = addNthDayOfWeek(firstAccrualDate, 3, Wednesday, true);
     REQUIRE( resultDate == 2026y/January/21d );
 }

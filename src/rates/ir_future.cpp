@@ -20,10 +20,10 @@ namespace rates
 		const time_unit_t& spotLead,
 		const std::set<year_month_day>& holidays)
 	{
-		year_month_day startDate = add(expiryDate, spotLead, false, dateRule, holidays);
+		year_month_day firstAccrualDate = add(expiryDate, spotLead, false, dateRule, holidays);
 		// The price is quoted as a discount from par. e.g. 0.05 is 95.
 		double rate = (100 - price) / 100.0;
-		deposit_ = Deposit(notional, rate, startDate, nMonths, dayCount, dateRule, holidays);
+		deposit_ = Deposit(notional, rate, firstAccrualDate, nMonths, dayCount, dateRule, holidays);
 	}
 
 	// A regular interest rate future is a just a deposit starting spot days

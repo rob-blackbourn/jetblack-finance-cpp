@@ -14,14 +14,14 @@ namespace rates
 	IrSwapLegFixed::IrSwapLegFixed(
 		double notional,
 		double rate,
-		const year_month_day& startDate,
+		const year_month_day& firstAccrualDate,
 		const time_unit_t& tenor,
 		EFrequency frequency,
 		EStubType stubType,
 		EDateRule dateRule,
 		EDayCount dayCount,
 		const std::set<year_month_day>& holidays)
-		:	IrSwapLeg(notional, startDate, tenor, frequency, stubType, dayCount, dateRule, holidays),
+		:	IrSwapLeg(notional, firstAccrualDate, tenor, frequency, stubType, dayCount, dateRule, holidays),
 			rate_(rate)
 	{
 	}
@@ -29,14 +29,14 @@ namespace rates
 	IrSwapLegFixed::IrSwapLegFixed(
 		double notional,
 		double rate,
-		const year_month_day& startDate,
-		const year_month_day& maturity,
+		const year_month_day& firstAccrualDate,
+		const year_month_day& maturityDate,
 		EFrequency frequency,
 		EStubType stubType,
 		EDateRule dateRule,
 		EDayCount dayCount,
 		const std::set<year_month_day>& holidays)
-		:	IrSwapLeg(notional, startDate, maturity, frequency, stubType, dayCount, dateRule, holidays),
+		:	IrSwapLeg(notional, firstAccrualDate, maturityDate, frequency, stubType, dayCount, dateRule, holidays),
 			rate_(rate)
 	{
 	}
@@ -84,7 +84,7 @@ namespace rates
 		if (divisor == 0.0)
 			throw std::runtime_error{"unable to calculate ir-swap zero rate - attempt to divide by zero"};
 
-		auto t = curve.time(maturity_);
+		auto t = curve.time(maturityDate_);
 		if (t == 0)
 			throw std::runtime_error{"unable to calculate ir-swap zero rate - swap has matured"};
 

@@ -54,7 +54,7 @@ namespace dates
 	}
 
 	inline std::vector<year_month_day> generateScheduleBackwards(
-		const year_month_day& startDate,
+		const year_month_day& firstAccrualDate,
 		const year_month_day& endDate,
 		EFrequency frequency,
 		bool allowShortFirst,
@@ -62,7 +62,7 @@ namespace dates
 		const std::set<year_month_day>& holidays)
 	{
 		// Generate the schedule from the end date, going backwards
-		auto startDateAdj = adjust(startDate, dateRule, holidays);
+		auto startDateAdj = adjust(firstAccrualDate, dateRule, holidays);
 		bool eom = isEndOfMonth(endDate);
 		auto step = to_time_unit(frequency);
 
@@ -98,7 +98,7 @@ namespace dates
 	}
 
 	inline std::vector<year_month_day> generateScheduleForwards(
-		const year_month_day& startDate,
+		const year_month_day& firstAccrualDate,
 		const year_month_day& endDate,
 		EFrequency frequency,
 		bool allowShortLast,
@@ -107,17 +107,17 @@ namespace dates
 	{
 		// Generate the schedule from the start date, going forwards.
 		auto endDateAdj = adjust(endDate, dateRule, holidays);
-		bool eom = isEndOfMonth(startDate);
+		bool eom = isEndOfMonth(firstAccrualDate);
 		auto step = to_time_unit(frequency);
 
 		auto schedule = std::vector<year_month_day>{};
 
 		int n = 0;
-		auto date = adjust(startDate, dateRule, holidays);
+		auto date = adjust(firstAccrualDate, dateRule, holidays);
 		while (date <= endDateAdj)
 		{
 			schedule.push_back(date);
-			date = add(startDate, step * ++n, eom, dateRule, holidays);
+			date = add(firstAccrualDate, step * ++n, eom, dateRule, holidays);
 		}
 
 		if (!schedule.empty() && schedule.back() < endDateAdj)
@@ -137,14 +137,14 @@ namespace dates
 	}
 
 	inline std::vector<std::chrono::year_month_day> generateSchedule(
-		const std::chrono::year_month_day& startDate,
+		const std::chrono::year_month_day& firstAccrualDate,
 		const std::chrono::year_month_day& endDate,
 		EFrequency frequency,
 		EStubType stubType,
 		EDateRule dateRule,
 		const std::set<std::chrono::year_month_day>& holidays)
 	{
-		if (startDate >= endDate)
+		if (firstAccrualDate >= endDate)
 			throw "start date must be prior to end date";
 
 		switch (stubType)
@@ -153,7 +153,7 @@ namespace dates
 		case EStubType::LongFirst:
 			
 			return generateScheduleBackwards(
-				startDate,
+				firstAccrualDate,
 				endDate,
 				frequency,
 				stubType == EStubType::ShortFirst,
@@ -164,7 +164,7 @@ namespace dates
 		case EStubType::LongLast:
 
 			return generateScheduleForwards(
-				startDate,
+				firstAccrualDate,
 				endDate,
 				frequency,
 				stubType == EStubType::ShortLast,

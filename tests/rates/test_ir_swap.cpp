@@ -18,7 +18,7 @@ TEST_CASE("ctor.default", "ir_swap")
 
 TEST_CASE("ctor.tenor", "[ir_swap]")
 {
-    auto startDate = 2000y/January/1d;
+    auto firstAccrualDate = 2000y/January/1d;
     auto tenor = years(2);
     auto frequency = EFrequency::SemiAnnual;
     auto stubType = EStubType::ShortFirst;
@@ -34,7 +34,7 @@ TEST_CASE("ctor.tenor", "[ir_swap]")
         notional,
         rate,
         spread,
-        startDate,
+        firstAccrualDate,
         tenor,
         frequency,
         stubType,
@@ -45,10 +45,10 @@ TEST_CASE("ctor.tenor", "[ir_swap]")
     );
 
     REQUIRE ( swap.fixedLeg().rate() == 0.05 );
-    REQUIRE ( swap.fixedLeg().startDate() == 2000y/January/1d );
-    REQUIRE ( swap.fixedLeg().maturity() == 2002y/January/1d );
+    REQUIRE ( swap.fixedLeg().firstAccrualDate() == 2000y/January/1d );
+    REQUIRE ( swap.fixedLeg().maturityDate() == 2002y/January/1d );
 
     REQUIRE ( swap.floatingLeg().spread() == 0.01 );
-    REQUIRE ( swap.floatingLeg().startDate() == 2000y/January/1d );
-    REQUIRE ( swap.floatingLeg().maturity() == 2002y/January/1d );
+    REQUIRE ( swap.floatingLeg().firstAccrualDate() == 2000y/January/1d );
+    REQUIRE ( swap.floatingLeg().maturityDate() == 2002y/January/1d );
 }
