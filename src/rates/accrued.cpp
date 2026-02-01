@@ -22,18 +22,6 @@ namespace rates
 		return notional * rate * t;		
 	}
 
-	static double accrued(
-		const year_month_day& startDate,
-		const year_month_day& valueDate,
-		EDayCount dayCount,
-		const std::optional<double>& fixingRate,
-		double notional)
-	{
-		if (!fixingRate)
-			throw std::domain_error("rate not fixed");
-		return accrued(startDate, valueDate, dayCount, *fixingRate, notional);
-	}
-
 	double accrued(
 		const year_month_day& valueDate,
 		const std::vector<year_month_day>& schedule,
@@ -85,32 +73,6 @@ namespace rates
 			{
 				// The value date is within this cashflow period.
 				return accrued(startDate, valueDate, dayCount, rate, notional);
-			}
-		}
-
-		return 0.0;
-	}
-
-	double accrued(
-		const year_month_day& valueDate,
-		const std::vector<year_month_day>& schedule,
-		EDayCount dayCount,
-		const std::vector<Fixing>& fixings,
-		double notional)
-	{
-		if (valueDate <= schedule.front() || valueDate >= schedule.back())
-		{
-			// The value date is outside the schedule of payments, so there
-			// is no accrued.
-			return 0.0;
-		}
-
-		for (const auto &[startDate, endDate, fixing] : std::views::zip(schedule, schedule | std::views::drop(1), fixings))
-		{
-			if (valueDate >= startDate && valueDate < endDate)
-			{
-				// The value date is within this cashflow period.
-				return accrued(startDate, valueDate, dayCount, fixing.rate(), notional);
 			}
 		}
 

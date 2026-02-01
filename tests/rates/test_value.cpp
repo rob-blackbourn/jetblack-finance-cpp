@@ -113,15 +113,6 @@ TEST_CASE("fixings/yieldCurve", "[value]")
         0.10,
         0.11,
     };
-    auto fixings = std::views::zip(
-            schedule | std::views::drop(1),
-            fixingRates)
-        | std::views::transform([](auto&& t)
-            {
-                auto&& [date, rate] = t;
-                return Fixing { date, rate };
-            })
-        | std::ranges::to<std::vector<Fixing>>();
     auto notional = 1000000.0;
 
     auto actual = rates::value(
@@ -129,7 +120,7 @@ TEST_CASE("fixings/yieldCurve", "[value]")
         curve,
         schedule,
         dayCount,
-        fixings,
+        fixingRates,
         notional
     );
     REQUIRE ( actual == Approx(1009728.5234190911).epsilon(1e-10) );

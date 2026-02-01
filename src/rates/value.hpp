@@ -7,8 +7,6 @@
 #include "dates/terms.hpp"
 #include "dates/schedules.hpp"
 
-#include "rates/fixing.hpp"
-
 namespace rates
 {
 	using namespace std::chrono;
@@ -30,14 +28,6 @@ namespace rates
 		const std::vector<year_month_day>& schedule,
 		EDayCount dayCount,
 		const std::vector<double>& fixingRates,
-		double notional);
-
-	double value(
-		const year_month_day& valueDate,
-		const YieldCurve& curve,
-		const std::vector<year_month_day>& schedule,
-		EDayCount dayCount,
-		const std::vector<Fixing>& fixings,
 		double notional);
 
 	double value(
