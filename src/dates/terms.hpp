@@ -19,18 +19,18 @@ namespace dates
 
 	enum class EDayCount
 	{ 
-		Actual_d360 = 0,
-		Actual_d365 = 1,
-		Actual_d366 = 2,
-		Actual_d365_25 = 3,
-		Actual_Actual = 4,
-		NY_d365 = 5,
-		d30A_360 = 6,
-		d30_d365 = 7,
-		d30E_d360 = 8,
-		Actual_Actual_ISDA = 9,
-		Actual_Actual_ISMA = 10,
-		Actual_Actual_AFB = 11
+		Actual_d360,
+		Actual_d365,
+		Actual_d366,
+		Actual_d365_25,
+		Actual_Actual,
+		NY_d365,
+		d30A_360, // Also know as 30/360 Bond Basis
+		d30E_d360,
+		d30_d365,
+		Actual_Actual_ISDA,
+		Actual_Actual_ISMA,
+		Actual_Actual_AFB
 	};
 
 	namespace {
@@ -96,14 +96,11 @@ namespace dates
 
 				auto days_in_year = 360.0;
 
-				if (d1 == 31)
-				{
-					d1 = 30;
-				}
+				d1 = std::min(d1, 30);
 
-				if (d2 == 31 && d1 == 30)
+				if (d1 > 29)
 				{
-					d2 = 30;
+					d2 = std::min(d2, 30);
 				}
 
 				auto days_in_period = days{

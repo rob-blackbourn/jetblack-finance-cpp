@@ -6,6 +6,7 @@
         "daycount",
         "flatfwd",
         "ISDA",
+        "ISMA",
         "jetblack",
         "lrates",
         "Scholes"
