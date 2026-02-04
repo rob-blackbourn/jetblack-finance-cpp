@@ -109,11 +109,6 @@ namespace dates
 						d2 = 30;
 					}
 
-					auto a = 360 * (y2 - y1);
-					auto b = 30 * (m2 - m1);
-					auto c = (d2 - d1);
-					auto d = a + b + c;
-
 					auto days_in_period = days{
 						360 * (y2 - y1) +
 						30 * (m2 - m1) +
