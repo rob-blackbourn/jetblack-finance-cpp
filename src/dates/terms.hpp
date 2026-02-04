@@ -7,6 +7,7 @@
 #include <chrono>
 #include <set>
 #include <string>
+#include <tuple>
 #include <type_traits>
 #include <vector>
 
@@ -32,6 +33,16 @@ namespace dates
 		Actual_Actual_AFB = 11
 	};
 
+	namespace {
+		std::tuple<int, int, int> decompose(const year_month_day& date)
+		{
+			auto d = static_cast<unsigned int>(date.day());
+			auto m = static_cast<unsigned int>(date.month());
+			auto y = static_cast<int>(date.year());
+			return {d, m, y};
+		}
+	}
+
 	// <summary>
 	// Calculates the year fraction between two dates for a given daycount convention.
 	// </summary>
@@ -42,7 +53,7 @@ namespace dates
 	// The days and the year fraction
 	// </returns>
 	inline
-	std::pair<days,double>
+	std::tuple<days,double>
 	getTerm(const year_month_day& start, const year_month_day& end, EDayCount dayCount)
 	{
 		// double days, term;
@@ -80,39 +91,51 @@ namespace dates
 
 			case EDayCount::d30_d360:
 			{
-				auto d1 = start.day(), d2 = end.day();
-				auto m1 = start.month(), m2 = end.month();
-				auto y1 = start.year(), y2 = end.year();
+				auto [d1, m1, y1] = decompose(start);
+				auto [d2, m2, y2] = decompose(end);
 
 				auto days_in_year = 360.0;
 
-				if (false)
+				if (true)
 				{
 					// Method 1
-					if (d1 == 31d)
+					if (d1 == 31)
 					{
-						d1 = 30d;
+						d1 = 30;
 					}
 
-					if (d2 == 31d && d1 == 30d)
+					if (d2 == 31 && d1 == 30)
 					{
-						d2 = 30d;
+						d2 = 30;
 					}
 
-					auto days_in_period = days{(360 * (y2 - y1).count() + 30 * (m2 - m1).count() + (d2 - d1).count())};
+					auto a = 360 * (y2 - y1);
+					auto b = 30 * (m2 - m1);
+					auto c = (d2 - d1);
+					auto d = a + b + c;
+
+					auto days_in_period = days{
+						360 * (y2 - y1) +
+						30 * (m2 - m1) +
+						(d2 - d1)};
+
 					auto term = days_in_period.count() / days_in_year;
 					return { days_in_period, term };
 				}
 				else
 				{
 					// Method 2
-					if (d2 == 31d && d1 < 30d)
+					if (d2 == 31 && d1 < 30)
 					{
-						d2 = 1d;
+						d2 = 1;
 						m2++;
 					}
 
-					auto days_in_period = days{360 * (y2 - y1).count() + 30 * ((m2 - m1).count() - 1) + std::max(0, (30d - d1).count()) + static_cast<unsigned int>(std::min(30d, d2))};
+					auto days_in_period = days{
+						360 * (y2 - y1) +
+						30 * ((m2 - m1) - 1) +
+						std::max(0, (30 - d1)) + std::min(30, d2)};
+
 					auto term = days_in_period.count() / 360.0;
 					return { days_in_period, term };
 				}
@@ -301,20 +324,23 @@ namespace dates
 	inline double
 	yearFrac(const year_month_day& start, const year_month_day& end, EDayCount dayCount)
 	{
-		return getTerm(start, end, dayCount).second;
+		const auto& [d, t] = getTerm(start, end, dayCount);
+		return t;
 	}
 
 
 	inline double
 	yearsBetween(const year_month_day& start, const year_month_day& end, EDayCount dayCount)
 	{
-		return getTerm(start, end, dayCount).second;
+		const auto& [d, t] = getTerm(start, end, dayCount);
+		return t;
 	}
 
 	inline days
 	daysBetween(const year_month_day& start, const year_month_day& end, EDayCount dayCount)
 	{
-		return getTerm(start, end, dayCount).first;
+		const auto& [d, t] = getTerm(start, end, dayCount);
+		return d;
 	}
 
 	// <summary>

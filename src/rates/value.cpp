@@ -100,9 +100,9 @@ namespace rates
 		double notional,
 		EFrequency frequency)
 	{
-		double period_t = dates::getTerm(firstAccrualDate, endDate, dayCount).second;
+		double period_t = dates::yearFrac(firstAccrualDate, endDate, dayCount);
 		double cashflow = rate * notional * period_t;
-		double t = dates::getTerm(valueDate, endDate, dayCount).second;
+		double t = dates::yearFrac(valueDate, endDate, dayCount);
 		double periods = t * static_cast<int>(frequency);
 		double x = std::pow(1 + yield / std::to_underlying(frequency), periods);
 		if (x == 0)
@@ -119,7 +119,7 @@ namespace rates
 		double notional,
 		EFrequency frequency)
 	{
-		double t = dates::getTerm(valueDate, endDate, dayCount).second;
+		double t = dates::yearFrac(valueDate, endDate, dayCount);
 		double periods = t * static_cast<int>(frequency);
 		double x = std::pow(1 + yield / static_cast<int>(frequency), periods);
 		if (x == 0)

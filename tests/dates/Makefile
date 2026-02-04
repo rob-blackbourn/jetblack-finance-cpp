@@ -29,12 +29,14 @@ all: \
 	$(BINDIR)/test_arithmetic \
 	$(BINDIR)/test_business_days \
 	$(BINDIR)/test_calendars \
+	$(BINDIR)/test_daycount \
 	$(BINDIR)/test_schedules
 
 test: all
 	$(BINDIR)/test_arithmetic -s
 	$(BINDIR)/test_business_days -s
 	$(BINDIR)/test_calendars -s
+	$(BINDIR)/test_daycount -s
 	$(BINDIR)/test_schedules -s
 
 $(BINDIR)/test_arithmetic: $(OBJDIR)/test_arithmetic.o
@@ -45,6 +47,9 @@ $(BINDIR)/test_business_days: $(OBJDIR)/test_business_days.o
 
 $(BINDIR)/test_calendars: $(OBJDIR)/test_calendars.o
 	$(LINK.cc) $(OBJDIR)/test_calendars.o $(LOADLIBES) $(LDLIBS) -o $@
+
+$(BINDIR)/test_daycount: $(OBJDIR)/test_daycount.o
+	$(LINK.cc) $(OBJDIR)/test_daycount.o $(LOADLIBES) $(LDLIBS) -o $@
 
 $(BINDIR)/test_schedules: $(OBJDIR)/test_schedules.o
 	$(LINK.cc) $(OBJDIR)/test_schedules.o $(LOADLIBES) $(LDLIBS) -o $@
