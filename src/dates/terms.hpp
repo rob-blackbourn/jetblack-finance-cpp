@@ -27,6 +27,7 @@ namespace dates
 		NY_d365,
 		d30A_360, // Also know as 30/360 Bond Basis.
 		d30E_d360, // Also known as 30/360 ICMA, 30/360 ISMA, 30S/360, Eurobond basis (ISDA 2006), Special German.
+		d30E_d360_ISDA, // Also known as Eurobond basis (ISDA 2000), German.
 		d30_d365,
 		Actual_Actual_ISDA,
 		Actual_Actual_ISMA,
@@ -43,18 +44,9 @@ namespace dates
 		}
 	}
 
-	// <summary>
-	// Calculates the year fraction between two dates for a given daycount convention.
-	// </summary>
-	// <param name="start">The start date</param>
-	// <param name="end">The end date</param>
-	// <param name="daycount">The daycount convention</param>
-	// <returns>
-	// The days and the year fraction
-	// </returns>
 	inline
 	std::tuple<days,double>
-	getTerm(const year_month_day& start, const year_month_day& end, EDayCount dayCount)
+	getTerm(const year_month_day& date1, const year_month_day& date2, EDayCount dayCount)
 	{
 		// double days, term;
 
@@ -62,28 +54,28 @@ namespace dates
 		{
 			case EDayCount::Actual_d360:
 				{
-					auto days_in_period = (sys_days{end} - sys_days{start});
+					auto days_in_period = (sys_days{date2} - sys_days{date1});
                     auto days_in_year = 360.0;
 					auto term = days_in_period.count() / days_in_year;
                     return { days_in_period, term };
 				}
 			case EDayCount::Actual_d365:
 				{
-					auto days_in_period = (sys_days{end} - sys_days{start});
+					auto days_in_period = (sys_days{date2} - sys_days{date1});
                     auto days_in_year = 365.0;
 					auto term = days_in_period.count() / days_in_year;
                     return { days_in_period, term };
 				}
 			case EDayCount::Actual_d366:
 				{
-					auto days_in_period = (sys_days{end} - sys_days{start});
+					auto days_in_period = (sys_days{date2} - sys_days{date1});
                     auto days_in_year = 366.0;
 					auto term = days_in_period.count() / days_in_year;
                     return { days_in_period, term };
 				}
 			case EDayCount::Actual_d365_25:
 				{
-					auto days_in_period = (sys_days{end} - sys_days{start});
+					auto days_in_period = (sys_days{date2} - sys_days{date1});
                     auto days_in_year = 365.25;
 					auto term = days_in_period.count() / days_in_year;
                     return { days_in_period, term };
@@ -91,10 +83,8 @@ namespace dates
 
 			case EDayCount::d30A_360:
 			{
-				auto [d1, m1, y1] = decompose(start);
-				auto [d2, m2, y2] = decompose(end);
-
-				auto days_in_year = 360.0;
+				auto [d1, m1, y1] = decompose(date1);
+				auto [d2, m2, y2] = decompose(date2);
 
 				d1 = std::min(d1, 30);
 
@@ -103,18 +93,18 @@ namespace dates
 					d2 = std::min(d2, 30);
 				}
 
-				auto days_in_period = days{
+				auto day_count = days{
 					360 * (y2 - y1) + 30 * (m2 - m1) + (d2 - d1)
 				};
 
-				auto term = days_in_period.count() / days_in_year;
-				return { days_in_period, term };
+				auto term = day_count.count() / 360.0;
+				return { day_count, term };
 			}
 
 			case EDayCount::d30E_d360:
 			{
-				auto [d1, m1, y1] = decompose(start);
-				auto [d2, m2, y2] = decompose(end);
+				auto [d1, m1, y1] = decompose(date1);
+				auto [d2, m2, y2] = decompose(date2);
 
 				if (d1 == 31)
 				{
@@ -126,18 +116,42 @@ namespace dates
 					d2 = 30;
 				}
 
-				auto days_in_period = days{
+				auto day_count = days{
 					360 * (y2 - y1) + 30 * (m2 - m1) + (d2 - d1)
 				};
 
-				auto term = days_in_period.count() / 360.0;
-				return { days_in_period, term };
+				auto term = day_count.count() / 360.0;
+				return { day_count, term };
+			}
+
+			case EDayCount::d30E_d360_ISDA:
+			{
+				auto [d1, m1, y1] = decompose(date1);
+				auto [d2, m2, y2] = decompose(date2);
+
+				if (isEndOfMonth(date1))
+				{
+					d1 = 30;
+				}
+
+				if (date2.month() == February && isEndOfMonth(date2))
+				{
+					d2 = 30;
+				}
+
+				auto day_count = days{
+					360 * (y2 - y1) + 30 * (m2 - m1) + (d2 - d1)
+				};
+
+				auto term = day_count.count() / 360.0;
+
+				return { day_count, term };
 			}
 
 			case EDayCount::d30_d365:
 			{
-				auto [d1, m1, y1] = decompose(start);
-				auto [d2, m2, y2] = decompose(end);
+				auto [d1, m1, y1] = decompose(date1);
+				auto [d2, m2, y2] = decompose(date2);
 
 				auto days_in_period = days{
 					365 * (y2 - y1) + 30 * (m2 - m1) + (d2 - d1)
@@ -149,12 +163,12 @@ namespace dates
             case EDayCount::Actual_Actual:
 			case EDayCount::Actual_Actual_ISDA:
 				{
-					auto firstAccrualDate = year_month_day{start.year() / start.month() / start.day()};
+					auto firstAccrualDate = year_month_day{date1.year() / date1.month() / date1.day()};
                     auto daysInPeriod = days{0};
                     auto term = 0.0;
 
 					// Get the period from now to the end of the year
-					if (firstAccrualDate.year() < end.year())
+					if (firstAccrualDate.year() < date2.year())
 					{
 						daysInPeriod = days{1} + (daysInYear(firstAccrualDate.year()) - dayOfYear(firstAccrualDate));
 						term = daysInPeriod.count() / (double)daysInYear(firstAccrualDate.year()).count();
@@ -162,7 +176,7 @@ namespace dates
 						firstAccrualDate = year_month_day((firstAccrualDate.year() + years{1}) / January / 1d);
 
 						// Get the whole years from the moved start to the end
-						while (firstAccrualDate.year() < end.year())
+						while (firstAccrualDate.year() < date2.year())
 						{
 							term += 1;
 							daysInPeriod += daysInYear(firstAccrualDate.year());
@@ -177,7 +191,7 @@ namespace dates
 					}
 
 					// Handle the end stub.
-					auto end_days = (dayOfYear(end) - dayOfYear(firstAccrualDate));
+					auto end_days = (dayOfYear(date2) - dayOfYear(firstAccrualDate));
 					term += end_days.count() / (double)daysInYear(firstAccrualDate.year()).count();
 					daysInPeriod += end_days;
                     return { daysInPeriod, term };
@@ -188,33 +202,33 @@ namespace dates
                     auto daysInPeriod = days{0};
                     auto term = 0.0;
 
-                    if (start.year() == end.year())
+                    if (date1.year() == date2.year())
                     {
                         // If we are in the same year this is a simple case.
-                        daysInPeriod = sys_days{end} - sys_days{start};
-                        term = daysInPeriod.count() / (double)daysInYear(start.year()).count();
+                        daysInPeriod = sys_days{date2} - sys_days{date1};
+                        term = daysInPeriod.count() / (double)daysInYear(date1.year()).count();
                     }
                     else
                     {
                         // Calculate the term from the start date to the end of the year.
-                        daysInPeriod = days{1} + daysInYear(start.year()) - dayOfYear(start);
-                        term = daysInPeriod.count() / static_cast<double>(daysInYear(start.year()).count());
+                        daysInPeriod = days{1} + daysInYear(date1.year()) - dayOfYear(date1);
+                        term = daysInPeriod.count() / static_cast<double>(daysInYear(date1.year()).count());
 
-                        if (addMonths(start, months{12}, true) > end)
+                        if (addMonths(date1, months{12}, true) > date2)
                         {
                             // The dates are less than a year apart, but are in different years.
                             // Simply add on the year fraction for the end stub.
-							auto period_days = dayOfYear(end) - days{1};
-                            term += period_days.count() / static_cast<double>(daysInYear(end.year()).count());
+							auto period_days = dayOfYear(date2) - days{1};
+                            term += period_days.count() / static_cast<double>(daysInYear(date2.year()).count());
                             daysInPeriod += period_days;
                             return { daysInPeriod, term };
                         }
                         else
                         {
                             // Find a date in the next year, which has the same day and month as the end date.
-                            auto y = start.year() + years{1};
-                            auto m = end.month();
-                            auto d = std::min(end.day(), lastDayOfMonth(start.year() + years{1}, end.month()));
+                            auto y = date1.year() + years{1};
+                            auto m = date2.month();
+                            auto d = std::min(date2.day(), lastDayOfMonth(date1.year() + years{1}, date2.month()));
 							auto fcd = year_month_day(y / m / d);
                             // Add on the year fraction for this stub.
 							auto period_days = dayOfYear(fcd) - days{1};
@@ -222,7 +236,7 @@ namespace dates
                             daysInPeriod += period_days;
 
                             // The remaining time is a whole number of years.
-                            while (fcd < end)
+                            while (fcd < date2)
                             {
                                 term += 1;
                                 daysInPeriod += daysInYear(fcd.year());
@@ -235,35 +249,35 @@ namespace dates
 
 			case EDayCount::Actual_Actual_AFB:
 				{
-                    if (start.year() == end.year())
+                    if (date1.year() == date2.year())
                     {
                         // If we are in the same year this is a simple case.
-						auto period_days = (sys_days{end} - sys_days{start});
-                        auto term = period_days.count() / (double)daysInYear(start.year()).count();
+						auto period_days = (sys_days{date2} - sys_days{date1});
+                        auto term = period_days.count() / (double)daysInYear(date1.year()).count();
                         return { period_days, term };
                     }
                     else
                     {
                         // If either this year of the next year is a leap year, use 366 as the number of days in the year.
-                        auto days_in_year = days{start.year().is_leap() || (start.year() + years{1}).is_leap() ? 366 : 365};
+                        auto days_in_year = days{date1.year().is_leap() || (date1.year() + years{1}).is_leap() ? 366 : 365};
 
                         // Calculate the number of days left in the year.
-                        auto days_in_period = (days{1} + daysInYear(start.year()) - dayOfYear(start));
+                        auto days_in_period = (days{1} + daysInYear(date1.year()) - dayOfYear(date1));
                         auto term = 0.0;
 
-                        if (addMonths(start, months{12}, true) > end)
+                        if (addMonths(date1, months{12}, true) > date2)
                         {
                             // Since the denominator is fixed we can accumulate the number of days and maintain precision.
-                            days_in_period += dayOfYear(end) - days{1};
+                            days_in_period += dayOfYear(date2) - days{1};
                             term = days_in_period.count() / static_cast<double>(days_in_year.count());
                             return { days_in_period, term };
                         }
                         else
                         {
                             // Find a date in the next year, which has the same day and month as the end date.
-                            auto y = start.year() + years{1};
-                            auto m = end.month();
-                            auto d = std::min(end.day(), lastDayOfMonth(start.year() + years{1}, end.month()));
+                            auto y = date1.year() + years{1};
+                            auto m = date2.month();
+                            auto d = std::min(date2.day(), lastDayOfMonth(date1.year() + years{1}, date2.month()));
 							auto fcd = year_month_day{y / m / d};
 
                             // Since the denominator is fixed we can accumulate the number of days and maintain precision.
@@ -271,7 +285,7 @@ namespace dates
                             term = days_in_period.count() / static_cast<double>(days_in_year.count());
 
                             // The remaining time is a whole number of years.
-                            while (fcd < end)
+                            while (fcd < date2)
                             {
                                 term += 1;
                                 days_in_period += daysInYear(fcd.year());
