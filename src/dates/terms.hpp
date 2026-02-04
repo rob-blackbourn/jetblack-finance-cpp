@@ -132,9 +132,7 @@ namespace dates
 					}
 
 					auto days_in_period = days{
-						360 * (y2 - y1) +
-						30 * ((m2 - m1) - 1) +
-						std::max(0, (30 - d1)) + std::min(30, d2)};
+						360 * (y2 - y1) + 30 * ((m2 - m1) - 1) + std::max(0, (30 - d1)) + std::min(30, d2)};
 
 					auto term = days_in_period.count() / 360.0;
 					return { days_in_period, term };
@@ -143,37 +141,38 @@ namespace dates
 
 			case EDayCount::d30_d365:
 			{
-				auto d1 = start.day(), d2 = end.day();
-				auto m1 = start.month(), m2 = end.month();
-				year y1 = start.year(), y2 = end.year();
+				auto [d1, m1, y1] = decompose(start);
+				auto [d2, m2, y2] = decompose(end);
 
-				auto days_in_period = days{(365 * (y2 - y1).count() + 30 * (m2 - m1).count() + (d2 - d1).count())};
+				auto days_in_period = days{
+					365 * (y2 - y1) + 30 * (m2 - m1) + (d2 - d1)};
 				auto term = days_in_period.count() / 365.0;
 				return { days_in_period, term };
 			}
 
 			case EDayCount::d30E_d360:
 			{
-				auto d1 = start.day(), d2 = end.day();
-				auto m1 = start.month(), m2 = end.month();
-				auto y1 = start.year(), y2 = end.year();
+				auto [d1, m1, y1] = decompose(start);
+				auto [d2, m2, y2] = decompose(end);
 
 				if (false)
 				{
 					// method 1
-					if ((d2 == 31d && d1 < 30d) || (m2 == February && isEndOfMonth(end)))
+					if ((d2 == 31 && d1 < 30) || (m2 == 2 && isEndOfMonth(end)))
 					{
-						d2 = 30d;
+						d2 = 30;
 					}
 
-					auto days_in_period = days{(360 * (y2 - y1).count() + 30 * (m2 - m1).count() + (d2 - d1).count())};
+					auto days_in_period = days{
+						360 * (y2 - y1) + 30 * (m2 - m1) + (d2 - d1)};
 					auto term = days_in_period.count() / 360.0;
 					return { days_in_period, term };
 				}
 				else
 				{
 					// method 2
-					auto days_in_period = days{360 * (y2 - y1).count() + 30 * ((m2 - m1).count() - 1) + std::max(0, (30d - d1).count()) + static_cast<unsigned int>(std::min(30d, d2))};
+					auto days_in_period = days{
+						360 * (y2 - y1) + 30 * ((m2 - m1) - 1) + std::max(0, 30 - d1) + std::min(30, d2)};
 					auto term = days_in_period.count() / 360.0;
 					return { days_in_period, term };
 				}
