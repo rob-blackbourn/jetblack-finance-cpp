@@ -96,42 +96,22 @@ namespace dates
 
 				auto days_in_year = 360.0;
 
-				if (true)
+				if (d1 == 31)
 				{
-					// Method 1
-					if (d1 == 31)
-					{
-						d1 = 30;
-					}
-
-					if (d2 == 31 && d1 == 30)
-					{
-						d2 = 30;
-					}
-
-					auto days_in_period = days{
-						360 * (y2 - y1) +
-						30 * (m2 - m1) +
-						(d2 - d1)};
-
-					auto term = days_in_period.count() / days_in_year;
-					return { days_in_period, term };
+					d1 = 30;
 				}
-				else
+
+				if (d2 == 31 && d1 == 30)
 				{
-					// Method 2
-					if (d2 == 31 && d1 < 30)
-					{
-						d2 = 1;
-						m2++;
-					}
-
-					auto days_in_period = days{
-						360 * (y2 - y1) + 30 * ((m2 - m1) - 1) + std::max(0, (30 - d1)) + std::min(30, d2)};
-
-					auto term = days_in_period.count() / 360.0;
-					return { days_in_period, term };
+					d2 = 30;
 				}
+
+				auto days_in_period = days{
+					360 * (y2 - y1) + 30 * (m2 - m1) + (d2 - d1)
+				};
+
+				auto term = days_in_period.count() / days_in_year;
+				return { days_in_period, term };
 			}
 
 			case EDayCount::d30_d365:
@@ -150,27 +130,22 @@ namespace dates
 				auto [d1, m1, y1] = decompose(start);
 				auto [d2, m2, y2] = decompose(end);
 
-				if (false)
+				if (d1 == 31)
 				{
-					// method 1
-					if ((d2 == 31 && d1 < 30) || (m2 == 2 && isEndOfMonth(end)))
-					{
-						d2 = 30;
-					}
+					d1 = 30;
+				}
 
-					auto days_in_period = days{
-						360 * (y2 - y1) + 30 * (m2 - m1) + (d2 - d1)};
-					auto term = days_in_period.count() / 360.0;
-					return { days_in_period, term };
-				}
-				else
+				if (d2 == 31)
 				{
-					// method 2
-					auto days_in_period = days{
-						360 * (y2 - y1) + 30 * ((m2 - m1) - 1) + std::max(0, 30 - d1) + std::min(30, d2)};
-					auto term = days_in_period.count() / 360.0;
-					return { days_in_period, term };
+					d2 = 30;
 				}
+
+				auto days_in_period = days{
+					360 * (y2 - y1) + 30 * (m2 - m1) + (d2 - d1)
+				};
+				
+				auto term = days_in_period.count() / 360.0;
+				return { days_in_period, term };
 			}
 
             case EDayCount::Actual_Actual:
