@@ -25,8 +25,8 @@ namespace dates
 		Actual_d365_25,
 		Actual_Actual,
 		NY_d365,
-		d30A_360, // Also know as 30/360 Bond Basis
-		d30E_d360,
+		d30A_360, // Also know as 30/360 Bond Basis.
+		d30E_d360, // Also known as 30/360 ICMA, 30/360 ISMA, 30S/360, Eurobond basis (ISDA 2006), Special German.
 		d30_d365,
 		Actual_Actual_ISDA,
 		Actual_Actual_ISMA,
