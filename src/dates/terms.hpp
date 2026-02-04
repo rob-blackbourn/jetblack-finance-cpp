@@ -114,17 +114,6 @@ namespace dates
 				return { days_in_period, term };
 			}
 
-			case EDayCount::d30_d365:
-			{
-				auto [d1, m1, y1] = decompose(start);
-				auto [d2, m2, y2] = decompose(end);
-
-				auto days_in_period = days{
-					365 * (y2 - y1) + 30 * (m2 - m1) + (d2 - d1)};
-				auto term = days_in_period.count() / 365.0;
-				return { days_in_period, term };
-			}
-
 			case EDayCount::d30E_d360:
 			{
 				auto [d1, m1, y1] = decompose(start);
@@ -143,8 +132,20 @@ namespace dates
 				auto days_in_period = days{
 					360 * (y2 - y1) + 30 * (m2 - m1) + (d2 - d1)
 				};
-				
+
 				auto term = days_in_period.count() / 360.0;
+				return { days_in_period, term };
+			}
+
+			case EDayCount::d30_d365:
+			{
+				auto [d1, m1, y1] = decompose(start);
+				auto [d2, m2, y2] = decompose(end);
+
+				auto days_in_period = days{
+					365 * (y2 - y1) + 30 * (m2 - m1) + (d2 - d1)
+				};
+				auto term = days_in_period.count() / 365.0;
 				return { days_in_period, term };
 			}
 
