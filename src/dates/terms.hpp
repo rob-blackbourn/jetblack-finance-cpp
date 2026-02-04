@@ -25,7 +25,7 @@ namespace dates
 		Actual_d365_25 = 3,
 		Actual_Actual = 4,
 		NY_d365 = 5,
-		d30_d360 = 6,
+		d30A_360 = 6,
 		d30_d365 = 7,
 		d30E_d360 = 8,
 		Actual_Actual_ISDA = 9,
@@ -89,7 +89,7 @@ namespace dates
                     return { days_in_period, term };
 				}
 
-			case EDayCount::d30_d360:
+			case EDayCount::d30A_360:
 			{
 				auto [d1, m1, y1] = decompose(start);
 				auto [d2, m2, y2] = decompose(end);
@@ -371,7 +371,7 @@ static const struct { const char* string_type; dates::EDayCount enum_type; } Day
 	{"ACT/365.25",	dates::EDayCount::Actual_d365_25},
 	{"ACT/ACT",		dates::EDayCount::Actual_Actual},
 	{"NY/365",		dates::EDayCount::NY_d365},
-	{"30/360",		dates::EDayCount::d30_d360},
+	{"30/360",		dates::EDayCount::d30A_360},
 	{"30/365",		dates::EDayCount::d30_d365},
 	{"30E/360",		dates::EDayCount::d30E_d360},
 	{"Act/ActISDA",	dates::EDayCount::Actual_Actual_ISDA},

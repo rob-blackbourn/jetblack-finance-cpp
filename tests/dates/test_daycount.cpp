@@ -51,7 +51,7 @@ TEST_CASE("d30d360", "[dates]")
 
     for (auto&& [startDate, endDate, expectedDays] : data)
     {
-        auto&& [d, t] = dates::getTerm(startDate, endDate, EDayCount::d30_d360);
+        auto&& [d, t] = dates::getTerm(startDate, endDate, EDayCount::d30A_360);
         REQUIRE( d == expectedDays );
     }
 }
