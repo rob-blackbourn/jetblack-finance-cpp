@@ -9,7 +9,7 @@
 
 using namespace dates;
 
-TEST_CASE("d30d360", "[dates]")
+TEST_CASE("d30A_360", "[dates]")
 {
     using namespace std::chrono;
     using test_data_t = std::tuple<year_month_day, year_month_day, days>;
@@ -49,14 +49,14 @@ TEST_CASE("d30d360", "[dates]")
         {2008y/February/28d,  2008y/March/31d,    days{ 33}}
     };
 
-    for (auto&& [startDate, endDate, expectedDays] : data)
+    for (auto&& [date1, date2, expectedDays] : data)
     {
-        auto&& [d, t] = dates::getTerm(startDate, endDate, EDayCount::d30A_360);
+        auto&& [d, t] = dates::getTerm(date1, date2, EDayCount::d30A_360);
         REQUIRE( d == expectedDays );
     }
 }
 
-TEST_CASE("d30d360E", "[dates]")
+TEST_CASE("d30E_d360", "[dates]")
 {
     using namespace std::chrono;
     using test_data_t = std::tuple<year_month_day, year_month_day, days>;
@@ -102,9 +102,64 @@ TEST_CASE("d30d360E", "[dates]")
         {2008y/February/28d,  2008y/March/31d,    days{ 32}}
     };
 
-    for (auto&& [startDate, endDate, expectedDays] : data)
+    for (auto&& [date1, date2, expectedDays] : data)
     {
-        auto&& [d, t] = dates::getTerm(startDate, endDate, EDayCount::d30E_d360);
+        auto&& [d, t] = dates::getTerm(date1, date2, EDayCount::d30E_d360);
         REQUIRE( d == expectedDays );
     }
+}
+
+TEST_CASE("d30E_d360_ISDA", "[dates]")
+{
+    using namespace std::chrono;
+    using test_data_t = std::tuple<year_month_day, year_month_day, year_month_day, days>;
+
+    test_data_t data[] = {
+        // End dates not the last day of February.
+        {2006y/August/20d,    2007y/February/20d, 2009y/August/20d, days{180}},
+        {2007y/February/20d,  2007y/August/20d,   2009y/August/20d, days{180}},
+        {2007y/August/20d,    2008y/February/20d, 2009y/August/20d, days{180}},
+        {2008y/February/20d,  2008y/August/20d,   2009y/August/20d, days{180}},
+        {2008y/August/20d,    2009y/February/20d, 2009y/August/20d, days{180}},
+        {2009y/February/20d,  2009y/August/20d,   2009y/August/20d, days{180}},
+
+        // Some maturity dates lie on end dates.
+        {2006y/February/28d,  2006y/August/31d,   2012y/February/29d, days{180}},
+        {2006y/August/31d,    2007y/February/28d, 2012y/February/29d, days{180}},
+        {2007y/February/28d,  2007y/August/31d,   2012y/February/29d, days{180}},
+        {2007y/August/31d,    2008y/February/29d, 2012y/February/29d, days{180}},
+        {2008y/February/29d,  2008y/August/31d,   2012y/February/29d, days{180}},
+        {2008y/August/31d,    2009y/February/28d, 2012y/February/29d, days{180}},
+        {2009y/February/28d,  2009y/August/31d,   2012y/February/29d, days{180}},
+        {2009y/August/31d,    2010y/February/28d, 2012y/February/29d, days{180}},
+        {2010y/February/28d,  2010y/August/31d,   2012y/February/29d, days{180}},
+        {2010y/August/31d,    2011y/February/28d, 2012y/February/29d, days{180}},
+        {2011y/February/28d,  2011y/August/31d,   2012y/February/29d, days{180}},
+        {2011y/August/31d,    2012y/February/29d, 2012y/February/29d, days{179}},
+
+        // Regression tests.
+        {2006y/January/31d,   2006y/February/28d, 2008y/February/29d, days{ 30}},
+        {2006y/January/30d,   2006y/February/28d, 2008y/February/29d, days{ 30}},
+        {2006y/February/28d,  2006y/March/3d,     2008y/February/29d, days{  3}},
+        {2006y/February/14d,  2006y/February/28d, 2008y/February/29d, days{ 16}},
+        {2006y/September/30d, 2006y/October/31d,  2008y/February/29d, days{ 30}},
+        {2006y/October/31d,   2006y/November/28d, 2008y/February/29d, days{ 28}},
+        {2007y/August/31d,    2008y/February/28d, 2008y/February/29d, days{178}},
+        {2008y/February/28d,  2008y/August/28d,   2008y/February/29d, days{180}},
+        {2008y/February/28d,  2008y/August/30d,   2008y/February/29d, days{182}},
+        {2008y/February/28d,  2008y/August/31d,   2008y/February/29d, days{182}},
+        {2007y/February/28d,  2008y/February/28d, 2008y/February/29d, days{358}},
+        {2007y/February/28d,  2008y/February/29d, 2008y/February/29d, days{359}},
+        {2008y/February/29d,  2009y/February/28d, 2008y/February/29d, days{360}},
+        {2008y/February/29d,  2008y/March/30d,    2008y/February/29d, days{ 30}},
+        {2008y/February/29d,  2008y/March/31d,    2008y/February/29d, days{ 30}}
+
+    };
+
+    for (auto&& [date1, date2, maturity, expectedDays] : data)
+    {
+        auto&& [d, t] = dates::getTerm(date1, date2, EDayCount::d30E_d360_ISDA, maturity);
+        REQUIRE( d == expectedDays );
+    }
+
 }

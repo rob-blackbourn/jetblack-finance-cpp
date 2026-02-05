@@ -5,6 +5,7 @@
 
 #include <algorithm>
 #include <chrono>
+#include <optional>
 #include <set>
 #include <string>
 #include <tuple>
@@ -42,11 +43,20 @@ namespace dates
 			auto y = static_cast<int>(date.year());
 			return {d, m, y};
 		}
+
+		bool isLastDayOfFebruary(const year_month_day& date)
+		{
+			return date.month() == February && isEndOfMonth(date);
+		}
 	}
 
 	inline
 	std::tuple<days,double>
-	getTerm(const year_month_day& date1, const year_month_day& date2, EDayCount dayCount)
+	getTerm(
+		const year_month_day& date1,
+		const year_month_day& date2,
+		EDayCount dayCount,
+		const std::optional<year_month_day> maturity = {})
 	{
 		// double days, term;
 
@@ -129,12 +139,15 @@ namespace dates
 				auto [d1, m1, y1] = decompose(date1);
 				auto [d2, m2, y2] = decompose(date2);
 
-				if (isEndOfMonth(date1))
+				d1 = std::min(d1, 30);
+				d2 = std::min(d2, 30);
+
+				if (isLastDayOfFebruary(date1))
 				{
 					d1 = 30;
 				}
 
-				if (date2.month() == February && isEndOfMonth(date2))
+				if (isLastDayOfFebruary(date2) && date2 != *maturity)
 				{
 					d2 = 30;
 				}
