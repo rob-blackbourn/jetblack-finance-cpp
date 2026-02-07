@@ -180,7 +180,7 @@ TEST_CASE("Actual/360", "[dates]")
         {2020y/January/1d,    2020y/July/1d, days{182}, 182 / 360.0},
         {2021y/January/1d,    2021y/July/1d, days{181}, 181 / 360.0},
         // Two years over two whole years.
-        {2020y/January/1d,    2022y/January/1d, days{366 + 365}, (366 + 365) / 360.},
+        {2020y/January/1d,    2022y/January/1d, days{366 + 365}, (366 + 365) / 360.0},
         {2021y/January/1d,    2023y/January/1d, days{365 + 365}, (365 + 365) / 360.0},
         // Two years with overlapping years.
         {2020y/January/30d,    2022y/January/30d, days{366 + 365}, (366 + 365) / 360.0},
@@ -196,6 +196,44 @@ TEST_CASE("Actual/360", "[dates]")
     for (auto&& [date1, date2, expectedDays, expectedTime] : data)
     {
         auto&& [d, t] = dates::getTerm(date1, date2, EDayCount::Actual_d360);
+        REQUIRE( d == expectedDays );
+        REQUIRE( t == Approx(expectedTime).epsilon(1e-12) );
+    }
+}
+
+TEST_CASE("Actual/365", "[dates]")
+{
+    using namespace std::chrono;
+    using test_data_t = std::tuple<year_month_day, year_month_day, days, double>;
+
+    test_data_t data[] = {
+        // 2020 is a leap year
+        // Single year within one year.
+        {2020y/January/1d,    2021y/January/1d, days{366}, 366 / 365.0},
+        {2021y/January/1d,    2022y/January/1d, days{365}, 365 / 365.0},
+        // Single year over two years.
+        {2020y/January/30d,    2021y/January/30d, days{366}, 366 / 365.0},
+        {2021y/January/30d,    2022y/January/30d, days{365}, 365 / 365.0},
+        // Half a year with no overlapping years.
+        {2020y/January/1d,    2020y/July/1d, days{182}, 182 / 365.0},
+        {2021y/January/1d,    2021y/July/1d, days{181}, 181 / 365.0},
+        // Two years over two whole years.
+        {2020y/January/1d,    2022y/January/1d, days{366 + 365}, (366 + 365) / 365.0},
+        {2021y/January/1d,    2023y/January/1d, days{365 + 365}, (365 + 365) / 365.0},
+        // Two years with overlapping years.
+        {2020y/January/30d,    2022y/January/30d, days{366 + 365}, (366 + 365) / 365.0},
+        {2021y/January/30d,    2023y/January/30d, days{365 + 365}, (365 + 365) / 365.0},
+        // Two years six months over two whole years.
+        {2020y/January/1d,    2022y/July/1d, days{912}, 912 / 365.0},
+        {2021y/January/1d,    2023y/July/1d, days{911}, 911 / 365.0},
+        // Two years six months with overlapping years.
+        {2020y/January/30d,    2022y/July/30d, days{912}, 912 / 365.0},
+        {2021y/January/30d,    2023y/July/30d, days{911}, 911 / 365.0},
+    };
+
+    for (auto&& [date1, date2, expectedDays, expectedTime] : data)
+    {
+        auto&& [d, t] = dates::getTerm(date1, date2, EDayCount::Actual_d365);
         REQUIRE( d == expectedDays );
         REQUIRE( t == Approx(expectedTime).epsilon(1e-12) );
     }
