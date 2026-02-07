@@ -65,29 +65,25 @@ namespace dates
 			case EDayCount::Actual_d360:
 				{
 					auto days_in_period = (sys_days{date2} - sys_days{date1});
-                    auto days_in_year = 360.0;
-					auto term = days_in_period.count() / days_in_year;
+					auto term = days_in_period.count() / 360.0;
                     return { days_in_period, term };
 				}
 			case EDayCount::Actual_d365:
 				{
 					auto days_in_period = (sys_days{date2} - sys_days{date1});
-                    auto days_in_year = 365.0;
-					auto term = days_in_period.count() / days_in_year;
+					auto term = days_in_period.count() / 365.0;
                     return { days_in_period, term };
 				}
 			case EDayCount::Actual_d366:
 				{
 					auto days_in_period = (sys_days{date2} - sys_days{date1});
-                    auto days_in_year = 366.0;
-					auto term = days_in_period.count() / days_in_year;
+					auto term = days_in_period.count() / 366.0;
                     return { days_in_period, term };
 				}
 			case EDayCount::Actual_d365_25:
 				{
 					auto days_in_period = (sys_days{date2} - sys_days{date1});
-                    auto days_in_year = 365.25;
-					auto term = days_in_period.count() / days_in_year;
+					auto term = days_in_period.count() / 365.25;
                     return { days_in_period, term };
 				}
 
