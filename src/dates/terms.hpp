@@ -24,7 +24,6 @@ namespace dates
 		Actual_d365,
 		Actual_d366,
 		Actual_d365_25,
-		Actual_Actual,
 		NY_d365,
 		d30A_360, // Also know as 30/360 Bond Basis.
 		d30E_d360, // Also known as 30/360 ICMA, 30/360 ISMA, 30S/360, Eurobond basis (ISDA 2006), Special German.
@@ -99,12 +98,12 @@ namespace dates
 					d2 = std::min(d2, 30);
 				}
 
-				auto day_count = days{
+				auto days_in_period = days{
 					360 * (y2 - y1) + 30 * (m2 - m1) + (d2 - d1)
 				};
 
-				auto term = day_count.count() / 360.0;
-				return { day_count, term };
+				auto term = days_in_period.count() / 360.0;
+				return { days_in_period, term };
 			}
 
 			case EDayCount::d30E_d360:
@@ -122,12 +121,12 @@ namespace dates
 					d2 = 30;
 				}
 
-				auto day_count = days{
+				auto days_in_period = days{
 					360 * (y2 - y1) + 30 * (m2 - m1) + (d2 - d1)
 				};
 
-				auto term = day_count.count() / 360.0;
-				return { day_count, term };
+				auto term = days_in_period.count() / 360.0;
+				return { days_in_period, term };
 			}
 
 			case EDayCount::d30E_d360_ISDA:
@@ -148,13 +147,13 @@ namespace dates
 					d2 = 30;
 				}
 
-				auto day_count = days{
+				auto days_in_period = days{
 					360 * (y2 - y1) + 30 * (m2 - m1) + (d2 - d1)
 				};
 
-				auto term = day_count.count() / 360.0;
+				auto term = days_in_period.count() / 360.0;
 
-				return { day_count, term };
+				return { days_in_period, term };
 			}
 
 			case EDayCount::d30_d365:
@@ -169,38 +168,37 @@ namespace dates
 				return { days_in_period, term };
 			}
 
-            case EDayCount::Actual_Actual:
 			case EDayCount::Actual_Actual_ISDA:
 				{
 					auto accrual_date = date1;
-                    auto day_count1 = days{0};
+                    auto days_in_period1 = days{0};
                     auto term1 = 0.0;
 
 					// Get the period from now to the start of the last year.
 					if (date1.year() < date2.year())
 					{
 						accrual_date = (date1.year() + years{1}) / January / 1d;
-						day_count1 = sys_days{accrual_date} - sys_days{date1};
+						days_in_period1 = sys_days{accrual_date} - sys_days{date1};
 						auto days_in_year1 = daysInYear(date1.year()).count();
-						term1 = day_count1.count() / static_cast<double>(days_in_year1);
+						term1 = days_in_period1.count() / static_cast<double>(days_in_year1);
 
 						// Get the whole years from the moved start to the end
 						while (accrual_date.year() < date2.year())
 						{
 							term1 += 1;
-							day_count1 += daysInYear(accrual_date.year());
+							days_in_period1 += daysInYear(accrual_date.year());
 							accrual_date += years {1};
 						}
 						// Years should now be the same.
 					}
 
 					// Handle the end stub.
-					auto day_count2 = sys_days{date2} - sys_days{accrual_date};
-					auto day_count = day_count1 + day_count2;
+					auto days_in_period2 = sys_days{date2} - sys_days{accrual_date};
+					auto days_in_period = days_in_period1 + days_in_period2;
 					auto days_in_year2 = daysInYear(date2.year()).count();
-					auto term2 = day_count2.count() / static_cast<double>(days_in_year2);
+					auto term2 = days_in_period2.count() / static_cast<double>(days_in_year2);
 					double term = term1 + term2;
-                    return { day_count, term };
+                    return { days_in_period, term };
 				}
 
             case EDayCount::Actual_Actual_ISMA:
@@ -378,7 +376,6 @@ static const struct { const char* string_type; dates::EDayCount enum_type; } Day
 	{"ACT/365",		dates::EDayCount::Actual_d365},
 	{"ACT/366",		dates::EDayCount::Actual_d366},
 	{"ACT/365.25",	dates::EDayCount::Actual_d365_25},
-	{"ACT/ACT",		dates::EDayCount::Actual_Actual},
 	{"NY/365",		dates::EDayCount::NY_d365},
 	{"30/360",		dates::EDayCount::d30A_360},
 	{"30/365",		dates::EDayCount::d30_d365},

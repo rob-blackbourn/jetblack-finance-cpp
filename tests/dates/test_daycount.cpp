@@ -215,7 +215,7 @@ TEST_CASE("Actual/Fixed", "[dates]")
     }
 }
 
-TEST_CASE("Actual/Actual", "[dates]")
+TEST_CASE("Actual/Actual ISDA", "[dates]")
 {
     using namespace std::chrono;
     using test_data_t = std::tuple<year_month_day, year_month_day, days, double>;
@@ -247,7 +247,7 @@ TEST_CASE("Actual/Actual", "[dates]")
 
     for (auto&& [date1, date2, expectedDays, expectedTime] : data)
     {
-        auto&& [d, t] = dates::getTerm(date1, date2, EDayCount::Actual_Actual);
+        auto&& [d, t] = dates::getTerm(date1, date2, EDayCount::Actual_Actual_ISDA);
         REQUIRE( d == expectedDays );
         REQUIRE( t == Approx(expectedTime).epsilon(1e-12) );
     }
