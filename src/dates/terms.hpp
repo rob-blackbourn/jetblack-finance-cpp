@@ -176,38 +176,35 @@ namespace dates
             case EDayCount::Actual_Actual:
 			case EDayCount::Actual_Actual_ISDA:
 				{
-					auto firstAccrualDate = year_month_day{date1.year() / date1.month() / date1.day()};
-                    auto daysInPeriod = days{0};
-                    auto term = 0.0;
+					auto accrual_date = date1;
+                    auto day_count1 = days{0};
+                    auto term1 = 0.0;
 
-					// Get the period from now to the end of the year
-					if (firstAccrualDate.year() < date2.year())
+					// Get the period from now to the start of the last year.
+					if (date1.year() < date2.year())
 					{
-						daysInPeriod = days{1} + (daysInYear(firstAccrualDate.year()) - dayOfYear(firstAccrualDate));
-						term = daysInPeriod.count() / (double)daysInYear(firstAccrualDate.year()).count();
-
-						firstAccrualDate = year_month_day((firstAccrualDate.year() + years{1}) / January / 1d);
+						accrual_date = (date1.year() + years{1}) / January / 1d;
+						day_count1 = sys_days{accrual_date} - sys_days{date1};
+						auto days_in_year1 = daysInYear(date1.year()).count();
+						term1 = day_count1.count() / static_cast<double>(days_in_year1);
 
 						// Get the whole years from the moved start to the end
-						while (firstAccrualDate.year() < date2.year())
+						while (accrual_date.year() < date2.year())
 						{
-							term += 1;
-							daysInPeriod += daysInYear(firstAccrualDate.year());
-							firstAccrualDate = {(firstAccrualDate.year() + years{1}) / January / 1d};
+							term1 += 1;
+							day_count1 += daysInYear(accrual_date.year());
+							accrual_date += years {1};
 						}
 						// Years should now be the same.
 					}
-					else
-					{
-						term = 0;
-						daysInPeriod = days{0};
-					}
 
 					// Handle the end stub.
-					auto end_days = (dayOfYear(date2) - dayOfYear(firstAccrualDate));
-					term += end_days.count() / (double)daysInYear(firstAccrualDate.year()).count();
-					daysInPeriod += end_days;
-                    return { daysInPeriod, term };
+					auto day_count2 = sys_days{date2} - sys_days{accrual_date};
+					auto day_count = day_count1 + day_count2;
+					auto days_in_year2 = daysInYear(date2.year()).count();
+					auto term2 = day_count2.count() / static_cast<double>(days_in_year2);
+					double term = term1 + term2;
+                    return { day_count, term };
 				}
 
             case EDayCount::Actual_Actual_ISMA:
