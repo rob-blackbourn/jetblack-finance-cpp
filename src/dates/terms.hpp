@@ -258,49 +258,47 @@ namespace dates
                     if (date1.year() == date2.year())
                     {
                         // If we are in the same year this is a simple case.
-						auto period_days = (sys_days{date2} - sys_days{date1});
-                        auto term = period_days.count() / (double)daysInYear(date1.year()).count();
-                        return { period_days, term };
+						auto days_in_period = (sys_days{date2} - sys_days{date1});
+                        auto days_in_year = daysInYear(date1.year()).count();
+                        auto term = days_in_period.count() / static_cast<double>(days_in_year);
+                        return { days_in_period, term };
                     }
-                    else
-                    {
-                        // If either this year of the next year is a leap year, use 366 as the number of days in the year.
-                        auto days_in_year = days{date1.year().is_leap() || (date1.year() + years{1}).is_leap() ? 366 : 365};
 
-                        // Calculate the number of days left in the year.
-                        auto days_in_period = (days{1} + daysInYear(date1.year()) - dayOfYear(date1));
-                        auto term = 0.0;
+					// If either this year of the next year is a leap year, use
+					// 366 as the number of days in the year.
+					auto days_in_year = days{date1.year().is_leap() || (date1.year() + years{1}).is_leap() ? 366 : 365};
 
-                        if (addMonths(date1, months{12}, true) > date2)
-                        {
-                            // Since the denominator is fixed we can accumulate the number of days and maintain precision.
-                            days_in_period += dayOfYear(date2) - days{1};
-                            term = days_in_period.count() / static_cast<double>(days_in_year.count());
-                            return { days_in_period, term };
-                        }
-                        else
-                        {
-                            // Find a date in the next year, which has the same day and month as the end date.
-                            auto y = date1.year() + years{1};
-                            auto m = date2.month();
-                            auto d = std::min(date2.day(), lastDayOfMonth(date1.year() + years{1}, date2.month()));
-							auto fcd = year_month_day{y / m / d};
+					// Calculate the number of days left in the year.
+					auto days_in_period = (days{1} + daysInYear(date1.year()) - dayOfYear(date1));
 
-                            // Since the denominator is fixed we can accumulate the number of days and maintain precision.
-                            days_in_period += dayOfYear(fcd) - days{1};
-                            term = days_in_period.count() / static_cast<double>(days_in_year.count());
+					if (addYears(date1, years{1}, true) > date2)
+					{
+						// The period is less than a year.
+						days_in_period += dayOfYear(date2) - days{1};
+						auto term = days_in_period.count() / static_cast<double>(days_in_year.count());
+						return { days_in_period, term };
+					}
 
-                            // The remaining time is a whole number of years.
-                            while (fcd < date2)
-                            {
-                                term += 1;
-                                days_in_period += daysInYear(fcd.year());
-                                fcd = addMonths(fcd, months{12}, true);
-                            }
+					// Find a date in the next year, which has the same day and
+					// month as the end date.
+					auto y = date1.year() + years{1};
+					auto m = date2.month();
+					auto d = std::min(date2.day(), lastDayOfMonth(date1.year() + years{1}, date2.month()));
+					auto fcd = year_month_day{y / m / d};
 
-                            return { days_in_period, term };
-                        }
-                    }
+					// Since the denominator is fixed we can accumulate the number of days and maintain precision.
+					days_in_period += dayOfYear(fcd) - days{1};
+					auto term = days_in_period.count() / static_cast<double>(days_in_year.count());
+
+					// The remaining time is a whole number of years.
+					while (fcd < date2)
+					{
+						term += 1;
+						days_in_period += daysInYear(fcd.year());
+						fcd = addYears(fcd, years{1}, true);
+					}
+
+					return { days_in_period, term };
 				}
 
             default:

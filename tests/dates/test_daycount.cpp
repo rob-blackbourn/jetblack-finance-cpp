@@ -204,7 +204,7 @@ TEST_CASE("Actual/Fixed", "[dates]")
     for (auto&& [dayCount, daysInYear] : cases)
     {
         INFO( "Testing " << dayCount );
-        
+
         for (auto&& [date1, date2, expectedDays] : data)
         {
             auto expectedTime = expectedDays.count() / daysInYear;
@@ -248,6 +248,45 @@ TEST_CASE("Actual/Actual", "[dates]")
     for (auto&& [date1, date2, expectedDays, expectedTime] : data)
     {
         auto&& [d, t] = dates::getTerm(date1, date2, EDayCount::Actual_Actual);
+        REQUIRE( d == expectedDays );
+        REQUIRE( t == Approx(expectedTime).epsilon(1e-12) );
+    }
+}
+
+TEST_CASE("Actual/Actual (AFB)", "[dates]")
+{
+    using namespace std::chrono;
+    using test_data_t = std::tuple<year_month_day, year_month_day, days, double>;
+
+    test_data_t data[] = {
+        // 2020 is a leap year
+        // Single year within one year.
+        {2020y/January/1d,    2021y/January/1d, days{366}, 1.0},
+        {2021y/January/1d,    2022y/January/1d, days{365}, 1.0},
+        // Single year over two years.
+        {2020y/January/30d,    2021y/January/30d, days{366}, 1.0},
+        {2021y/January/30d,    2022y/January/30d, days{365}, 1.0},
+        // Half a year with no overlapping years.
+        {2020y/January/1d,    2020y/July/1d, days{182}, 182 / 366.0},
+        {2021y/January/1d,    2021y/July/1d, days{181}, 181 / 365.0},
+        // Two years over two whole years.
+        {2020y/January/1d,    2022y/January/1d, days{366 + 365}, 2.0},
+        {2021y/January/1d,    2023y/January/1d, days{365 + 365}, 2.0},
+        // Two years with overlapping years.
+        {2020y/January/30d,    2022y/January/30d, days{366 + 365}, 2.0},
+        {2021y/January/30d,    2023y/January/30d, days{365 + 365}, 2.0},
+        // Two years six months over two whole years.
+        {2020y/January/1d,    2022y/July/1d, days{912}, 2.4945355191256828},
+        {2021y/January/1d,    2023y/July/1d, days{911}, 2.4958904109589044},
+        // Two years six months with overlapping years.
+        {2020y/January/30d,    2022y/July/30d, days{912}, 2.4945355191256828},
+        {2021y/January/30d,    2023y/July/30d, days{911}, 2.495890410958904},
+    };
+
+    for (auto&& [date1, date2, expectedDays, expectedTime] : data)
+    {
+        INFO ("For " << date1 << " to " << date2 );
+        auto&& [d, t] = dates::getTerm(date1, date2, EDayCount::Actual_Actual_AFB);
         REQUIRE( d == expectedDays );
         REQUIRE( t == Approx(expectedTime).epsilon(1e-12) );
     }
