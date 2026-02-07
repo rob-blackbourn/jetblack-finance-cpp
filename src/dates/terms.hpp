@@ -205,52 +205,46 @@ namespace dates
 
             case EDayCount::Actual_Actual_ISMA:
 				{
-                    auto daysInPeriod = days{0};
-                    auto term = 0.0;
-
                     if (date1.year() == date2.year())
                     {
                         // If we are in the same year this is a simple case.
-                        daysInPeriod = sys_days{date2} - sys_days{date1};
-                        term = daysInPeriod.count() / (double)daysInYear(date1.year()).count();
+                        auto daysInPeriod = sys_days{date2} - sys_days{date1};
+                        auto term = daysInPeriod.count() / (double)daysInYear(date1.year()).count();
+						return { daysInPeriod, term };
                     }
-                    else
-                    {
-                        // Calculate the term from the start date to the end of the year.
-                        daysInPeriod = days{1} + daysInYear(date1.year()) - dayOfYear(date1);
-                        term = daysInPeriod.count() / static_cast<double>(daysInYear(date1.year()).count());
 
-                        if (addMonths(date1, months{12}, true) > date2)
-                        {
-                            // The dates are less than a year apart, but are in different years.
-                            // Simply add on the year fraction for the end stub.
-							auto period_days = dayOfYear(date2) - days{1};
-                            term += period_days.count() / static_cast<double>(daysInYear(date2.year()).count());
-                            daysInPeriod += period_days;
-                            return { daysInPeriod, term };
-                        }
-                        else
-                        {
-                            // Find a date in the next year, which has the same day and month as the end date.
-                            auto y = date1.year() + years{1};
-                            auto m = date2.month();
-                            auto d = std::min(date2.day(), lastDayOfMonth(date1.year() + years{1}, date2.month()));
-							auto fcd = year_month_day(y / m / d);
-                            // Add on the year fraction for this stub.
-							auto period_days = dayOfYear(fcd) - days{1};
-                            term += period_days.count() / static_cast<double>(daysInYear(fcd.year()).count());
-                            daysInPeriod += period_days;
+					// Calculate the term from the start date to the end of the year.
+					auto daysInPeriod = days{1} + daysInYear(date1.year()) - dayOfYear(date1);
+					auto term = daysInPeriod.count() / static_cast<double>(daysInYear(date1.year()).count());
 
-                            // The remaining time is a whole number of years.
-                            while (fcd < date2)
-                            {
-                                term += 1;
-                                daysInPeriod += daysInYear(fcd.year());
-                                fcd = addMonths(fcd, months{12}, true);
-                            }
-                            return { daysInPeriod, term };
-                        }
-                    }
+					if (addYears(date1, years{1}, true) > date2)
+					{
+						// The dates are less than a year apart, but are in different years.
+						// Simply add on the year fraction for the end stub.
+						auto period_days = dayOfYear(date2) - days{1};
+						term += period_days.count() / static_cast<double>(daysInYear(date2.year()).count());
+						daysInPeriod += period_days;
+						return { daysInPeriod, term };
+					}
+
+					// Find a date in the next year, which has the same day and month as the end date.
+					auto y = date1.year() + years{1};
+					auto m = date2.month();
+					auto d = std::min(date2.day(), lastDayOfMonth(date1.year() + years{1}, date2.month()));
+					auto fcd = year_month_day(y / m / d);
+					// Add on the year fraction for this stub.
+					auto period_days = dayOfYear(fcd) - days{1};
+					term += period_days.count() / static_cast<double>(daysInYear(fcd.year()).count());
+					daysInPeriod += period_days;
+
+					// The remaining time is a whole number of years.
+					while (fcd < date2)
+					{
+						term += 1;
+						daysInPeriod += daysInYear(fcd.year());
+						fcd = addMonths(fcd, months{12}, true);
+					}
+					return { daysInPeriod, term };
                 }
 
 			case EDayCount::Actual_Actual_AFB:
