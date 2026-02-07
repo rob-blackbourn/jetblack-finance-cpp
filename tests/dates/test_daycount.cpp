@@ -203,6 +203,8 @@ TEST_CASE("Actual/Fixed", "[dates]")
 
     for (auto&& [dayCount, daysInYear] : cases)
     {
+        INFO( "Testing " << dayCount );
+        
         for (auto&& [date1, date2, expectedDays] : data)
         {
             auto expectedTime = expectedDays.count() / daysInYear;
