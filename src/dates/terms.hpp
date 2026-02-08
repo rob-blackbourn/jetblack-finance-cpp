@@ -111,15 +111,8 @@ namespace dates
 				auto [d1, m1, y1] = decompose(date1);
 				auto [d2, m2, y2] = decompose(date2);
 
-				if (d1 == 31)
-				{
-					d1 = 30;
-				}
-
-				if (d2 == 31)
-				{
-					d2 = 30;
-				}
+				d1 = std::min(d1, 30);
+				d2 = std::min(d2, 30);
 
 				auto days_in_period = days{
 					360 * (y2 - y1) + 30 * (m2 - m1) + (d2 - d1)
@@ -161,9 +154,13 @@ namespace dates
 				auto [d1, m1, y1] = decompose(date1);
 				auto [d2, m2, y2] = decompose(date2);
 
+				d1 = std::min(d1, 30);
+				d2 = std::min(d2, 30);
+
 				auto days_in_period = days{
-					365 * (y2 - y1) + 30 * (m2 - m1) + (d2 - d1)
+					360 * (y2 - y1) + 30 * (m2 - m1) + (d2 - d1)
 				};
+
 				auto term = days_in_period.count() / 365.0;
 				return { days_in_period, term };
 			}
