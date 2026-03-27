@@ -4,6 +4,7 @@
 #include "rates/value.hpp"
 #include "rates/yield_curve.hpp"
 
+#include <cmath>
 #include <exception>
 
 namespace rates

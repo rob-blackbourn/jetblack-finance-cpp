@@ -1,6 +1,7 @@
 #include "rates/cashflow.hpp"
 #include "rates/yield_curve.hpp"
 
+#include <cmath>
 #include <ranges>
 #include <stdexcept>
 #include <type_traits>
