@@ -32,7 +32,7 @@ namespace maths
             double e = sb - sa;
             double d = e;
 
-            for (auto iteration = 0; iteration < maxIterations; ++iteration)
+            for (auto iteration = 0u; iteration < maxIterations; ++iteration)
             {
                 if (fabs(fc) < fabs(fb))
                 {
