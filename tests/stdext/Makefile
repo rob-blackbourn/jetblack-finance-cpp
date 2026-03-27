@@ -2,7 +2,7 @@ ROOT_DIR=../..
 SRC_DIR=${ROOT_DIR}/src
 EXT_DIR=${ROOT_DIR}/external
 
-CXX = clang++
+# CXX = clang++
 INCLUDES=-I${SRC_DIR} -I${EXT_DIR}
 CXXFLAGS=${INCLUDES} -std=c++23 -g
 

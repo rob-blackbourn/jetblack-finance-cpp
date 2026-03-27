@@ -3,7 +3,7 @@ SRC_DIR=${ROOT_DIR}/src
 EXT_DIR=${ROOT_DIR}/externals
 INSTALL_DIR=$(HOME)/.local/bin
 
-CXX = clang++
+# CXX = clang++
 INCLUDES = -I${SRC_DIR} -I${EXT_DIR} -I/opt/homebrew/include
 LIBS = -L/opt/homebrew/lib
 CXXFLAGS = -g -std=c++23 -Wall ${INCLUDES}
