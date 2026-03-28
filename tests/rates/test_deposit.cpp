@@ -78,7 +78,6 @@ TEST_CASE("solveZeroRate/ON", "deposit")
 {
     auto valueDate = 1997y/October/6d;
     auto deposit = Deposit(1e6, 5.58675 / 100, valueDate, days{1}, EDayCount::Actual_d360, EDateRule::Following, {});
-    auto t = yearFrac(valueDate, deposit.maturityDate(), EDayCount::Actual_d365);
     auto curve = YieldCurve{{{1, 0.05}}, valueDate, EDayCount::Actual_d365, EInterpolationMethod::Exponential};
     auto actual = deposit.solveZeroRate(curve);
     auto expected = 0.056639042777946388;

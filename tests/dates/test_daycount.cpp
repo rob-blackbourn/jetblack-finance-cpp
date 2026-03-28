@@ -393,7 +393,6 @@ TEST_CASE("Actual/Actual (AFB)", "[dates]")
 TEST_CASE("date order", "[dates]")
 {
     using namespace std::chrono;
-    using test_data_t = std::tuple<year_month_day, year_month_day, days, double>;
 
     auto&& [d1, t1] = getTerm(2020y/January/1d, 2020y/January/1d, EDayCount::Actual_d365);
     REQUIRE( d1 == days{0} );
