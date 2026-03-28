@@ -1,3 +1,5 @@
 *.o
 *.o.tmp
 a.out
+build/
+builddir/

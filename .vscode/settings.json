@@ -1,6 +1,7 @@
 {
     "editor.rulers": [80, 120],
     "cSpell.words": [
+        "buildtype",
         "cashflows",
         "Cashlows",
         "daycount",
@@ -11,6 +12,9 @@
         "jetblack",
         "lrates",
         "NODEPS",
-        "Scholes"
-    ]
+        "Scholes",
+        "stdext"
+    ],
+    "C_Cpp.default.compileCommands": "/Users/rtb/dev/github/rob-blackbourn/jetblack-finance-cpp/builddir/compile_commands.json",
+    "C_Cpp.default.configurationProvider": "mesonbuild.mesonbuild"
 }
