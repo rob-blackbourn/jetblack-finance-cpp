@@ -1,6 +1,7 @@
 {
     "editor.rulers": [80, 120],
     "cSpell.words": [
+        "buildtype",
         "cashflows",
         "Cashlows",
         "daycount",
@@ -11,6 +12,7 @@
         "jetblack",
         "lrates",
         "NODEPS",
-        "Scholes"
+        "Scholes",
+        "stdext"
     ]
 }
