@@ -21,8 +21,6 @@ rates_sources = [
   'rates/yield_curve.cpp'
 ]
 
-openssl_dep = dependency('openssl')
 lib_rates = static_library('rates', rates_sources,
-    dependencies: openssl_dep,
     include_directories: include_directories('rates')
 )
