@@ -1,21 +1,6 @@
 {
     "configurations": [
         {
-            "name": "Linux",
-            "includePath": [
-                "src",
-                "external"
-            ],
-            "defines": [],
-            "compilerPath": "/usr/bin/g++",
-            "compilerArgs": [
-                "-DNULL=0"
-            ],
-            "cStandard": "c17",
-            "cppStandard": "c++23",
-            "intelliSenseMode": "linux-gcc-x64"
-        },
-        {
             "name": "MacOS",
             "includePath": [
                 "src",
@@ -29,6 +14,21 @@
             "cStandard": "c17",
             "cppStandard": "c++23",
             "intelliSenseMode": "macos-clang-arm64"
+        },
+        {
+            "name": "Linux",
+            "includePath": [
+                "src",
+                "external"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/g++",
+            "compilerArgs": [
+                "-DNULL=0"
+            ],
+            "cStandard": "c17",
+            "cppStandard": "c++23",
+            "intelliSenseMode": "linux-gcc-x64"
         }
     ],
     "version": 4
