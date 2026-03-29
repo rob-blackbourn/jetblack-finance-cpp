@@ -11,6 +11,7 @@
 #include "dates/arithmetic.hpp"
 #include "dates/business_days.hpp"
 #include "dates/adjustments.hpp"
+#include "dates/schedules.hpp"
 
 namespace dates
 {

@@ -35,6 +35,12 @@ test_schedules = executable('test_schedules', 'dates/test_schedules.cpp',
 )
 test('schedules', test_schedules)
 
+test_tenors = executable('test_tenors', 'dates/test_tenors.cpp',
+  include_directories: [src_inc, catch2_inc],
+  dependencies: [lib_dates, lib_stdext]
+)
+test('tenors', test_tenors)
+
 # Tests for rates
 test_accrued = executable('test_accrued', 'rates/test_accrued.cpp',
   include_directories: [src_inc, catch2_inc],

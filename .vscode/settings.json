@@ -10,11 +10,12 @@
         "ISDA",
         "ISMA",
         "jetblack",
+        "lastpartialmatch",
         "lrates",
         "NODEPS",
         "Scholes",
         "stdext"
     ],
-    "C_Cpp.default.compileCommands": "/Users/rtb/dev/github/rob-blackbourn/jetblack-finance-cpp/builddir/compile_commands.json",
+    "C_Cpp.default.compileCommands": "/home/rtb/dev/github.com/rob-blackbourn/jetblack-finance-cpp/builddir/compile_commands.json",
     "C_Cpp.default.configurationProvider": "mesonbuild.mesonbuild"
 }
