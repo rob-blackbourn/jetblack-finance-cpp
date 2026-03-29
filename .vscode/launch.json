@@ -5,10 +5,26 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "test/dates: arithmetic",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceRoot}/builddir/tests/dates/test_arithmetic",
+            "args": [],
+            "cwd": "${workspaceRoot}"
+        },
+        {
+            "name": "test/dates: business days",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceRoot}/builddir/tests/dates/test_business_days",
+            "args": [],
+            "cwd": "${workspaceRoot}"
+        },
+        {
             "name": "test/dates: daycount",
             "type": "lldb",
             "request": "launch",
-            "program": "${workspaceRoot}/tests/dates/bin/test_daycount",
+            "program": "${workspaceRoot}/builddir/tests/dates/test_daycount",
             "args": [],
             "cwd": "${workspaceRoot}"
         },
@@ -16,7 +32,15 @@
             "name": "test/dates: schedules",
             "type": "lldb",
             "request": "launch",
-            "program": "${workspaceRoot}/tests/dates/bin/test_schedules",
+            "program": "${workspaceRoot}/builddir/tests/dates/test_schedules",
+            "args": [],
+            "cwd": "${workspaceRoot}"
+        },
+        {
+            "name": "test/dates: tenors",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceRoot}/builddir/tests/dates/test_tenors",
             "args": [],
             "cwd": "${workspaceRoot}"
         },
@@ -24,7 +48,7 @@
             "name": "test/rates: accrued",
             "type": "lldb",
             "request": "launch",
-            "program": "${workspaceRoot}/tests/rates/bin/test_accrued",
+            "program": "${workspaceRoot}/builddir/tests/rates/test_accrued",
             "args": [],
             "cwd": "${workspaceRoot}"
         },
@@ -32,7 +56,7 @@
             "name": "test/rates: deposit",
             "type": "lldb",
             "request": "launch",
-            "program": "${workspaceRoot}/tests/rates/bin/test_deposit",
+            "program": "${workspaceRoot}/builddir/tests/rates/test_deposit",
             "args": [],
             "cwd": "${workspaceRoot}"
         },
@@ -40,7 +64,7 @@
             "name": "test/rates: ir future",
             "type": "lldb",
             "request": "launch",
-            "program": "${workspaceRoot}/tests/rates/bin/test_ir_future",
+            "program": "${workspaceRoot}/builddir/tests/rates/test_ir_future",
             "args": [],
             "cwd": "${workspaceRoot}"
         },
@@ -48,7 +72,7 @@
             "name": "test/rates: ir swap leg fixed",
             "type": "lldb",
             "request": "launch",
-            "program": "${workspaceRoot}/tests/rates/bin/test_ir_swap_leg_fixed",
+            "program": "${workspaceRoot}/builddir/tests/rates/test_ir_swap_leg_fixed",
             "args": [],
             "cwd": "${workspaceRoot}"
         },
@@ -56,7 +80,7 @@
             "name": "test/rates: ir swap leg floating",
             "type": "lldb",
             "request": "launch",
-            "program": "${workspaceRoot}/tests/rates/bin/test_ir_swap_leg_floating",
+            "program": "${workspaceRoot}/builddir/tests/rates/test_ir_swap_leg_floating",
             "args": [],
             "cwd": "${workspaceRoot}"
         },
@@ -64,7 +88,7 @@
             "name": "test/rates: ir swap",
             "type": "lldb",
             "request": "launch",
-            "program": "${workspaceRoot}/tests/rates/bin/test_ir_swap",
+            "program": "${workspaceRoot}/builddir/tests/rates/test_ir_swap",
             "args": [],
             "cwd": "${workspaceRoot}"
         },
@@ -72,7 +96,7 @@
             "name": "test/rates: value",
             "type": "lldb",
             "request": "launch",
-            "program": "${workspaceRoot}/tests/rates/bin/test_value",
+            "program": "${workspaceRoot}/builddir/tests/rates/test_value",
             "args": [],
             "cwd": "${workspaceRoot}"
         },
@@ -80,7 +104,7 @@
             "name": "test/rates: yield curve",
             "type": "lldb",
             "request": "launch",
-            "program": "${workspaceRoot}/tests/rates/bin/test_yield_curve",
+            "program": "${workspaceRoot}/builddir/tests/rates/test_yield_curve",
             "args": [],
             "cwd": "${workspaceRoot}"
         },
@@ -88,7 +112,7 @@
             "name": "test/stdext: match",
             "type": "lldb",
             "request": "launch",
-            "program": "${workspaceRoot}/tests/stdext/bin/test_match",
+            "program": "${workspaceRoot}/builddir/tests/stdext/test_match",
             "args": [],
             "cwd": "${workspaceRoot}"
         }
