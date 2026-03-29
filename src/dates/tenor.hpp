@@ -4,6 +4,7 @@
 #include <cstring>
 
 #include <chrono>
+#include <stdexcept>
 #include <set>
 #include <string>
 #include <vector>
@@ -81,39 +82,39 @@ namespace dates
 		{
 		}
 
-		Tenor(const char* tenor_code, const std::chrono::days& spot_days = std::chrono::days{0})
+		Tenor(const std::string& tenor_code, const std::chrono::days& spot_days = std::chrono::days{0})
 		{
-			if (tenor_code == NULL || strlen(tenor_code) == 0)
-				throw "empty tenor";
-			else if (std::strcmp("S", tenor_code) == 0)
+			if (tenor_code.empty())
+				throw std::out_of_range("empty tenor");
+			else if (tenor_code == "S")
 			{
 				days = std::chrono::days{0};
 				weeks = std::chrono::weeks{0};
 				months = std::chrono::months{0};
 				this->spot_days = spot_days;
 			}
-			else if (std::strcmp("ON", tenor_code) == 0)
+			else if (tenor_code == "ON")
 			{
 				this->spot_days = std::chrono::days{0};
 				days = std::chrono::days{1};
 				weeks = std::chrono::weeks{0};
 				months = std::chrono::months{0};
 			}
-			else if (std::strcmp("TN", tenor_code) == 0)
+			else if (tenor_code == "TN")
 			{
 				this->spot_days = std::chrono::days{1};
 				days = std::chrono::days{1};
 				weeks = std::chrono::weeks{0};
 				months = std::chrono::months{0};
 			}
-			else if (std::strcmp("SN", tenor_code) == 0)
+			else if (tenor_code == "SN")
 			{
 				this->spot_days = spot_days;
 				days = std::chrono::days{1};
 				weeks = std::chrono::weeks{0};
 				months = std::chrono::months{0};
 			}
-			else if (std::strcmp("SW", tenor_code) == 0)
+			else if (tenor_code == "SW")
 			{
 				this->spot_days = spot_days;
 				days = std::chrono::days{0};
@@ -142,7 +143,7 @@ namespace dates
 				// 2Y3M1W2D
 				int matches =
 					sscanf(
-						tenor_code,
+						tenor_code.c_str(),
 						"%d%c%d%c%d%c%d%c",
 						&count[0], &units[0],
 						&count[1], &units[1],
@@ -150,7 +151,7 @@ namespace dates
 						&count[3], &units[3]);
 
 				if (matches < 2)
-					throw "Invalid date";
+					throw std::invalid_argument("Invalid date");
 
 				int lastfullmatch = matches / 2 - 1;
 				int lastpartialmatch = matches / 2 + matches % 2 - 1;
@@ -216,7 +217,7 @@ namespace dates
 				error += (d > 1) + (w > 1) + (m > 1) + (y > 1);
 
 				if (error > 0)
-					throw "Invalid date";
+					throw std::invalid_argument("Invalid date");
 
 				this->spot_days = (days == std::chrono::days{0} && weeks == std::chrono::weeks{0} ? spot_days : std::chrono::days{0});
 			}

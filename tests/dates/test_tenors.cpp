@@ -16,9 +16,9 @@ TEST_CASE("Tenor.ctor", "[dates]")
     REQUIRE (t1.weeks == weeks{0});
     REQUIRE (t1.months == months{3});
 
-    // auto t2 = Tenor("1Q");
-    // REQUIRE (t2.spot_days == days{0});
-    // REQUIRE (t2.days == days{0});
-    // REQUIRE (t2.weeks == weeks{0});
-    // REQUIRE (t2.months == months{3});
+    auto t2 = Tenor("3M");
+    REQUIRE (t2.spot_days == days{0});
+    REQUIRE (t2.days == days{0});
+    REQUIRE (t2.weeks == weeks{0});
+    REQUIRE (t2.months == months{3});
 }
