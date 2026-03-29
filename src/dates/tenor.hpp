@@ -134,7 +134,7 @@ namespace dates
 				// It is an error for any one unit to appear more than once.
 				// It is an error to use an unknown tenor.
 
-				int i, error = 0;
+				int error = 0;
 				int count[4];
 				char units[4];
 
@@ -155,7 +155,7 @@ namespace dates
 				int lastpartialmatch = matches / 2 + matches % 2 - 1;
 
 				// Replace unspecified cells with "0X".
-				for (i = lastpartialmatch+1; i < 4; ++i)
+				for (auto i = lastpartialmatch+1; i < 4; ++i)
 					count[i] = 0, units[i] = 'X';
 
 				// Complete any partial match.
@@ -183,7 +183,7 @@ namespace dates
 				weeks = std::chrono::weeks{0};
 				months = std::chrono::months{0};
 				int d = 0, w = 0, m = 0, y = 0;
-				for (i = 0; i < sizeof(units) / sizeof(units[0]); ++i)
+				for (auto i = 0ul; i < sizeof(units) / sizeof(units[0]); ++i)
 				{
 					switch (units[i])
 					{
