@@ -8,6 +8,7 @@
 #include <set>
 #include <string>
 #include <type_traits>
+#include <utility>
 #include <vector>
 
 #include "dates/arithmetic.hpp"
@@ -17,8 +18,6 @@
 namespace dates
 {
     using namespace std::chrono;
-
-
 
 	// <summary>
 	// Returns the number of days between two dates after removing the number of complete months.
@@ -255,7 +254,7 @@ namespace dates
 			dayOfMonth = std::max(firstRegular.day(), lastRegular.day());
 		}
 
-		// Checck the date order is valid
+		// Check the date order is valid
 		if (firstAccrualDate > firstRegularDate)
 			throw std::invalid_argument("The start date must be on or before the first regular date");
 		else if (firstRegularDate > lastRegularDate)
@@ -487,7 +486,14 @@ namespace dates
 		return sched;
 	}
 
-	inline std::vector<year_month_day> generateSchedule(const year_month_day& effective_date, const Tenor tenor, EDateRule date_rule, bool eom_flag, EFrequency frequency, bool odd_at_start, const std::set<year_month_day>& holidays = std::set<year_month_day>())
+	inline std::vector<year_month_day> generateSchedule(
+		const year_month_day& effective_date,
+		const Tenor& tenor,
+		EDateRule date_rule,
+		bool eom_flag,
+		EFrequency frequency,
+		bool odd_at_start,
+		const std::set<year_month_day>& holidays = std::set<year_month_day>())
 	{
 		auto start_date = tenor.spot_date(effective_date, date_rule, holidays);
 
